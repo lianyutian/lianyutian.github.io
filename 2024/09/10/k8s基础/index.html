@@ -1,0 +1,758 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1" theme-name="Stellar" theme-version="1.29.1">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>k8s基础 - Lianyutian</title>
+
+  
+    <meta name="description" content="1. 简介1.1  基础设施的变革-单机场景1.1.1 传统方式部署机器硬件-&gt;操作系统-&gt;应用服务（n）  1.1.2 虚拟部署机器硬件-&gt;操作系统-&gt;虚拟机（n）-&gt;应用服务（n）  1.1.3 容器部署机器硬件-&gt;操作系统-&gt;容器-&gt;应用服务（n） 优势：  资源效率：  轻量级：容器共享宿主操作系统的内核，不需要完整的操作系统，每个容器仅包含">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s基础">
+<meta property="og:url" content="http://example.com/2024/09/10/k8s%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="1. 简介1.1  基础设施的变革-单机场景1.1.1 传统方式部署机器硬件-&gt;操作系统-&gt;应用服务（n）  1.1.2 虚拟部署机器硬件-&gt;操作系统-&gt;虚拟机（n）-&gt;应用服务（n）  1.1.3 容器部署机器硬件-&gt;操作系统-&gt;容器-&gt;应用服务（n） 优势：  资源效率：  轻量级：容器共享宿主操作系统的内核，不需要完整的操作系统，每个容器仅包含">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212634519.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212653550.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212727170.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910213310601.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910213654811.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912201716602.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210634668.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210651234.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210704494.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210713584.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210724847.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210732763.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210750717.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912212501902.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912205837915.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210035600.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210341608.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210303796.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210527146.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912223602012.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912223703841.png">
+<meta property="article:published_time" content="2024-09-10T20:29:20.000Z">
+<meta property="article:modified_time" content="2024-12-08T12:11:38.979Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="k8s、Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212634519.png">
+  
+  
+  
+  <meta name="keywords" content="k8s、Go">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.29.1">
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/assets/20240507174529.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Lianyutian</div><div class="sub cap">学无止境</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item active" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2024/06/27/%E7%94%B5%E5%95%86%E9%A1%B9%E7%9B%AE/"><span class="title">电商项目</span></a><a class="item title" href="/2024/08/15/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B%E6%94%B9%E9%80%A0/"><span class="title">记一次数据迁移过程改造</span></a><a class="item title" href="/2024/03/28/2024-03-28-mysql%E8%BF%9B%E9%98%B6/"><span class="title">mysql进阶</span></a><a class="item title" href="/2024/05/31/ArrayBlockingQueue%E8%AF%A6%E8%A7%A3/"><span class="title">ArrayBlockingQueue详解</span></a><a class="item title" href="/2024/08/22/Docker-jenkins-Springboot%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1/"><span class="title">Docker+jenkins+Springboot部署服务</span></a><a class="item title" href="/2024/09/03/Gin%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"><span class="title">Gin基础学习</span></a><a class="item title" href="/2024/09/04/Gorm%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"><span class="title">Gorm基础学习</span></a><a class="item title" href="/2024/09/26/React%E5%9F%BA%E7%A1%80/"><span class="title">React基础</span></a><a class="item title" href="/2024/05/27/Redis%E9%9D%A2%E8%AF%95%E9%A2%98/"><span class="title">Redis面试</span></a><a class="item title" href="/2024/05/29/ReentrantLock%E8%AF%A6%E8%A7%A3/"><span class="title">ReentrantLock详解</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/CICD/">CICD</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-09-10T20:29:20.000Z">2024-09-10</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2024-12-08T12:11:38.979Z">2024-12-08</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>k8s基础</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h2><h3 id="1-1-基础设施的变革-单机场景"><a href="#1-1-基础设施的变革-单机场景" class="headerlink" title="1.1  基础设施的变革-单机场景"></a>1.1  基础设施的变革-单机场景</h3><h4 id="1-1-1-传统方式部署"><a href="#1-1-1-传统方式部署" class="headerlink" title="1.1.1 传统方式部署"></a>1.1.1 传统方式部署</h4><p>机器硬件-&gt;操作系统-&gt;应用服务（n）</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212634519.png" alt="image-20240910212634519"></p>
+<h4 id="1-1-2-虚拟部署"><a href="#1-1-2-虚拟部署" class="headerlink" title="1.1.2 虚拟部署"></a>1.1.2 虚拟部署</h4><p>机器硬件-&gt;操作系统-&gt;虚拟机（n）-&gt;应用服务（n）</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212653550.png" alt="image-20240910212653550"></p>
+<h4 id="1-1-3-容器部署"><a href="#1-1-3-容器部署" class="headerlink" title="1.1.3 容器部署"></a>1.1.3 容器部署</h4><p>机器硬件-&gt;操作系统-&gt;容器-&gt;应用服务（n）</p>
+<p><strong>优势：</strong></p>
+<blockquote>
+<p><strong>资源效率</strong>：</p>
+<ul>
+<li><strong>轻量级</strong>：容器共享宿主操作系统的内核，不需要完整的操作系统，每个容器仅包含应用和其依赖。这使得容器比虚拟机更轻量，启动速度更快，资源占用更少。</li>
+<li><strong>资源利用率</strong>：由于容器更轻量，通常可以在同一台物理机器上运行更多的容器实例，而虚拟机则需要更多的计算资源和内存。</li>
+</ul>
+<p><strong>启动时间</strong>：</p>
+<ul>
+<li><strong>快速启动</strong>：容器的启动速度通常比虚拟机快得多。这是因为容器只需启动应用程序及其依赖，而虚拟机需要启动一个完整的操作系统。</li>
+</ul>
+<p><strong>部署一致性</strong>：</p>
+<ul>
+<li><strong>环境一致性</strong>：容器封装了应用及其所有依赖，确保在不同环境中（开发、测试、生产）具有一致的行为。这减少了因环境差异导致的问题。</li>
+</ul>
+<p><strong>管理和运维</strong>：</p>
+<ul>
+<li><strong>简化管理</strong>：容器可以通过容器编排工具（如 Kubernetes）来管理和部署，支持自动扩展、负载均衡和故障恢复。虚拟机的管理则相对复杂一些。</li>
+<li><strong>更好的开发体验</strong>：容器支持持续集成和持续交付（CI&#x2F;CD），有助于提高开发效率和减少发布周期。</li>
+</ul>
+<p><strong>可移植性</strong>：</p>
+<ul>
+<li><strong>跨平台</strong>：容器可以在任何支持容器引擎的环境中运行，如不同的操作系统或云平台。这使得应用程序在不同环境之间的迁移变得更加容易。</li>
+</ul>
+<p><strong>版本控制</strong>：</p>
+<ul>
+<li><strong>镜像版本管理</strong>：容器镜像可以被版本控制和存储在镜像仓库中，这使得回滚到某个特定版本或使用不同版本的镜像变得简单。</li>
+</ul>
+</blockquote>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212727170.png" alt="image-20240910212727170"></p>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p><strong>安全性</strong>：</p>
+<ul>
+<li><strong>内核共享</strong>：容器共享宿主操作系统的内核，这意味着如果容器化应用中存在漏洞，攻击者可能会利用这些漏洞获取宿主操作系统的控制权。这种共享内核的机制使得容器的隔离性相对较弱。</li>
+<li><strong>攻击面增大</strong>：容器技术的流行增加了攻击者对容器环境的兴趣。容器漏洞或配置错误可能会导致安全问题，如容器逃逸（container escape）等。</li>
+</ul>
+<p><strong>隔离性</strong>：</p>
+<ul>
+<li><strong>资源隔离</strong>：虽然容器在大多数情况下提供了足够的资源隔离，但与虚拟机相比，容器在资源隔离方面仍然有限。虚拟机通过完全虚拟化提供了更强的隔离性和安全性。</li>
+<li><strong>网络和存储隔离</strong>：容器在网络和存储方面的隔离可能不如虚拟机那样强，尤其是在复杂的网络设置或多租户环境中。</li>
+</ul>
+<p><strong>复杂性</strong>：</p>
+<ul>
+<li><strong>管理和编排</strong>：虽然容器编排工具（如 Kubernetes）可以提供强大的管理功能，但它们也引入了额外的复杂性。学习和配置这些工具需要额外的时间和资源。</li>
+<li><strong>持久化存储</strong>：容器本身是短暂的，虽然可以通过卷（volumes）来管理数据持久性，但容器的临时性和动态性使得持久化存储和数据管理更为复杂。</li>
+</ul>
+<p><strong>兼容性</strong>：</p>
+<ul>
+<li><strong>操作系统和内核版本</strong>：容器依赖宿主操作系统和内核的特性，某些操作系统或内核版本可能不完全支持容器的特定功能。这可能会限制某些应用程序的容器化能力。</li>
+<li><strong>应用兼容性</strong>：某些应用程序可能不适合在容器中运行，特别是那些需要对操作系统有特殊要求的应用程序。</li>
+</ul>
+<p><strong>调试和监控</strong>：</p>
+<ul>
+<li><strong>调试难度</strong>：容器的动态特性（如快速启动和销毁）可能使得调试和排错更加复杂。容器化环境中的故障排除可能需要额外的工具和技巧。</li>
+<li><strong>监控挑战</strong>：虽然现代工具可以监控容器，但容器环境的动态性和分布式特性可能使得监控和日志管理更加复杂。</li>
+</ul>
+</blockquote>
+<h3 id="1-2-基础设施的变革-集群场景-IAAS"><a href="#1-2-基础设施的变革-集群场景-IAAS" class="headerlink" title="1.2  基础设施的变革-集群场景-IAAS"></a>1.2  基础设施的变革-集群场景-IAAS</h3><p>IAAS（Infrastructure as a Service，基础设施即服务）是一种云计算服务模型，它提供了对计算资源、存储、网络和其他基础设施组件的虚拟化访问。这些资源可以通过互联网按需进行访问和管理，而无需用户购买和维护物理硬件。例如各种云服务提供厂商：阿里云、腾讯云、华为云。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910213310601.png" alt="image-20240910213310601"></p>
+<h3 id="1-3-基础设施的变革-集群场景-PAAS"><a href="#1-3-基础设施的变革-集群场景-PAAS" class="headerlink" title="1.3 基础设施的变革-集群场景-PAAS"></a>1.3 基础设施的变革-集群场景-PAAS</h3><p>PAAS（Platform as a Service，平台即服务）是一种云计算服务模型，提供了一个完整的平台，允许开发者在其上构建、测试、部署和维护应用程序，而无需管理底层的基础设施（如服务器、存储、网络和操作系统）。PAAS简化了应用程序开发和管理的过程，使得开发者能够专注于应用逻辑和功能，而不是基础设施的管理。例如：Swarm、MESOS、Kubernetes</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910213654811.png" alt="image-20240910213654811"></h3><p>PAAS（Platform as a Service，平台即服务）是一种云计算服务模型，提供了一个完整的平台，允许开发者在其上构建、测试、部署和维护应用程序，而无需管理底层的基础设施（如服务器、存储、网络和操作系统）。PAAS简化了应用程序开发和管理的过程，使得开发者能够专注于应用逻辑和功能，而不是基础设施的管理。</p>
+<h2 id="2-k8s组件"><a href="#2-k8s组件" class="headerlink" title="2. k8s组件"></a>2. k8s组件</h2><p><strong>Kubernetes Master（控制平面）</strong>：</p>
+<ul>
+<li><strong>API Server</strong>：Kubernetes API 的前端，用于处理所有的 REST 操作并更新相应的对象。</li>
+<li><strong>Controller Manager</strong>：负责处理集群的常规任务和控制逻辑，如副本控制、节点控制、端点控制等。</li>
+<li><strong>Scheduler</strong>：负责将 Pod 分配到合适的节点上，基于资源需求、策略和其他约束条件。</li>
+<li><strong>etcd</strong>：一个分布式键值存储，用于保存和复制集群状态数据。</li>
+</ul>
+<p><strong>Node（工作节点）</strong>：</p>
+<ul>
+<li><strong>kubelet</strong>：一个在每个节点上运行的代理，负责管理 P od 的生命周期和节点的健康状态。</li>
+<li><strong>kube-proxy</strong>：实现服务代理和负载均衡，为 Pod 提供网络服务。</li>
+<li><strong>Container Runtime</strong>：负责运行容器的组件（如 Docker、containerd 或 CRI-O）。</li>
+</ul>
+<p><strong>Pods</strong>：</p>
+<ul>
+<li><strong>Pod</strong>：Kubernetes 中最小的可部署单元，可以包含一个或多个容器。Pod 共享网络、存储和环境配置。</li>
+</ul>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912201716602.png" alt="image-20240912201716602"></p>
+<h2 id="-1"><a href="#-1" class="headerlink" title=""></a></h2><h2 id="3-k8s安装"><a href="#3-k8s安装" class="headerlink" title="3. k8s安装"></a>3. k8s安装</h2><h3 id="3-1-虚拟机安装"><a href="#3-1-虚拟机安装" class="headerlink" title="3.1 虚拟机安装"></a>3.1 虚拟机安装</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210634668.png" alt="image-20240912210634668"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210651234.png" alt="image-20240912210651234"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210704494.png" alt="image-20240912210704494"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210713584.png" alt="image-20240912210713584"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210724847.png" alt="image-20240912210724847"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210732763.png" alt="image-20240912210732763"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210750717.png" alt="image-20240912210750717"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912212501902.png" alt="image-20240912212501902"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912205837915.png" alt="image-20240912205837915"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210035600.png" alt="image-20240912210035600"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210341608.png" alt="image-20240912210341608"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210303796.png" alt="image-20240912210303796"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210527146.png" alt="image-20240912210527146"></p>
+<h3 id="3-2-虚拟机配置"><a href="#3-2-虚拟机配置" class="headerlink" title="3.2 虚拟机配置"></a>3.2 虚拟机配置</h3><p><strong>修改网络配置，注意修改号小的第一个网卡</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/NetworkManager/system-connections</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[connection]</span><br><span class="line">id=ens160</span><br><span class="line">uuid=608f85fc-b982-3408-a5c1-cf192287a0a2</span><br><span class="line">type=ethernet</span><br><span class="line">autoconnect-priority=-999</span><br><span class="line">interface-name=ens160</span><br><span class="line">timestamp=1726174608</span><br><span class="line"></span><br><span class="line">[ethernet]</span><br><span class="line"></span><br><span class="line">[ipv4]</span><br><span class="line">method=manual</span><br><span class="line">address1=192.168.3.10/24,192.168.3.1</span><br><span class="line"></span><br><span class="line">[ipv6]</span><br><span class="line">addr-gen-mode=eui64</span><br><span class="line">method=auto</span><br><span class="line"></span><br><span class="line">[proxy]</span><br></pre></td></tr></table></figure>
+
+<p><strong>编辑仅主机网卡修改网段为192.168.3.x</strong></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912223602012.png" alt="image-20240912223602012"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912223703841.png" alt="image-20240912223703841"></p>
+<p><strong>替换yum源</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sed -e &#x27;s|^mirrorlist=|#mirrorlist=|g&#x27; \</span><br><span class="line">    -e&#x27;s|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirrors.aliyun.com/rockylinux|g&#x27; \</span><br><span class="line">    -i.bak \</span><br><span class="line">   /etc/yum.repos.d/[Rr]ocky*.repo</span><br><span class="line">   </span><br><span class="line">dnf makecache</span><br></pre></td></tr></table></figure>
+
+<p><strong>关闭防火墙</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br></pre></td></tr></table></figure>
+
+<p><strong>开启iptables</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dnf -y install iptables-services</span><br><span class="line">systemctl start iptables</span><br><span class="line">iptables -F</span><br><span class="line">service iptables save</span><br><span class="line">systemctl enable iptables</span><br></pre></td></tr></table></figure>
+
+<p><strong>禁用Selinux</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setenforce 0</span><br><span class="line">sed -i &quot;s/SELINUX=enforcing/SELINUX=disabled/g&quot; /etc/selinux/config</span><br><span class="line">grubby --update-kernel ALL --args selinux=0</span><br></pre></td></tr></table></figure>
+
+<p><strong>设置系统时区</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">timedatectl set-timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-安装-Docker-环境"><a href="#3-3-安装-Docker-环境" class="headerlink" title="3.3 安装 Docker 环境"></a>3.3 安装 Docker 环境</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加载 bridge</span></span><br><span class="line">dnf install -y epel-release</span><br><span class="line">dnf install -y bridge-utils</span><br><span class="line"></span><br><span class="line">modprobe br_netfilter</span><br><span class="line"></span><br><span class="line">echo &#x27;br_netfilter&#x27; &gt;&gt; /etc/modules-load.d/bridge.conf</span><br><span class="line">echo &#x27;net.bridge.bridge-nf-call-iptables=1&#x27; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &#x27;net.bridge.bridge-nf-call-ip6tables=1&#x27; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &#x27;net.ipv4.ip_forward=1&#x27; &gt;&gt; /etc/sysctl.conf</span><br><span class="line"></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加 docker-ce yum 源</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">中科大(ustc)</span></span><br><span class="line">sudo dnf config-manager --add-repo https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">cd /etc/yum.repos.d</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">切换中科大源</span></span><br><span class="line">sed -e &#x27;s|download.docker.com|mirrors.ustc.edu.cn/docker-ce|g&#x27; docker-ce.repo</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 docker-ce</span></span><br><span class="line">dnf -y install docker-ce</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置 daemon.</span></span><br><span class="line">cat &gt; /etc/docker/daemon.json &lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">      &quot;data-root&quot;: &quot;/data/docker&quot;,</span><br><span class="line">      &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;],</span><br><span class="line">      &quot;log-driver&quot;: &quot;json-file&quot;,</span><br><span class="line">      &quot;log-opts&quot;: &#123;</span><br><span class="line">        &quot;max-size&quot;: &quot;100m&quot;,</span><br><span class="line">        &quot;max-file&quot;: &quot;100&quot;</span><br><span class="line"> 	  &#125;,</span><br><span class="line">      &quot;insecure-registries&quot;: [&quot;harbor.xinxainghf.com&quot;],</span><br><span class="line">      &quot;registry-mirrors&quot;: [&quot;https://kfp63jaj.mirror.aliyuncs.com&quot;]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">mkdir -p /etc/systemd/system/docker.service.d</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启docker服务</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker </span><br><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2024/09/26/React%E5%9F%BA%E7%A1%80/">React基础</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/">rpc基础</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-text">1. 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E7%9A%84%E5%8F%98%E9%9D%A9-%E5%8D%95%E6%9C%BA%E5%9C%BA%E6%99%AF"><span class="toc-text">1.1  基础设施的变革-单机场景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-1-%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F%E9%83%A8%E7%BD%B2"><span class="toc-text">1.1.1 传统方式部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-2-%E8%99%9A%E6%8B%9F%E9%83%A8%E7%BD%B2"><span class="toc-text">1.1.2 虚拟部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-3-%E5%AE%B9%E5%99%A8%E9%83%A8%E7%BD%B2"><span class="toc-text">1.1.3 容器部署</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E7%9A%84%E5%8F%98%E9%9D%A9-%E9%9B%86%E7%BE%A4%E5%9C%BA%E6%99%AF-IAAS"><span class="toc-text">1.2  基础设施的变革-集群场景-IAAS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E7%9A%84%E5%8F%98%E9%9D%A9-%E9%9B%86%E7%BE%A4%E5%9C%BA%E6%99%AF-PAAS"><span class="toc-text">1.3 基础设施的变革-集群场景-PAAS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text"></span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-k8s%E7%BB%84%E4%BB%B6"><span class="toc-text">2. k8s组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#-1"><span class="toc-text"></span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-k8s%E5%AE%89%E8%A3%85"><span class="toc-text">3. k8s安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85"><span class="toc-text">3.1 虚拟机安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%85%8D%E7%BD%AE"><span class="toc-text">3.2 虚拟机配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%AE%89%E8%A3%85-Docker-%E7%8E%AF%E5%A2%83"><span class="toc-text">3.3 安装 Docker 环境</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js`,
+    marked: `https://cdn.jsdelivr.net/npm/marked@13.0.1/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.29.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    }
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
