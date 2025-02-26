@@ -1,0 +1,844 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1" theme-name="Stellar" theme-version="1.29.1">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>仿小红书服务.md - Lianyutian</title>
+
+  
+    <meta name="description" content="1234567891011121314151617这里我们直接引入 Service - Repository - DAO 三层结构。其中 service、repostory 参考的是 DDD设计。service: 代表的是领域服务（domain service），代表一个业务的完整的处理过程。repository：按照 DDD 的说法，是代表领域对象的存储，这里你直观理解为存储数据的抽象。dao:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="仿小红书服务.md">
+<meta property="og:url" content="http://example.com/2024/10/10/%E4%BB%BF%E5%B0%8F%E7%BA%A2%E4%B9%A6%E6%9C%8D%E5%8A%A1/index.html">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="1234567891011121314151617这里我们直接引入 Service - Repository - DAO 三层结构。其中 service、repostory 参考的是 DDD设计。service: 代表的是领域服务（domain service），代表一个业务的完整的处理过程。repository：按照 DDD 的说法，是代表领域对象的存储，这里你直观理解为存储数据的抽象。dao:">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20241012085429.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20241016135838.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20241017111109.png">
+<meta property="article:published_time" content="2024-10-10T17:15:22.000Z">
+<meta property="article:modified_time" content="2025-02-26T09:44:33.774Z">
+<meta property="article:author" content="lianyutian">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20241012085429.png">
+  
+  
+  
+  
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.29.1">
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/assets/20240507174529.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Lianyutian</div><div class="sub cap">学无止境</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item active" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2024/06/24/%E6%90%AD%E5%BB%BA%E4%BA%91%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"><span class="title">搭建云开发环境</span></a><a class="item title" href="/2024/06/27/%E7%94%B5%E5%95%86%E9%A1%B9%E7%9B%AE/"><span class="title">电商项目</span></a><a class="item title" href="/2024/08/15/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E8%BF%87%E7%A8%8B%E6%94%B9%E9%80%A0/"><span class="title">记一次数据迁移过程改造</span></a><a class="item title" href="/2025/02/20/python%E5%9F%BA%E7%A1%80/"><span class="title">python基础</span></a><a class="item title" href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/"><span class="title">rpc基础</span></a><a class="item title" href="/2024/10/10/%E4%BB%BF%E5%B0%8F%E7%BA%A2%E4%B9%A6%E6%9C%8D%E5%8A%A1/"><span class="title">仿小红书服务.md</span></a><a class="item title" href="/2024/06/24/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%BC%80%E5%8F%91%E8%84%9A%E6%89%8B%E6%9E%B6/"><span class="title">微服务开发脚手架</span></a><a class="item title" href="/2024/11/26/cloud-mall-vue/"><span class="title">cloud-mall-vue</span></a><a class="item title" href="/2024/09/10/k8s%E5%9F%BA%E7%A1%80/"><span class="title">k8s基础</span></a><a class="item title" href="/2024/06/27/nacos%E6%8E%A2%E7%B4%A2/"><span class="title">nacos探索</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-10-10T17:15:22.000Z">2024-10-10</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-02-26T09:44:33.774Z">2025-02-26</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>仿小红书服务.md</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">这里我们直接引入 Service - Repository - DAO 三</span><br><span class="line">层结构。其中 service、repostory 参考的是 DDD</span><br><span class="line">设计。</span><br><span class="line">service: 代表的是领域服务（domain service），</span><br><span class="line">代表一个业务的完整的处理过程。</span><br><span class="line">repository：按照 DDD 的说法，是代表领域对象的</span><br><span class="line">存储，这里你直观理解为存储数据的抽象。</span><br><span class="line">dao: 代表的是数据库操作。</span><br><span class="line">同时，我们还需要一个 domain，代表领域对象。</span><br><span class="line"></span><br><span class="line">• 为什么有 repository 之后，还要有 dao？repository 是一个整体抽象，它里面既可以考虑用</span><br><span class="line">ElasticSearch，也可以考虑使用 MySQL，还可以考虑用 MongoDB。所以它只代表数据存储，但是不</span><br><span class="line">代表数据库。</span><br><span class="line">• service 是拿来干嘛的？简单来说，就是组合各种 repository、domain，偶尔也会组合别的 service，</span><br><span class="line">来共同完成一个业务功能。</span><br><span class="line">• domain 又是什么？它被认为是业务在系统中的直接反应，或者你直接理解为一个业务对象，又或者就</span><br><span class="line">是一个现实对象在程序中的反应</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="1-用户模块"><a href="#1-用户模块" class="headerlink" title="1. 用户模块"></a>1. 用户模块</h1><h2 id="1-1-跨域问题"><a href="#1-1-跨域问题" class="headerlink" title="1.1 跨域问题"></a>1.1 跨域问题</h2><h3 id="1-1-1-概念"><a href="#1-1-1-概念" class="headerlink" title="1.1.1 概念"></a>1.1.1 概念</h3><p>跨域问题是指在浏览器中执行一个网页向另一个不同源的服务器发送请求时，由于<strong>同源策略</strong>（Same-Origin Policy，SOP）的限制，浏览器会阻止这个请求。<strong>同源策略</strong>是一种用于保护用户信息安全的浏览器安全机制，它限制了来自不同源的资源互相访问。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20241012085429.png"></p>
+<h3 id="1-1-2-什么是“同源”？"><a href="#1-1-2-什么是“同源”？" class="headerlink" title="1.1.2 什么是“同源”？"></a>1.1.2 什么是“同源”？</h3><p>在浏览器中，同源指的是以下三个部分都相同：</p>
+<ol>
+<li><strong>协议</strong>（如 <code>http://</code> 和 <code>https://</code>）</li>
+<li><strong>域名</strong>（如 <code>example.com</code>）</li>
+<li><strong>端口</strong>（如 <code>80</code> 或 <code>443</code>）</li>
+</ol>
+<p>只有当这三个部分完全一致时，两个URL才被认为是同源的。否则就是跨域。例如：</p>
+<ul>
+<li><code>http://example.com</code> 和 <code>http://example.com:8080</code> 不是同源，因为端口不同。</li>
+<li><code>http://example.com</code> 和 <code>https://example.com</code> 不是同源，因为协议不同。</li>
+<li><code>http://example.com</code> 和 <code>http://anotherdomain.com</code> 不是同源，因为域名不同。</li>
+</ul>
+<h3 id="1-1-3-常见的跨域场景"><a href="#1-1-3-常见的跨域场景" class="headerlink" title="1.1.3 常见的跨域场景"></a>1.1.3 常见的跨域场景</h3><ol>
+<li><strong>前端调用后端API</strong>：前端页面在 <code>http://example.com</code> 下运行，而后端API服务器可能在 <code>http://api.example.com</code> 上，属于不同源。</li>
+<li><strong>CDN资源</strong>：网页可能会从不同的源（如CDN）加载JavaScript、CSS或图片资源。</li>
+<li><strong>跨域请求（CORS）</strong>：通过JavaScript（如<code>fetch</code>或<code>XMLHttpRequest</code>）向不同源的服务器发送请求。</li>
+</ol>
+<h3 id="1-1-4-如何解决跨域问题？"><a href="#1-1-4-如何解决跨域问题？" class="headerlink" title="1.1.4 如何解决跨域问题？"></a>1.1.4 如何解决跨域问题？</h3><ol>
+<li><strong>CORS</strong>（跨域资源共享，Cross-Origin Resource Sharing）：最常见的解决方案。通过设置服务器的HTTP响应头中的 <code>Access-Control-Allow-Origin</code>，服务器可以指定允许哪些源的请求。常见的CORS头包括：<ul>
+<li><code>Access-Control-Allow-Origin</code>: 指定允许的源，或者使用 <code>*</code> 表示允许所有源。</li>
+<li><code>Access-Control-Allow-Methods</code>: 允许的HTTP方法（如 GET、POST 等）。</li>
+<li><code>Access-Control-Allow-Headers</code>: 允许的请求头。</li>
+</ul>
+</li>
+<li><strong>反向代理</strong>：通过设置反向代理服务器（如 Nginx、Apache）将请求代理到目标服务器，从而让请求看起来是从同一个源发出的。</li>
+</ol>
+<h3 id="1-1-5-gin-cors"><a href="#1-1-5-gin-cors" class="headerlink" title="1.1.5 gin-cors"></a>1.1.5 gin-cors</h3><p>该项目使用第一种方式解决跨域问题。使用Gin官方插件 <a target="_blank" rel="noopener" href="https://github.com/gin-contrib/cors">https://github.com/gin-contrib/cors</a></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get github.com/gin-contrib/cors</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">r := gin.Default()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理跨域问题</span></span><br><span class="line"><span class="comment">// 配置 CORS 中间件</span></span><br><span class="line">r.Use(cors.New(cors.Config&#123;</span><br><span class="line">	AllowOrigins:     []<span class="type">string</span>&#123;<span class="string">&quot;http://localhost:3000&quot;</span>&#125;,                   <span class="comment">// 允许的域</span></span><br><span class="line">	AllowMethods:     []<span class="type">string</span>&#123;<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;POST&quot;</span>, <span class="string">&quot;PUT&quot;</span>, <span class="string">&quot;DELETE&quot;</span>, <span class="string">&quot;OPTIONS&quot;</span>&#125;, <span class="comment">// 允许的HTTP方法</span></span><br><span class="line">	AllowHeaders:     []<span class="type">string</span>&#123;<span class="string">&quot;Origin&quot;</span>, <span class="string">&quot;Content-Type&quot;</span>, <span class="string">&quot;Authorization&quot;</span>&#125;, <span class="comment">// 允许的Header</span></span><br><span class="line">	ExposeHeaders:    []<span class="type">string</span>&#123;<span class="string">&quot;Content-Length&quot;</span>&#125;,                          <span class="comment">// 公开的Header</span></span><br><span class="line">	AllowCredentials: <span class="literal">true</span>,                                                <span class="comment">// 允许携带凭证（如 cookies）</span></span><br><span class="line">	MaxAge:           <span class="number">12</span> * time.Hour,                                      <span class="comment">// 预检请求的缓存时间</span></span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="1-2-注册验证"><a href="#1-2-注册验证" class="headerlink" title="1.2 注册验证"></a>1.2 注册验证</h2><p>使用 Go 标准库 <code>regexp</code> 实现</p>
+<h3 id="1-2-1-基本用法"><a href="#1-2-1-基本用法" class="headerlink" title="1.2.1 基本用法"></a>1.2.1 基本用法</h3><ol>
+<li><p><strong>导入正则包</strong> 在使用正则表达式前，需要导入 <code>regexp</code> 包：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;regexp&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Compile 和 MustCompile</strong> 你可以通过 <code>regexp.Compile</code> 或 <code>regexp.MustCompile</code> 函数来创建正则表达式对象。两者的区别是：</p>
+<ul>
+<li><code>Compile</code>: 会返回错误，如果正则表达式有误。</li>
+<li><code>MustCompile</code>: 不返回错误，但如果正则表达式无效，程序会直接 panic。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">re, err := regexp.Compile(<span class="string">`^a.*z$`</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Invalid regex:&quot;</span>, err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者使用 MustCompile</span></span><br><span class="line">re := regexp.MustCompile(<span class="string">`^a.*z$`</span>)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="1-2-2-校验邮箱和密码"><a href="#1-2-2-校验邮箱和密码" class="headerlink" title="1.2.2 校验邮箱和密码"></a>1.2.2 校验邮箱和密码</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">    <span class="string">&quot;net/http&quot;</span></span><br><span class="line">    <span class="string">&quot;regexp&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> emailRegexPattern = <span class="string">&quot;^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]&#123;2,&#125;$&quot;</span></span><br><span class="line"><span class="keyword">const</span> passwordRegexPattern = <span class="string">&quot;^[a-zA-Z0-9!@#\\$%\\^&amp;\\*\\(\\)_\\+\\-=\\[\\]\\&#123;\\&#125;;&#x27;:\&quot;,.&lt;&gt;?/\\\\|]&#123;6,10&#125;$&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> UserHandler <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(u *UserHandler)</span></span> RegisterRoutes(server *gin.Engine) &#123;</span><br><span class="line">    group := server.Group(<span class="string">&quot;/users&quot;</span>)</span><br><span class="line">    group.POST(<span class="string">&quot;/signup&quot;</span>, u.signUp)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 校验电子邮件格式</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">isValidEmail</span><span class="params">(email <span class="type">string</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">    re := regexp.MustCompile(emailRegexPattern)</span><br><span class="line">    <span class="keyword">return</span> re.MatchString(email)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 校验电子邮件格式</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">isValidPassword</span><span class="params">(password <span class="type">string</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">    re := regexp.MustCompile(passwordRegexPattern)</span><br><span class="line">    <span class="keyword">return</span> re.MatchString(password)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(u *UserHandler)</span></span> signUp(c *gin.Context) &#123;</span><br><span class="line">    <span class="keyword">type</span> signUpReq <span class="keyword">struct</span> &#123;</span><br><span class="line">       Email           <span class="type">string</span> <span class="string">`json:&quot;email&quot;`</span></span><br><span class="line">       Password        <span class="type">string</span> <span class="string">`json:&quot;password&quot;`</span></span><br><span class="line">       ConfirmPassword <span class="type">string</span> <span class="string">`json:&quot;confirmPassword&quot;`</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> req signUpReq</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> err := c.Bind(&amp;req); err != <span class="literal">nil</span> &#123;</span><br><span class="line">       c.String(http.StatusBadRequest, <span class="string">&quot;bad request&quot;</span>)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> !isValidEmail(req.Email) &#123;</span><br><span class="line">       c.String(http.StatusOK, <span class="string">&quot;Email is invalid&quot;</span>)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> !isValidPassword(req.Password) &#123;</span><br><span class="line">       c.String(http.StatusOK, <span class="string">&quot;Password is invalid&quot;</span>)</span><br><span class="line">       <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="1-3-密码加密"><a href="#1-3-密码加密" class="headerlink" title="1.3 密码加密"></a>1.3 密码加密</h2><h3 id="1-3-1-简介"><a href="#1-3-1-简介" class="headerlink" title="1.3.1 简介"></a>1.3.1 简介</h3><p> <code>bcrypt</code> 是一种用于安全存储密码的加密哈希算法。<code>bcrypt</code> 常用于加密密码，确保即使密码被泄露，原始密码也难以被恢复。</p>
+<h3 id="1-3-2-工作原理"><a href="#1-3-2-工作原理" class="headerlink" title="1.3.2 工作原理"></a>1.3.2 工作原理</h3><ol>
+<li><strong>盐（Salt）</strong>：每次加密时，bcrypt 会为密码生成一个随机的“盐值”。这个盐值用于加强密码的安全性，即使两个用户使用相同的密码，加密后的结果也会不同。</li>
+<li><strong>哈希（Hashing）</strong>：密码与盐值结合后通过 bcrypt 算法进行多次迭代哈希，生成一个加密后的密码。</li>
+<li><strong>验证</strong>：在验证密码时，bcrypt 会将输入的密码与加密后保存的哈希值进行比较，看它们是否匹配。</li>
+</ol>
+<h3 id="1-3-3-基础使用"><a href="#1-3-3-基础使用" class="headerlink" title="1.3.3 基础使用"></a>1.3.3 基础使用</h3><p><strong>使用 bcrypt 的步骤：</strong></p>
+<ol>
+<li><p><strong>安装 <code>bcrypt</code> 包</strong>： 你可以使用 Go 的官方包管理工具 <code>go get</code> 来获取该包：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get golang.org/x/crypto/bcrypt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>加密密码</strong>： 使用 <code>GenerateFromPassword</code> 函数将密码加密，这个函数会自动生成盐并将密码加密。</p>
+</li>
+<li><p><strong>验证密码</strong>： 使用 <code>CompareHashAndPassword</code> 函数比较用户输入的密码与数据库中保存的 bcrypt 哈希值。</p>
+</li>
+</ol>
+<p><strong>示例代码：</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;log&quot;</span></span><br><span class="line">    <span class="string">&quot;golang.org/x/crypto/bcrypt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加密密码</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">hashPassword</span><span class="params">(password <span class="type">string</span>)</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">    <span class="comment">// 使用默认的成本（10）加密密码</span></span><br><span class="line">    bytes, err := bcrypt.GenerateFromPassword([]<span class="type">byte</span>(password), bcrypt.DefaultCost)</span><br><span class="line">    <span class="keyword">return</span> <span class="type">string</span>(bytes), err</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 验证密码</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">checkPasswordHash</span><span class="params">(password, hash <span class="type">string</span>)</span></span> <span class="type">bool</span> &#123;</span><br><span class="line">    err := bcrypt.CompareHashAndPassword([]<span class="type">byte</span>(hash), []<span class="type">byte</span>(password))</span><br><span class="line">    <span class="keyword">return</span> err == <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    password := <span class="string">&quot;mySuperSecretPassword&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 加密密码</span></span><br><span class="line">    hashedPassword, err := hashPassword(password)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fmt.Println(<span class="string">&quot;原始密码:&quot;</span>, password)</span><br><span class="line">    fmt.Println(<span class="string">&quot;加密后的密码:&quot;</span>, hashedPassword)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 验证密码</span></span><br><span class="line">    match := checkPasswordHash(password, hashedPassword)</span><br><span class="line">    fmt.Println(<span class="string">&quot;密码匹配:&quot;</span>, match)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>代码说明：</strong></p>
+<ul>
+<li>**<code>hashPassword</code>**：将明文密码转换成 bcrypt 哈希。<code>bcrypt.GenerateFromPassword</code> 会自动生成一个盐并加密密码，使用默认的加密强度（成本）。</li>
+<li>**<code>checkPasswordHash</code>**：将用户输入的密码与数据库中存储的哈希值进行比较，返回 <code>true</code> 或 <code>false</code>。</li>
+</ul>
+<p><strong>成本（Cost）参数：</strong></p>
+<ul>
+<li><code>bcrypt.DefaultCost</code> 默认值是 10。你可以根据需要调整这个值，值越高，加密所需时间越长，但安全性也越高。</li>
+</ul>
+<h2 id="1-4-登录校验"><a href="#1-4-登录校验" class="headerlink" title="1.4 登录校验"></a>1.4 登录校验</h2><h3 id="1-4-1-Cookie和Session"><a href="#1-4-1-Cookie和Session" class="headerlink" title="1.4.1 Cookie和Session"></a>1.4.1 Cookie和Session</h3><p>HTTP 是一种 <strong>无状态</strong> 协议，意味着每个请求都是独立的，与之前或之后的请求没有直接关联。服务器不会自动保存客户端之间的会话信息。</p>
+<p><strong>如何管理状态</strong>：尽管 HTTP 是无状态的，但可以通过以下机制来模拟有状态的会话：</p>
+<ul>
+<li><p><strong>Cookies</strong>：服务器通过设置 cookie 将状态保存在客户端浏览器中，随后浏览器每次请求时都会自动发送这些 cookie 信息，维持会话状态。（也正因为 Cookie 是放在浏览器本地的，所以很不安全）</p>
+<p>Cookies关键配置：</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Domain</span><span class="punctuation">: </span>也就是 Cookie 可以用在什么域名下，按照最小化原则来设定。</span><br><span class="line">Path：Cookie 可以用在什么路径下，同样按照最小化原则来设定。</span><br><span class="line">Max-Age 和 Expires：过期时间，只保留必要时间。</span><br><span class="line">Http-Only：设置为 true 的话，那么浏览器上的 JS 代码将无法使用这个 Cookie。永远设置为 true。</span><br><span class="line">Secure：只能用于 HTTPS 协议，生产环境永远设置为 true。</span><br><span class="line">SameSite：是否允许跨站发送 Cookie，尽量避免。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Session（会话）</strong>：服务器端会为客户端创建一个唯一的 session ID，通常通过 cookie 或 URL 参数传递，来识别用户的会话状态。</p>
+</li>
+</ul>
+<p>如果有的界面需要登录成功后才能访问，那么需要怎么去校验登录状态？</p>
+<p>关键数据我们希望放在后端，这个存储的东西就叫做 Session。因此在登录里面，我们就可以通过 Session 来记</p>
+<p>录登录状态</p>
+<h3 id="1-4-2-Gin-Session"><a href="#1-4-2-Gin-Session" class="headerlink" title="1.4.2 Gin-Session"></a>1.4.2 Gin-Session</h3><p><a target="_blank" rel="noopener" href="https://github.com/gin-contrib/sessions">https://github.com/gin-contrib/sessions</a></p>
+<p><strong>创建 session 存储</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 cookie 存储 session，密钥是一个字符串（你可以选择复杂的密钥）</span></span><br><span class="line">store := cookie.NewStore([]<span class="type">byte</span>(<span class="string">&quot;secret&quot;</span>))</span><br><span class="line"><span class="comment">// Cookie名为ssid</span></span><br><span class="line">r.Use(sessions.Sessions(<span class="string">&quot;ssid&quot;</span>, store))</span><br></pre></td></tr></table></figure>
+
+<p><strong>在登录接口登录成功后将用户 id 存入 session</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">session := sessions.Default(c)</span><br><span class="line">session.Set(<span class="string">&quot;userId&quot;</span>, user.Id)</span><br><span class="line">session.Save()</span><br></pre></td></tr></table></figure>
+
+<p><strong>这样用户登录成功后会将 session 存入 Cookie 中</strong></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20241016135838.png"></p>
+<p><strong>添加校验中间件</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">r.Use(</span><br><span class="line">	middleware.NewLoginMiddlewareBuilder().</span><br><span class="line">		IgnorePath(<span class="string">&quot;/users/login&quot;</span>).</span><br><span class="line">		IgnorePath(<span class="string">&quot;/users/singup&quot;</span>).</span><br><span class="line">		Build(),</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> middleware</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/gin-contrib/sessions&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> LoginMiddlewareBuilder <span class="keyword">struct</span> &#123;</span><br><span class="line">	paths []<span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewLoginMiddlewareBuilder</span><span class="params">()</span></span> *LoginMiddlewareBuilder &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;LoginMiddlewareBuilder&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l *LoginMiddlewareBuilder)</span></span> IgnorePath(path <span class="type">string</span>) *LoginMiddlewareBuilder &#123;</span><br><span class="line">	l.paths = <span class="built_in">append</span>(l.paths, path)</span><br><span class="line">	<span class="keyword">return</span> l</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l *LoginMiddlewareBuilder)</span></span> Build() gin.HandlerFunc &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> _, path := <span class="keyword">range</span> l.paths &#123;</span><br><span class="line">			<span class="keyword">if</span> c.Request.URL.Path == path &#123;</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		session := sessions.Default(c)</span><br><span class="line">		userId := session.Get(<span class="string">&quot;userId&quot;</span>)</span><br><span class="line">		<span class="keyword">if</span> userId == <span class="literal">nil</span> &#123;</span><br><span class="line">			c.AbortWithStatus(http.StatusUnauthorized)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-3-Session-问题"><a href="#1-4-3-Session-问题" class="headerlink" title="1.4.3 Session 问题"></a>1.4.3 Session 问题</h3><h4 id="1-4-3-1-Session-存储问题"><a href="#1-4-3-1-Session-存储问题" class="headerlink" title="1.4.3.1 Session 存储问题"></a>1.4.3.1 Session 存储问题</h4><ol>
+<li>session 存储在 cookie 不能保证安全</li>
+<li>session 存储在服务中，当服务存在多实例时 session 不能共享</li>
+</ol>
+<h4 id="1-4-3-2-Session-存储-Redis"><a href="#1-4-3-2-Session-存储-Redis" class="headerlink" title="1.4.3.2 Session 存储 Redis"></a>1.4.3.2 Session 存储 Redis</h4><p>基于 Redis 做 Seesion 存储</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get github.com/boj/redistore</span><br><span class="line"><span class="keyword">go</span> get github.com/gomodule/redigo@latest</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// size: maximum number of idle connections.</span></span><br><span class="line"><span class="comment">// network: tcp or udp</span></span><br><span class="line"><span class="comment">// address: host:port</span></span><br><span class="line"><span class="comment">// password: redis-password</span></span><br><span class="line"><span class="comment">// Keys are defined in pairs to allow key rotation, but the common case is to set a single</span></span><br><span class="line"><span class="comment">// authentication key and optionally an encryption key </span></span><br><span class="line">store, _ := redis.NewStore(<span class="number">10</span>, <span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;116.198.217.158:6379&quot;</span>,</span><br><span class="line">		<span class="string">&quot;MIIEowIBAAKCAQEAwG90ULRHmAXFXQzZSwleoYts2+bCzUvqhhqtGiv/F5kUsETY&quot;</span>, []<span class="type">byte</span>(<span class="string">&quot;secret&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+<p>生成的 session 可以存储到 redis 中</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20241017111109.png"></p>
+<h3 id="1-4-4-Session-刷新"><a href="#1-4-4-Session-刷新" class="headerlink" title="1.4.4 Session 刷新"></a>1.4.4 Session 刷新</h3><h4 id="1-4-4-1-场景"><a href="#1-4-4-1-场景" class="headerlink" title="1.4.4.1 场景"></a>1.4.4.1 场景</h4><p>这里有一个登录状态很经常遇到的问题，就是我们这 Session id 所在的 Cookie，过期时间是固定的。</p>
+<p>举个例子：假如你设置为 10 分钟，那么用户登录了 9:59 秒之后，还能访问网站，结果过了两秒，他就被要求重新登录。</p>
+<p>也就是需要在用户持续使用网站的时候，刷新过期时间。</p>
+<h4 id="1-4-4-2-解决方法"><a href="#1-4-4-2-解决方法" class="headerlink" title="1.4.4.2 解决方法"></a>1.4.4.2 解决方法</h4><p>如何刷新？</p>
+<ul>
+<li><p>用户每次访问，我都刷新。</p>
+<p>性能差，对 Redis 之类的影响很大。</p>
+</li>
+<li><p>快要过期了我再刷新，比如说 10 分钟过期。当用户第 9 分钟访问过来的时候，我就刷新。</p>
+<p>万一我在第 9 分钟以后都没再访问过呢？</p>
+</li>
+<li><p>固定间隔时间刷新，比如说每分钟内第一次访问我都刷新。</p>
+</li>
+<li><p>使用长短 token。这个我们在后面接入微信登录的时候再深入讨论。</p>
+</li>
+</ul>
+<h3 id="1-4-5-JWT"><a href="#1-4-5-JWT" class="headerlink" title="1.4.5 JWT"></a>1.4.5 JWT</h3><p>JWT（<strong>JSON Web Token</strong>）是一种开放标准（RFC 7519），用于在各方之间以 JSON 对象安全地传输信息。JWT 通常用于身份验证和授权机制，它的设计轻量且跨平台，可以用于 Web、移动设备或其他应用程序。</p>
+<h4 id="1-4-5-1-JWT-的基本结构"><a href="#1-4-5-1-JWT-的基本结构" class="headerlink" title="1.4.5.1 JWT 的基本结构"></a>1.4.5.1 JWT 的基本结构</h4><p>JWT 包含三个部分：</p>
+<ol>
+<li><strong>Header（头部）</strong>：说明签名算法等信息。</li>
+<li><strong>Payload（负载）</strong>：包含实际传输的数据，通常是用户信息或其他声明。</li>
+<li><strong>Signature（签名）</strong>：用于验证发送方的身份并确保消息未被篡改。</li>
+</ol>
+<p>JWT 的格式为：<code>Header.Payload.Signature</code>，三部分之间用点 <code>.</code> 分隔。</p>
+<p><strong>1. Header（头部）</strong></p>
+<p>Header 通常由两部分组成：</p>
+<ul>
+<li>**<code>alg</code>**：签名算法，如 HMAC SHA256 或 RSA。</li>
+<li>**<code>typ</code>**：表示 token 的类型，通常是 “JWT”。</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后将其进行 <strong>Base64Url</strong> 编码，得到 Header 的部分。</p>
+<p><strong>2. Payload（负载）</strong></p>
+<p>Payload 是 JWT 的主体部分，包含声明（claims）。声明可以是预定义的，也可以是自定义的。</p>
+<p>一些常见的标准声明：</p>
+<ul>
+<li>**<code>iss</code>**（Issuer）：签发者</li>
+<li>**<code>sub</code>**（Subject）：主题</li>
+<li>**<code>exp</code>**（Expiration Time）：过期时间</li>
+<li>**<code>aud</code>**（Audience）：接收者</li>
+<li>**<code>iat</code>**（Issued At）：签发时间</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;sub&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1234567890&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;John Doe&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;admin&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>同样将其进行 <strong>Base64Url</strong> 编码，得到 Payload 部分。</p>
+<p><strong>3. Signature（签名）</strong></p>
+<p>签名的作用是保证 token 的完整性，并且可以验证发送方的身份。签名是通过对 <strong>Header</strong> 和 <strong>Payload</strong> 进行编码后，再加上一个密钥（Secret）使用指定的签名算法生成的。</p>
+<p>如果使用 HMAC SHA256 作为签名算法，签名生成规则如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HMACSHA256(</span><br><span class="line">  base64UrlEncode(header) + <span class="string">&quot;.&quot;</span> + base64UrlEncode(payload)<span class="punctuation">,</span></span><br><span class="line">  secret</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-4-5-2-JWT-的生成与验证过程"><a href="#1-4-5-2-JWT-的生成与验证过程" class="headerlink" title="1.4.5.2 JWT 的生成与验证过程"></a>1.4.5.2 JWT 的生成与验证过程</h4><p><strong>1. 生成 JWT</strong></p>
+<ul>
+<li>服务器在用户通过认证（如登录）后，生成一个 JWT，并将其返回给客户端。</li>
+<li>客户端收到 JWT 后，通常会将其存储在 <strong>localStorage</strong> 或 <strong>HTTP Cookies</strong> 中。</li>
+</ul>
+<p><strong>2. 客户端发送 JWT</strong></p>
+<ul>
+<li><p>每次客户端请求受保护的资源时，都会将 JWT 放在 HTTP 请求的 Authorization  头中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Authorization: Bearer &lt;token&gt;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>3. 验证 JWT</strong></p>
+<ul>
+<li>服务器接收到请求时，会从请求头中提取 JWT，并通过签名验证 JWT 的合法性和完整性。</li>
+<li>验证通过后，服务器将根据 JWT 的 payload 信息进行相应的处理。</li>
+</ul>
+<h4 id="1-4-5-3-优缺点"><a href="#1-4-5-3-优缺点" class="headerlink" title="1.4.5.3 优缺点"></a>1.4.5.3 优缺点</h4><p><strong>优点</strong></p>
+<ul>
+<li><strong>无状态</strong>：服务器不需要存储会话数据，JWT 完全存储在客户端，减少服务器压力。</li>
+<li><strong>跨平台</strong>：JWT 是 JSON 格式的，支持多种语言和平台。</li>
+<li><strong>灵活</strong>：可以在 Payload 中自定义存储用户信息或其他声明。</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li><strong>安全性问题</strong>：如果 JWT 未加密且泄露，敏感信息可能被暴露。</li>
+<li><strong>不可撤销</strong>：JWT 是无状态的，生成后无法在服务器端主动使其失效（除非设计特殊的黑名单机制）。</li>
+<li><strong>大小较大</strong>：与传统的 Session ID 相比，JWT 更大，因为包含了完整的信息。</li>
+</ul>
+<h4 id="1-4-5-4-Go-使用-JWT"><a href="#1-4-5-4-Go-使用-JWT" class="headerlink" title="1.4.5.4 Go 使用 JWT"></a>1.4.5.4 Go 使用 JWT</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get github.com/golang-jwt/jwt/v5</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;net/http&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/golang-jwt/jwt/v5&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> jwtSecret = []<span class="type">byte</span>(<span class="string">&quot;your-secret-key&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建 JWT</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GenerateToken</span><span class="params">(username <span class="type">string</span>)</span></span> (<span class="type">string</span>, <span class="type">error</span>) &#123;</span><br><span class="line">    <span class="comment">// 设置 JWT 的有效时间</span></span><br><span class="line">    now := time.Now()</span><br><span class="line">    claims := jwt.MapClaims&#123;</span><br><span class="line">        <span class="string">&quot;username&quot;</span>: username,</span><br><span class="line">        <span class="string">&quot;exp&quot;</span>:      now.Add(<span class="number">1</span> * time.Hour).Unix(), <span class="comment">// 过期时间为 1 小时</span></span><br><span class="line">        <span class="string">&quot;iat&quot;</span>:      now.Unix(),                   <span class="comment">// 签发时间</span></span><br><span class="line">    &#125;</span><br><span class="line">    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)</span><br><span class="line">    <span class="keyword">return</span> token.SignedString(jwtSecret)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 验证 JWT</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">AuthMiddleware</span><span class="params">()</span></span> gin.HandlerFunc &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        tokenString := c.GetHeader(<span class="string">&quot;Authorization&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> tokenString == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">            c.JSON(http.StatusUnauthorized, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Token is required&quot;</span>&#125;)</span><br><span class="line">            c.Abort()</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        token, err := jwt.Parse(tokenString, <span class="function"><span class="keyword">func</span><span class="params">(token *jwt.Token)</span></span> (<span class="keyword">interface</span>&#123;&#125;, <span class="type">error</span>) &#123;</span><br><span class="line">            <span class="comment">// 验证 token 的签名方法是否正确</span></span><br><span class="line">            <span class="keyword">if</span> _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">nil</span>, fmt.Errorf(<span class="string">&quot;unexpected signing method&quot;</span>)</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> jwtSecret, <span class="literal">nil</span></span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> || !token.Valid &#123;</span><br><span class="line">            c.JSON(http.StatusUnauthorized, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Invalid token&quot;</span>&#125;)</span><br><span class="line">            c.Abort()</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        c.Next()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 登录路由，生成并返回 JWT</span></span><br><span class="line">    r.POST(<span class="string">&quot;/login&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        username := c.PostForm(<span class="string">&quot;username&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> username == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">            c.JSON(http.StatusBadRequest, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Username is required&quot;</span>&#125;)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        token, err := GenerateToken(username)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            c.JSON(http.StatusInternalServerError, gin.H&#123;<span class="string">&quot;error&quot;</span>: <span class="string">&quot;Failed to generate token&quot;</span>&#125;)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        c.JSON(http.StatusOK, gin.H&#123;<span class="string">&quot;token&quot;</span>: token&#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 受保护的路由</span></span><br><span class="line">    r.GET(<span class="string">&quot;/protected&quot;</span>, AuthMiddleware(), <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">        c.JSON(http.StatusOK, gin.H&#123;<span class="string">&quot;message&quot;</span>: <span class="string">&quot;You have access to this resource&quot;</span>&#125;)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    r.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="1-5-登录保护"><a href="#1-5-登录保护" class="headerlink" title="1.5 登录保护"></a>1.5 登录保护</h2><h2 id="1-6-短信登录"><a href="#1-6-短信登录" class="headerlink" title="1.6 短信登录"></a>1.6 短信登录</h2><h3 id="1-6-1-抽接口"><a href="#1-6-1-抽接口" class="headerlink" title="1.6.1  抽接口"></a>1.6.1  抽接口</h3><p><code>type.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Service <span class="keyword">interface</span> &#123;</span><br><span class="line">	<span class="comment">// Send</span></span><br><span class="line">	<span class="comment">// templateId 短信模板id</span></span><br><span class="line">	<span class="comment">// args 短信模板参数</span></span><br><span class="line">	<span class="comment">// phoneNums 要发送到的手机号</span></span><br><span class="line">	Send(ctx context.Context, templateId <span class="type">string</span>, args []<span class="type">string</span>, phoneNums ...<span class="type">string</span>) <span class="type">error</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-6-2-腾讯云短信"><a href="#1-6-2-腾讯云短信" class="headerlink" title="1.6.2 腾讯云短信"></a>1.6.2 腾讯云短信</h3><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/document/product/382/43199">https://cloud.tencent.com/document/product/382/43199</a></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get -u github.com/tencentcloud/tencentcloud-sdk-<span class="keyword">go</span>/tencentcloud/sms/v20210111</span><br></pre></td></tr></table></figure>
+
+<p><code>service.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> tencent</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common&quot;</span></span><br><span class="line">	sms <span class="string">&quot;github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20210111&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Service <span class="keyword">struct</span> &#123;</span><br><span class="line">	client *sms.Client</span><br><span class="line">	appId  *<span class="type">string</span></span><br><span class="line">	sign   *<span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewService</span><span class="params">(client *sms.Client, appId <span class="type">string</span>, sign <span class="type">string</span>)</span></span> *Service &#123;</span><br><span class="line">	<span class="keyword">return</span> &amp;Service&#123;</span><br><span class="line">		client: client,</span><br><span class="line">		appId:  &amp;appId,</span><br><span class="line">		sign:   &amp;sign,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s Service)</span></span> Send(ctx context.Context, templateId <span class="type">string</span>, args []<span class="type">string</span>, phoneNums ...<span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line">	<span class="comment">// 创建发送请求</span></span><br><span class="line">	request := sms.NewSendSmsRequest()</span><br><span class="line"></span><br><span class="line">	request.SetContext(ctx)</span><br><span class="line">	request.SmsSdkAppId = s.appId</span><br><span class="line">	request.SignName = s.sign                             <span class="comment">// 短信签名</span></span><br><span class="line">	request.TemplateId = common.StringPtr(templateId)     <span class="comment">// 短信模板 ID</span></span><br><span class="line">	request.TemplateParamSet = common.StringPtrs(args)    <span class="comment">// 短信模板参数</span></span><br><span class="line">	request.PhoneNumberSet = common.StringPtrs(phoneNums) <span class="comment">// 发送到的手机号</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 发送短信</span></span><br><span class="line">	response, err := s.client.SendSms(request)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> _, status := <span class="keyword">range</span> response.Response.SendStatusSet &#123;</span><br><span class="line">		<span class="keyword">if</span> status.Code == <span class="literal">nil</span> || *(status.Code) != <span class="string">&quot;Ok&quot;</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> fmt.Errorf(<span class="string">&quot;send code faild code: %s message: %s&quot;</span>, *status.Code, *status.Message)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>service_test.go</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> tencent</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/go-playground/assert/v2&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common/profile&quot;</span></span><br><span class="line">	sms <span class="string">&quot;github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/sms/v20210111&quot;</span></span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestService_Send</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 替换为你的 SecretId 和 SecretKey</span></span><br><span class="line">	secretId := <span class="string">&quot;YOUR_SECRET_ID&quot;</span></span><br><span class="line">	secretKey := <span class="string">&quot;YOUR_SECRET_KEY&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 创建一个腾讯云 SMS 客户端</span></span><br><span class="line">	credential := common.NewCredential(secretId, secretKey)</span><br><span class="line">	cpf := profile.NewClientProfile()</span><br><span class="line">	cpf.SignMethod = <span class="string">&quot;HmacSHA256&quot;</span></span><br><span class="line">	client, _ := sms.NewClient(credential, <span class="string">&quot;ap-guangzhou&quot;</span>, cpf)</span><br><span class="line"></span><br><span class="line">	s := NewService(client, <span class="string">&quot;appId&quot;</span>, <span class="string">&quot;sign&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">type</span> S <span class="keyword">struct</span> &#123;</span><br><span class="line">		name <span class="type">string</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	testCases := []<span class="keyword">struct</span> &#123;</span><br><span class="line">		name       <span class="type">string</span></span><br><span class="line">		templateId <span class="type">string</span></span><br><span class="line">		params     []<span class="type">string</span></span><br><span class="line">		phoneNums  []<span class="type">string</span></span><br><span class="line">		wantErr    <span class="type">error</span></span><br><span class="line">	&#125;&#123;</span><br><span class="line">		&#123;</span><br><span class="line">			name:       <span class="string">&quot;发送验证码&quot;</span>,</span><br><span class="line">			templateId: <span class="string">&quot;模板id&quot;</span>,</span><br><span class="line">			params:     []<span class="type">string</span>&#123;<span class="string">&quot;123456&quot;</span>&#125;,</span><br><span class="line">			phoneNums:  []<span class="type">string</span>&#123;<span class="string">&quot;15720940769&quot;</span>&#125;,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _, tc := <span class="keyword">range</span> testCases &#123;</span><br><span class="line">		t.Run(tc.name, <span class="function"><span class="keyword">func</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">			err := s.Send(context.Background(), tc.templateId, tc.params, tc.phoneNums...)</span><br><span class="line">			assert.Equal(t, tc.wantErr, err)</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="1-7-wire"><a href="#1-7-wire" class="headerlink" title="1.7 wire"></a>1.7 wire</h2><h3 id="1-7-1-作用"><a href="#1-7-1-作用" class="headerlink" title="1.7.1 作用"></a>1.7.1 作用</h3><p>Wire 是一个代码生成工具，可以使用依赖注入自动连接组件。组件之间的依赖关系在 Wire 中表示为函数参数，鼓励显式初始化而不是全局变量。因为 Wire 操作时没有运行时状态或反射，所以编写用于 Wire 的代码甚至对于手写初始化也很有用。Wire 是一个代码生成工具，可以使用依赖注入自动连接组件。组件之间的依赖关系在 Wire 中表示为函数参数，鼓励显式初始化而不是全局变量。因为 Wire 操作时没有运行时状态或反射，所以编写用于 Wire 的代码甚至对于手写初始化也很有用。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> install github.com/google/wire/cmd/wire@latest</span><br><span class="line"></span><br><span class="line"><span class="keyword">go</span> get github.com/google/wire</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="2-单元测试"><a href="#2-单元测试" class="headerlink" title="2. 单元测试"></a>2. 单元测试</h1><h2 id="2-1-Mock"><a href="#2-1-Mock" class="headerlink" title="2.1 Mock"></a>2.1 Mock</h2><p>minikube start <br>–registry-mirror&#x3D;<a target="_blank" rel="noopener" href="https://bmtb46e4.mirror.aliyuncs.com/">https://bmtb46e4.mirror.aliyuncs.com</a> <br>–driver&#x3D;docker <br>–base-image&#x3D;”anjone&#x2F;kicbase” <br>–image-repository&#x3D;registry.cn-hangzhou.aliyuncs.com&#x2F;google_containers </p>
+<h2 id="1-Minikube下载"><a href="#1-Minikube下载" class="headerlink" title="1.Minikube下载"></a>1.Minikube下载</h2><p><a target="_blank" rel="noopener" href="https://github.com/kubernetes/minikube/releases/tag/v1.24.0">https://github.com/kubernetes/minikube/releases/tag/v1.24.0</a></p>
+<p>tar -zxf tar -zxf minikube-linux-amd64.tar.gz</p>
+<p>sudo install minikube-linux-amd64 &#x2F;usr&#x2F;local&#x2F;bin&#x2F;minikube</p>
+<p>minikube start –force –driver&#x3D;docker –image-repository&#x3D;<a target="_blank" rel="noopener" href="http://registry.cn-hangzhou.aliyuncs.com/google_containers">http://registry.cn-hangzhou.aliyuncs.com/google_containers</a></p>
+<p>minikube dashboard &amp;</p>
+<p><a target="_blank" rel="noopener" href="https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl">https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl</a></p>
+<p>sudo install -o root -g root -m 0755 kubectl &#x2F;usr&#x2F;local&#x2F;bin&#x2F;kubectl</p>
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2024/11/26/cloud-mall-vue/">cloud-mall-vue</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2024/09/26/React%E5%9F%BA%E7%A1%80/">React基础</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E7%94%A8%E6%88%B7%E6%A8%A1%E5%9D%97"><span class="toc-text">1. 用户模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98"><span class="toc-text">1.1 跨域问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1-%E6%A6%82%E5%BF%B5"><span class="toc-text">1.1.1 概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2-%E4%BB%80%E4%B9%88%E6%98%AF%E2%80%9C%E5%90%8C%E6%BA%90%E2%80%9D%EF%BC%9F"><span class="toc-text">1.1.2 什么是“同源”？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-3-%E5%B8%B8%E8%A7%81%E7%9A%84%E8%B7%A8%E5%9F%9F%E5%9C%BA%E6%99%AF"><span class="toc-text">1.1.3 常见的跨域场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-4-%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="toc-text">1.1.4 如何解决跨域问题？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-5-gin-cors"><span class="toc-text">1.1.5 gin-cors</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E6%B3%A8%E5%86%8C%E9%AA%8C%E8%AF%81"><span class="toc-text">1.2 注册验证</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-text">1.2.1 基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2-%E6%A0%A1%E9%AA%8C%E9%82%AE%E7%AE%B1%E5%92%8C%E5%AF%86%E7%A0%81"><span class="toc-text">1.2.2 校验邮箱和密码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E5%AF%86%E7%A0%81%E5%8A%A0%E5%AF%86"><span class="toc-text">1.3 密码加密</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-1-%E7%AE%80%E4%BB%8B"><span class="toc-text">1.3.1 简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">1.3.2 工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-text">1.3.3 基础使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-%E7%99%BB%E5%BD%95%E6%A0%A1%E9%AA%8C"><span class="toc-text">1.4 登录校验</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-1-Cookie%E5%92%8CSession"><span class="toc-text">1.4.1 Cookie和Session</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-2-Gin-Session"><span class="toc-text">1.4.2 Gin-Session</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-3-Session-%E9%97%AE%E9%A2%98"><span class="toc-text">1.4.3 Session 问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-3-1-Session-%E5%AD%98%E5%82%A8%E9%97%AE%E9%A2%98"><span class="toc-text">1.4.3.1 Session 存储问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-3-2-Session-%E5%AD%98%E5%82%A8-Redis"><span class="toc-text">1.4.3.2 Session 存储 Redis</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-4-Session-%E5%88%B7%E6%96%B0"><span class="toc-text">1.4.4 Session 刷新</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-4-1-%E5%9C%BA%E6%99%AF"><span class="toc-text">1.4.4.1 场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-4-2-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text">1.4.4.2 解决方法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-5-JWT"><span class="toc-text">1.4.5 JWT</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-5-1-JWT-%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-text">1.4.5.1 JWT 的基本结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-5-2-JWT-%E7%9A%84%E7%94%9F%E6%88%90%E4%B8%8E%E9%AA%8C%E8%AF%81%E8%BF%87%E7%A8%8B"><span class="toc-text">1.4.5.2 JWT 的生成与验证过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-5-3-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">1.4.5.3 优缺点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-5-4-Go-%E4%BD%BF%E7%94%A8-JWT"><span class="toc-text">1.4.5.4 Go 使用 JWT</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E7%99%BB%E5%BD%95%E4%BF%9D%E6%8A%A4"><span class="toc-text">1.5 登录保护</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-%E7%9F%AD%E4%BF%A1%E7%99%BB%E5%BD%95"><span class="toc-text">1.6 短信登录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-1-%E6%8A%BD%E6%8E%A5%E5%8F%A3"><span class="toc-text">1.6.1  抽接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-2-%E8%85%BE%E8%AE%AF%E4%BA%91%E7%9F%AD%E4%BF%A1"><span class="toc-text">1.6.2 腾讯云短信</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-wire"><span class="toc-text">1.7 wire</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7-1-%E4%BD%9C%E7%94%A8"><span class="toc-text">1.7.1 作用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95"><span class="toc-text">2. 单元测试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-Mock"><span class="toc-text">2.1 Mock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Minikube%E4%B8%8B%E8%BD%BD"><span class="toc-text">1.Minikube下载</span></a></li></ol></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js`,
+    marked: `https://cdn.jsdelivr.net/npm/marked@13.0.1/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.29.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    }
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
