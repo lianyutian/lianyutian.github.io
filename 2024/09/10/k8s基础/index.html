@@ -1,0 +1,1011 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.29.1" theme-name="Stellar" theme-version="1.29.1">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>k8s基础 - Lianyutian</title>
+
+  
+    <meta name="description" content="基础设施的变革单机场景传统方式部署早期，各个组织是在物理服务器上运行应用程序。 由于无法限制在物理服务器中运行的应用程序资源使用，因此会导致资源分配问题。 例如，如果在同一台物理服务器上运行多个应用程序， 则可能会出现一个应用程序占用大部分资源的情况，而导致其他应用程序的性能下降。 一种解决方案是将每个应用程序都运行在不同的物理服务器上， 但是当某个应用程序资源利用率不高时，剩余资源无法被分配给其">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s基础">
+<meta property="og:url" content="http://example.com/2024/09/10/k8s%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="基础设施的变革单机场景传统方式部署早期，各个组织是在物理服务器上运行应用程序。 由于无法限制在物理服务器中运行的应用程序资源使用，因此会导致资源分配问题。 例如，如果在同一台物理服务器上运行多个应用程序， 则可能会出现一个应用程序占用大部分资源的情况，而导致其他应用程序的性能下降。 一种解决方案是将每个应用程序都运行在不同的物理服务器上， 但是当某个应用程序资源利用率不高时，剩余资源无法被分配给其">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212634519.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212653550.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212727170.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910213310601.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910213654811.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250409150242.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250409153943.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250409172434.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210634668.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210651234.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210704494.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210713584.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210724847.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210732763.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210750717.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912212501902.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912205837915.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210035600.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210341608.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210303796.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210527146.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912223602012.png">
+<meta property="og:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912223703841.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250411162010.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250411162157.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250411170611.png">
+<meta property="article:published_time" content="2024-09-10T20:29:20.000Z">
+<meta property="article:modified_time" content="2025-04-11T09:35:32.402Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="k8s、Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212634519.png">
+  
+  
+  
+  <meta name="keywords" content="k8s、Go">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.29.1">
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body s:aa content tech" id="start" layout="post" ><aside class="l_left"><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/assets/20240507174529.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Lianyutian</div><div class="sub cap">学无止境</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item active" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/"><span class="title">rpc基础</span></a><a class="item title" href="/2025/03/25/xxl-job/"><span class="title">xxl-job基础</span></a><a class="item title" href="/2024/06/24/%E6%90%AD%E5%BB%BA%E4%BA%91%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"><span class="title">搭建云开发环境</span></a><a class="item title" href="/2025/02/20/python%E5%9F%BA%E7%A1%80/"><span class="title">python基础</span></a><a class="item title" href="/2024/12/13/circle-shop/"><span class="title">circle-shop</span></a><a class="item title" href="/2024/11/26/cloud-mall-vue/"><span class="title">cloud-mall-vue</span></a><a class="item title" href="/2024/09/10/k8s%E5%9F%BA%E7%A1%80/"><span class="title">k8s基础</span></a><a class="item title" href="/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/"><span class="title">protobuf基础</span></a><a class="item title" href="/2024/09/26/React%E5%9F%BA%E7%A1%80/"><span class="title">React基础</span></a><a class="item title" href="/2024/05/29/ReentrantLock%E8%AF%A6%E8%A7%A3/"><span class="title">ReentrantLock详解</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/k8s/">k8s</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-09-10T20:29:20.000Z">2024-09-10</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-04-11T09:35:32.402Z">2025-04-11</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>k8s基础</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="基础设施的变革"><a href="#基础设施的变革" class="headerlink" title="基础设施的变革"></a>基础设施的变革</h2><h3 id="单机场景"><a href="#单机场景" class="headerlink" title="单机场景"></a>单机场景</h3><h4 id="传统方式部署"><a href="#传统方式部署" class="headerlink" title="传统方式部署"></a>传统方式部署</h4><p>早期，各个组织是在物理服务器上运行应用程序。 由于无法限制在物理服务器中运行的应用程序资源使用，因此会导致资源分配问题。 例如，如果在同一台物理服务器上运行多个应用程序， 则可能会出现一个应用程序占用大部分资源的情况，而导致其他应用程序的性能下降。 一种解决方案是将每个应用程序都运行在不同的物理服务器上， 但是当某个应用程序资源利用率不高时，剩余资源无法被分配给其他应用程序， 而且维护许多物理服务器的成本很高。</p>
+<p>机器硬件-&gt; 操作系统-&gt; 应用服务（n）</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212634519.png" alt="image-20240910212634519"></p>
+<h4 id="虚拟部署"><a href="#虚拟部署" class="headerlink" title="虚拟部署"></a>虚拟部署</h4><p>因此，虚拟化技术被引入了。虚拟化技术允许你在单个物理服务器的 CPU 上运行多台虚拟机（VM）。 虚拟化能使应用程序在不同 VM 之间被彼此隔离，且能提供一定程度的安全性， 因为一个应用程序的信息不能被另一应用程序随意访问。虚拟化技术能够更好地利用物理服务器的资源，并且因为可轻松地添加或更新应用程序， 而因此可以具有更高的可扩缩性，以及降低硬件成本等等的好处。 通过虚拟化，你可以将一组物理资源呈现为可丢弃的虚拟机集群。每个 VM 是一台完整的计算机，在虚拟化硬件之上运行所有组件，包括其自己的操作系统。</p>
+<p>机器硬件-&gt; 操作系统-&gt; 虚拟机（n）-&gt; 应用服务（n）</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212653550.png" alt="image-20240910212653550"></p>
+<h4 id="容器部署"><a href="#容器部署" class="headerlink" title="容器部署"></a>容器部署</h4><p>容器类似于 VM，但是更宽松的隔离特性，使容器之间可以共享操作系统（OS）。 因此，容器比起 VM 被认为是更轻量级的。且与 VM 类似，每个容器都具有自己的文件系统、CPU、内存、进程空间等。 由于它们与基础架构分离，因此可以跨云和 OS 发行版本进行移植。</p>
+<p>容器因具有许多优势而变得流行起来，例如：</p>
+<ul>
+<li><p>敏捷应用程序的创建和部署：与使用 VM 镜像相比，提高了容器镜像创建的简便性和效率。</p>
+</li>
+<li><p>持续开发、集成和部署：通过快速简单的回滚（由于镜像不可变性）， 提供可靠且频繁的容器镜像构建和部署。</p>
+</li>
+<li><p>关注开发与运维的分离：在构建、发布时创建应用程序容器镜像，而不是在部署时， 从而将应用程序与基础架构分离。</p>
+</li>
+<li><p>可观察性：不仅可以显示 OS 级别的信息和指标，还可以显示应用程序的运行状况和其他指标信号。</p>
+</li>
+<li><p>跨开发、测试和生产的环境一致性：在笔记本计算机上也可以和在云中运行一样的应用程序。</p>
+</li>
+<li><p>跨云和操作系统发行版本的可移植性：可在 Ubuntu、RHEL、CoreOS、本地、 Google Kubernetes Engine 和其他任何地方运行。</p>
+</li>
+<li><p>以应用程序为中心的管理：提高抽象级别，从在虚拟硬件上运行 OS 到使用逻辑资源在 OS 上运行应用程序。</p>
+</li>
+<li><p>松散耦合、分布式、弹性、解放的微服务：应用程序被分解成较小的独立部分， 并且可以动态部署和管理 - 而不是在一台大型单机上整体运行。</p>
+</li>
+<li><p>资源隔离：可预测的应用程序性能。</p>
+</li>
+<li><p>资源利用：高效率和高密度。</p>
+</li>
+</ul>
+<p>机器硬件-&gt; 操作系统-&gt; 容器-&gt; 应用服务（n）</p>
+<p><strong>优势：</strong></p>
+<blockquote>
+<p><strong>资源效率</strong>：</p>
+<ul>
+<li><strong>轻量级</strong>：容器共享宿主操作系统的内核，不需要完整的操作系统，每个容器仅包含应用和其依赖。这使得容器比虚拟机更轻量，启动速度更快，资源占用更少。</li>
+<li><strong>资源利用率</strong>：由于容器更轻量，通常可以在同一台物理机器上运行更多的容器实例，而虚拟机则需要更多的计算资源和内存。</li>
+</ul>
+<p><strong>启动时间</strong>：</p>
+<ul>
+<li><strong>快速启动</strong>：容器的启动速度通常比虚拟机快得多。这是因为容器只需启动应用程序及其依赖，而虚拟机需要启动一个完整的操作系统。</li>
+</ul>
+<p><strong>部署一致性</strong>：</p>
+<ul>
+<li><strong>环境一致性</strong>：容器封装了应用及其所有依赖，确保在不同环境中（开发、测试、生产）具有一致的行为。这减少了因环境差异导致的问题。</li>
+</ul>
+<p><strong>管理和运维</strong>：</p>
+<ul>
+<li><strong>简化管理</strong>：容器可以通过容器编排工具（如 Kubernetes）来管理和部署，支持自动扩展、负载均衡和故障恢复。虚拟机的管理则相对复杂一些。</li>
+<li><strong>更好的开发体验</strong>：容器支持持续集成和持续交付（CI&#x2F;CD），有助于提高开发效率和减少发布周期。</li>
+</ul>
+<p><strong>可移植性</strong>：</p>
+<ul>
+<li><strong>跨平台</strong>：容器可以在任何支持容器引擎的环境中运行，如不同的操作系统或云平台。这使得应用程序在不同环境之间的迁移变得更加容易。</li>
+</ul>
+<p><strong>版本控制</strong>：</p>
+<ul>
+<li><strong>镜像版本管理</strong>：容器镜像可以被版本控制和存储在镜像仓库中，这使得回滚到某个特定版本或使用不同版本的镜像变得简单。</li>
+</ul>
+</blockquote>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910212727170.png" alt="image-20240910212727170"></p>
+<p><strong>缺点：</strong></p>
+<blockquote>
+<p><strong>安全性</strong>：</p>
+<ul>
+<li><strong>内核共享</strong>：容器共享宿主操作系统的内核，这意味着如果容器化应用中存在漏洞，攻击者可能会利用这些漏洞获取宿主操作系统的控制权。这种共享内核的机制使得容器的隔离性相对较弱。</li>
+<li><strong>攻击面增大</strong>：容器技术的流行增加了攻击者对容器环境的兴趣。容器漏洞或配置错误可能会导致安全问题，如容器逃逸（container escape）等。</li>
+</ul>
+<p><strong>隔离性</strong>：</p>
+<ul>
+<li><strong>资源隔离</strong>：虽然容器在大多数情况下提供了足够的资源隔离，但与虚拟机相比，容器在资源隔离方面仍然有限。虚拟机通过完全虚拟化提供了更强的隔离性和安全性。</li>
+<li><strong>网络和存储隔离</strong>：容器在网络和存储方面的隔离可能不如虚拟机那样强，尤其是在复杂的网络设置或多租户环境中。</li>
+</ul>
+<p><strong>复杂性</strong>：</p>
+<ul>
+<li><strong>管理和编排</strong>：虽然容器编排工具（如 Kubernetes）可以提供强大的管理功能，但它们也引入了额外的复杂性。学习和配置这些工具需要额外的时间和资源。</li>
+<li><strong>持久化存储</strong>：容器本身是短暂的，虽然可以通过卷（volumes）来管理数据持久性，但容器的临时性和动态性使得持久化存储和数据管理更为复杂。</li>
+</ul>
+<p><strong>兼容性</strong>：</p>
+<ul>
+<li><strong>操作系统和内核版本</strong>：容器依赖宿主操作系统和内核的特性，某些操作系统或内核版本可能不完全支持容器的特定功能。这可能会限制某些应用程序的容器化能力。</li>
+<li><strong>应用兼容性</strong>：某些应用程序可能不适合在容器中运行，特别是那些需要对操作系统有特殊要求的应用程序。</li>
+</ul>
+<p><strong>调试和监控</strong>：</p>
+<ul>
+<li><strong>调试难度</strong>：容器的动态特性（如快速启动和销毁）可能使得调试和排错更加复杂。容器化环境中的故障排除可能需要额外的工具和技巧。</li>
+<li><strong>监控挑战</strong>：虽然现代工具可以监控容器，但容器环境的动态性和分布式特性可能使得监控和日志管理更加复杂。</li>
+</ul>
+</blockquote>
+<h3 id="集群场景-IAAS"><a href="#集群场景-IAAS" class="headerlink" title="集群场景-IAAS"></a>集群场景-IAAS</h3><p>IAAS（Infrastructure as a Service，基础设施即服务）是一种云计算服务模型，它提供了对计算资源、存储、网络和其他基础设施组件的虚拟化访问。这些资源可以通过互联网按需进行访问和管理，而无需用户购买和维护物理硬件。例如各种云服务提供厂商：阿里云、腾讯云、华为云。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910213310601.png" alt="image-20240910213310601"></p>
+<h3 id="集群场景-PAAS"><a href="#集群场景-PAAS" class="headerlink" title="集群场景-PAAS"></a>集群场景-PAAS</h3><p>PAAS（Platform as a Service，平台即服务）是一种云计算服务模型，提供了一个完整的平台，允许开发者在其上构建、测试、部署和维护应用程序，而无需管理底层的基础设施（如服务器、存储、网络和操作系统）。PAAS 简化了应用程序开发和管理的过程，使得开发者能够专注于应用逻辑和功能，而不是基础设施的管理。例如：Swarm、MESOS、Kubernetes</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240910213654811.png" alt="image-20240910213654811"></p>
+<h2 id="Kubernetes-简介"><a href="#Kubernetes-简介" class="headerlink" title="Kubernetes 简介"></a>Kubernetes 简介</h2><p>Kubernetes 是一个可移植、可扩展的开源平台，用于 <strong>管理容器化的工作负载和服务</strong>，方便进行声明式配置和自动化。</p>
+<h3 id="为什么需要-Kubernetes？"><a href="#为什么需要-Kubernetes？" class="headerlink" title="为什么需要 Kubernetes？"></a>为什么需要 Kubernetes？</h3><p>容器是打包和运行应用程序的好方式。在生产环境中， 需要管理运行着应用程序的容器，并确保服务不会下线。 例如，如果一个容器发生故障，则需要启动另一个容器。 如果此行为交由给系统处理，是不是会更容易一些？</p>
+<p>这就是 Kubernetes 要来做的事情！ Kubernetes 提供了一个可弹性运行分布式系统的框架。 Kubernetes 会满足你的扩展要求、故障转移你的应用、提供部署模式等。</p>
+<h3 id="Kubernetes-功能"><a href="#Kubernetes-功能" class="headerlink" title="Kubernetes 功能"></a>Kubernetes 功能</h3><ul>
+<li><p><strong>服务发现和负载均衡</strong></p>
+<p>Kubernetes 可以使用 DNS 名称或自己的 IP 地址来暴露容器。 如果进入容器的流量很大， Kubernetes 可以负载均衡并分配网络流量，从而使部署稳定。</p>
+</li>
+<li><p><strong>存储编排</strong></p>
+<p>Kubernetes 允许你自动挂载你选择的存储系统，例如本地存储、公共云提供商等。</p>
+</li>
+<li><p><strong>自动部署和回滚</strong></p>
+<p>你可以使用 Kubernetes 描述已部署容器的所需状态， 它可以以受控的速率将实际状态更改为期望状态。 例如，你可以自动化 Kubernetes 来为你的部署创建新容器， 删除现有容器并将它们的所有资源用于新容器。</p>
+</li>
+<li><p><strong>自动分配 CPU&#x2F;内存资源 - 弹性伸缩</strong></p>
+<p>你为 Kubernetes 提供许多节点组成的集群，在这个集群上运行容器化的任务。 你告诉 Kubernetes 每个容器需要多少 CPU 和内存 (RAM)。 Kubernetes 可以将这些容器按实际情况调度到你的节点上，以最佳方式利用你的资源。</p>
+</li>
+<li><p><strong>自我修复</strong></p>
+<p>Kubernetes 将重新启动失败的容器、替换容器、杀死不响应用户定义的运行状况检查的容器， 并且在准备好服务之前不将其通告给客户端。</p>
+</li>
+<li><p><strong>密钥与配置管理</strong></p>
+<p>Kubernetes 允许你存储和管理敏感信息，例如密码、OAuth 令牌和 SSH 密钥。 你可以在不重建容器镜像的情况下部署和更新密钥和应用程序配置，也无需在堆栈配置中暴露密钥。</p>
+</li>
+<li><p><strong>批处理执行</strong> 除了服务外，Kubernetes 还可以管理你的批处理和 CI（持续集成）工作负载，如有需要，可以替换失败的容器。</p>
+</li>
+<li><p><strong>水平扩缩</strong> 使用简单的命令、用户界面或根据 CPU 使用率自动对你的应用进行扩缩。</p>
+</li>
+<li><p><strong>IPv4&#x2F;IPv6 双栈</strong> 为 Pod（容器组）和 Service（服务）分配 IPv4 和 IPv6 地址。</p>
+</li>
+<li><p><strong>为可扩展性设计</strong> 在不改变上游源代码的情况下为你的 Kubernetes 集群添加功能。</p>
+</li>
+</ul>
+<h2 id="Kubernetes-组件"><a href="#Kubernetes-组件" class="headerlink" title="Kubernetes 组件"></a>Kubernetes 组件</h2><p>Kubernetes 集群由 <strong>控制平面</strong> 和一个或多个 <strong>工作节点</strong> 组成。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250409150242.png"></p>
+<h3 id="Control-Plane-Components（控制平面）"><a href="#Control-Plane-Components（控制平面）" class="headerlink" title="Control Plane Components（控制平面）"></a>Control Plane Components（控制平面）</h3><p>管理集群的整体状态</p>
+<ul>
+<li><strong>API Server</strong>：公开 Kubernetes HTTP API 的核心组件服务器。</li>
+<li><strong>Controller Manager</strong>：负责处理集群的常规任务和控制逻辑，如副本控制、节点控制、端点控制等。</li>
+<li><strong>Scheduler</strong>：负责将 Pod 分配到合适的节点上，基于资源需求、策略和其他约束条件。</li>
+<li><strong>etcd</strong>：一个分布式键值存储，用于保存和复制集群状态数据。</li>
+<li>**cloud-controller-manager (可选)**：与底层云驱动集成</li>
+</ul>
+<h3 id="Node（工作节点）"><a href="#Node（工作节点）" class="headerlink" title="Node（工作节点）"></a>Node（工作节点）</h3><p>在每个节点上运行，维护运行的 Pod 并提供 Kubernetes 运行时环境</p>
+<ul>
+<li><strong>kubelet</strong>：一个在每个节点上运行的代理，负责管理 Pod 的生命周期和节点的健康状态。</li>
+<li><strong>Container Runtime</strong>：负责运行容器的组件（如 Docker、containerd 或 CRI-O）。</li>
+<li><strong>kube-proxy（可选）</strong>：实现服务代理和负载均衡，为 Pod 提供网络服务。</li>
+</ul>
+<h3 id="插件（Addons）"><a href="#插件（Addons）" class="headerlink" title="插件（Addons）"></a>插件（Addons）</h3><p>插件扩展了 Kubernetes 的功能。一些重要的例子包括：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/architecture/#dns">DNS</a></p>
+<p>集群范围内的 DNS 解析</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/architecture/#web-ui-dashboard">Web 界面</a>（Dashboard）</p>
+<p>通过 Web 界面进行集群管理</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/architecture/#container-resource-monitoring">容器资源监控</a></p>
+<p>用于收集和存储容器指标</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/architecture/#cluster-level-logging">集群层面日志</a></p>
+<p>用于将容器日志保存到中央日志存储</p>
+</li>
+</ul>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h3><p>打包应用及其运行依赖环境的技术。容器将应用程序从底层的主机设施中解耦。 这使得在不同的云或 OS 环境中部署更加容易。</p>
+<p>Kubernetes 集群中的每个 <a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/architecture/nodes/">节点</a> 都会运行容器， 这些容器构成分配给该节点的 <a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/workloads/pods/">Pod</a>。 单个 Pod 中的容器会在共同调度下，于同一位置运行在相同的节点上。</p>
+<h4 id="Pause-容器"><a href="#Pause-容器" class="headerlink" title="Pause 容器"></a>Pause 容器</h4><h5 id="‌基础概念‌"><a href="#‌基础概念‌" class="headerlink" title="‌基础概念‌"></a>‌<strong>基础概念</strong>‌</h5><ul>
+<li>‌<strong>Pause 容器</strong>‌（又称 Infra 容器）是每个 Pod 最先启动的隐藏容器，负责创建并维持 Pod 级别的 Linux 命名空间（如网络、IPC 等）。</li>
+<li>它不运行业务逻辑，仅执行 <code>/pause</code> 命令保持阻塞状态，占用资源极低（约 300KB 镜像）‌。</li>
+</ul>
+<h5 id="核心功能‌"><a href="#核心功能‌" class="headerlink" title="核心功能‌"></a><strong>核心功能</strong>‌</h5><ul>
+<li>‌<strong>共享网络&#x2F;IPC 命名空间</strong>‌：确保同 Pod 内容器共享相同 IP、端口范围，可通过 <code>localhost</code> 直接通信‌（如 Nginx 容器与日志收集器通过本地端口直接交互）。</li>
+<li>‌<strong>僵尸进程回收</strong>‌：作为 PID 1 进程，负责回收子进程避免僵尸进程堆积‌。</li>
+<li>‌<strong>稳定性保障</strong>‌：即使业务容器崩溃，Pause 容器仍保持运行，维持 Pod 网络身份不变‌。</li>
+</ul>
+<h5 id="典型行为特征"><a href="#典型行为特征" class="headerlink" title="典型行为特征"></a>典型行为特征</h5><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>镜像体积</td>
+<td>仅约 300KB，仅运行阻塞式 <code>/pause</code> 命令‌</td>
+</tr>
+<tr>
+<td>资源占用</td>
+<td>内存占用约 700KB，CPU 几乎无消耗‌</td>
+</tr>
+<tr>
+<td>生命周期</td>
+<td>与 Pod 完全绑定，Pod 删除后自动终止</td>
+</tr>
+</tbody></table>
+<h3 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h3><p><strong>Pod</strong> 是可以在 Kubernetes 中创建和管理的、最小的可部署的计算单元。</p>
+<p><strong>Pod</strong>（就像在鲸鱼荚或者豌豆荚中）是一组（一个或多个） <a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/containers/">容器</a>； 这些容器共享存储、网络、以及怎样运行这些容器的规约。 Pod 中的内容总是并置的并且一同调度，在共享的上下文中运行。 Pod 所建模的是特定于应用的 “逻辑主机”，其中包含一个或多个应用容器， 这些容器相对紧密地耦合在一起。</p>
+<p>用大白话给你解释 Kubernetes（k8s）里的容器和 Pod：</p>
+<ol>
+<li>‌<strong>容器</strong>‌ —— 就像一个个 “小罐头”<ul>
+<li>每个罐头里打包了一个完整的应用（比如一个网站后台）</li>
+<li>自带所有需要的配料（代码、环境、依赖库）</li>
+<li>和冰箱其他罐头相互隔离（不会互相干扰）</li>
+<li>轻巧便携，可以快速复制很多份</li>
+</ul>
+</li>
+<li>‌<strong>Pod</strong>‌ —— 相当于 “罐头礼盒”<ul>
+<li>最小的可部署单元（k8s 不直接管单个罐头，只管礼盒）</li>
+<li>一个礼盒里可以放：<ul>
+<li>单个主罐头（最常见）</li>
+<li>多个需要紧密配合的罐头（比如主程序+日志收集器）</li>
+</ul>
+</li>
+<li>礼盒里的罐头们：<ul>
+<li>共用同一个收件地址（IP 地址）</li>
+<li>可以互相访问 localhost</li>
+<li>共享同一块临时存储空间</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>举个栗子 🌰：</p>
+<ul>
+<li>你想部署一个网站，需要：<ul>
+<li>主程序容器（比如 Nginx）</li>
+<li>日志收集容器（比如 Filebeat）</li>
+</ul>
+</li>
+<li>这俩容器就会被打包在同一个 Pod 里</li>
+<li>它们可以共用日志文件，通过本地网络通信</li>
+</ul>
+<p>关键区别：</p>
+<ul>
+<li>容器是技术单元（实际运行的东西）</li>
+<li>Pod 是管理单元（k8s 调度的最小单位）</li>
+<li>就像你不会单独邮寄一个罐头，总是整盒寄送</li>
+</ul>
+<p>Pod 的设计让紧密协作的多个容器能像 “一个应用” 一样被管理。</p>
+<h2 id="Kubernetes-安装"><a href="#Kubernetes-安装" class="headerlink" title="Kubernetes 安装"></a>Kubernetes 安装</h2><h3 id="Minikube-安装-Kubernetes"><a href="#Minikube-安装-Kubernetes" class="headerlink" title="Minikube 安装 Kubernetes"></a>Minikube 安装 Kubernetes</h3><h4 id="安装-Minikube"><a href="#安装-Minikube" class="headerlink" title="安装 Minikube"></a>安装 Minikube</h4><ol>
+<li><p>下载 windows 版本</p>
+<p><a target="_blank" rel="noopener" href="https://minikube.sigs.k8s.io/docs/start/?arch=/windows/x86-64/stable/.exe+download">https://minikube.sigs.k8s.io/docs/start/?arch=%2Fwindows%2Fx86-64%2Fstable%2F.exe+download</a></p>
+</li>
+<li><p>安装 Minikube</p>
+</li>
+<li><p>打开安装目录，使用管理员打开 PowerShell 界面运行 Minikube</p>
+<ul>
+<li><p>安装失败</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250409153943.png"></p>
+</li>
+<li><p>启用 hyper-v</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Destinyzhoujunyu/article/details/131610508">https://blog.csdn.net/Destinyzhoujunyu/article/details/131610508</a></p>
+</li>
+</ul>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250409172434.png"></p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set HTTP_PROXY=http://127.0.0.1:17890</span><br><span class="line">set HTTPS_PROXY=https://127.0.0.1:17890</span><br><span class="line">set NO_PROXY=localhost,127.0.0.1,10.96.0.0/12,192.168.59.0/24,192.168.49.0/24,192.168.39.0/24</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="虚拟机安装"><a href="#虚拟机安装" class="headerlink" title="虚拟机安装"></a>虚拟机安装</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210634668.png" alt="image-20240912210634668"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210651234.png" alt="image-20240912210651234"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210704494.png" alt="image-20240912210704494"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210713584.png" alt="image-20240912210713584"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210724847.png" alt="image-20240912210724847"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210732763.png" alt="image-20240912210732763"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210750717.png" alt="image-20240912210750717"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912212501902.png" alt="image-20240912212501902"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912205837915.png" alt="image-20240912205837915"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210035600.png" alt="image-20240912210035600"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210341608.png" alt="image-20240912210341608"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210303796.png" alt="image-20240912210303796"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912210527146.png" alt="image-20240912210527146"></p>
+<h3 id="虚拟机配置"><a href="#虚拟机配置" class="headerlink" title="虚拟机配置"></a>虚拟机配置</h3><p><strong>修改网络配置，注意修改号小的第一个网卡</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/NetworkManager/system-connections</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[connection]</span><br><span class="line">id=ens160</span><br><span class="line">uuid=608f85fc-b982-3408-a5c1-cf192287a0a2</span><br><span class="line">type=ethernet</span><br><span class="line">autoconnect-priority=-999</span><br><span class="line">interface-name=ens160</span><br><span class="line">timestamp=1726174608</span><br><span class="line"></span><br><span class="line">[ethernet]</span><br><span class="line"></span><br><span class="line">[ipv4]</span><br><span class="line">method=manual</span><br><span class="line">address1=192.168.3.10/24,192.168.3.1</span><br><span class="line"></span><br><span class="line">[ipv6]</span><br><span class="line">addr-gen-mode=eui64</span><br><span class="line">method=auto</span><br><span class="line"></span><br><span class="line">[proxy]</span><br></pre></td></tr></table></figure>
+
+<p><strong>编辑仅主机网卡修改网段为 192.168.3.x</strong></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912223602012.png" alt="image-20240912223602012"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="C:\Users\14361\AppData\Roaming\Typora\typora-user-images\image-20240912223703841.png" alt="image-20240912223703841"></p>
+<p><strong>替换 yum 源</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sed -e &#x27;s|^mirrorlist=|#mirrorlist=|g&#x27; \</span><br><span class="line">    -e&#x27;s|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirrors.aliyun.com/rockylinux|g&#x27; \</span><br><span class="line">    -i.bak \</span><br><span class="line">   /etc/yum.repos.d/[Rr]ocky*.repo</span><br><span class="line">   </span><br><span class="line">dnf makecache</span><br></pre></td></tr></table></figure>
+
+<p><strong>关闭防火墙</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld</span><br><span class="line">systemctl disable firewalld</span><br></pre></td></tr></table></figure>
+
+<p><strong>开启 iptables</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dnf -y install iptables-services</span><br><span class="line">systemctl start iptables</span><br><span class="line">iptables -F</span><br><span class="line">service iptables save</span><br><span class="line">systemctl enable iptables</span><br></pre></td></tr></table></figure>
+
+<p><strong>禁用 Selinux</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">setenforce 0</span><br><span class="line">sed -i &quot;s/SELINUX=enforcing/SELINUX=disabled/g&quot; /etc/selinux/config</span><br><span class="line">grubby --update-kernel ALL --args selinux=0</span><br></pre></td></tr></table></figure>
+
+<p><strong>设置系统时区</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">timedatectl set-timezone Asia/Shanghai</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装-Docker-环境"><a href="#安装-Docker-环境" class="headerlink" title="安装 Docker 环境"></a>安装 Docker 环境</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">加载 bridge</span></span><br><span class="line">dnf install -y epel-release</span><br><span class="line">dnf install -y bridge-utils</span><br><span class="line"></span><br><span class="line">modprobe br_netfilter</span><br><span class="line"></span><br><span class="line">echo &#x27;br_netfilter&#x27; &gt;&gt; /etc/modules-load.d/bridge.conf</span><br><span class="line">echo &#x27;net.bridge.bridge-nf-call-iptables=1&#x27; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &#x27;net.bridge.bridge-nf-call-ip6tables=1&#x27; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &#x27;net.ipv4.ip_forward=1&#x27; &gt;&gt; /etc/sysctl.conf</span><br><span class="line"></span><br><span class="line">sysctl -p</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">添加 docker-ce yum 源</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">中科大(ustc)</span></span><br><span class="line">sudo dnf config-manager --add-repo https://mirrors.ustc.edu.cn/docker-ce/linux/centos/docker-ce.repo</span><br><span class="line">cd /etc/yum.repos.d</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">切换中科大源</span></span><br><span class="line">sed -e &#x27;s|download.docker.com|mirrors.ustc.edu.cn/docker-ce|g&#x27; docker-ce.repo</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 docker-ce</span></span><br><span class="line">dnf -y install docker-ce</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">配置 daemon.</span></span><br><span class="line">cat &gt; /etc/docker/daemon.json &lt;&lt;EOF</span><br><span class="line">&#123;</span><br><span class="line">      &quot;data-root&quot;: &quot;/data/docker&quot;,</span><br><span class="line">      &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;],</span><br><span class="line">      &quot;log-driver&quot;: &quot;json-file&quot;,</span><br><span class="line">      &quot;log-opts&quot;: &#123;</span><br><span class="line">        &quot;max-size&quot;: &quot;100m&quot;,</span><br><span class="line">        &quot;max-file&quot;: &quot;100&quot;</span><br><span class="line"> 	  &#125;,</span><br><span class="line">      &quot;insecure-registries&quot;: [&quot;harbor.xinxainghf.com&quot;],</span><br><span class="line">      &quot;registry-mirrors&quot;: [&quot;https://kfp63jaj.mirror.aliyuncs.com&quot;]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">mkdir -p /etc/systemd/system/docker.service.d</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">重启docker服务</span></span><br><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker </span><br><span class="line">systemctl enable docker</span><br></pre></td></tr></table></figure>
+
+<h2 id="资源清单"><a href="#资源清单" class="headerlink" title="资源清单"></a>资源清单</h2><h3 id="什么是资源清单？"><a href="#什么是资源清单？" class="headerlink" title="什么是资源清单？"></a>什么是资源清单？</h3><p><strong>资源</strong>：K8S 中所有的内容都抽象为 <strong>资源</strong>，资源实例化之后称为 <strong>对象‌</strong>。</p>
+<p><strong>资源清单的作用</strong>‌：是与 K8S 集群交互的机制，用于传递配置信息，创建符合预期的 Pod 或其他资源‌。</p>
+<p>在 Kubernetes（K8S）中，‌<strong>资源</strong>‌、‌<strong>对象</strong>‌和‌<strong>资源清单</strong>‌是三个核心概念，它们的关系可以用日常生活中的例子来类比：</p>
+<p><strong>资源（Resource）</strong>‌</p>
+<ul>
+<li>‌通俗解释：资源是 K8S 里的“工具”或“原材料”，每种工具都有特定功能。比如：<ul>
+<li><code>Pod</code>：像是一个“快递包裹”，里面装着一个或多个容器（比如 Nginx 服务）‌。</li>
+<li><code>Deployment</code>：像“流水线说明书”，告诉 K8S 如何批量管理相同的 Pod（比如始终保持 3 个 Nginx 副本运行）‌。</li>
+<li><code>Service</code>：相当于“电话号码簿”，让其他服务能找到你的 Pod‌。</li>
+</ul>
+</li>
+<li>‌<strong>本质</strong>‌：K8S 将计算、存储、网络等能力抽象成不同类型的资源，用户通过操作这些资源来管理应用‌。</li>
+</ul>
+<p><strong>对象（Object）</strong>‌</p>
+<ul>
+<li>‌通俗解释‌：对象是资源的“具体实例”。比如：<ul>
+<li>资源是“菜谱”，对象就是“按菜谱做出来的菜”。</li>
+<li>你定义一个 <code>Deployment</code> 资源（菜谱），K8S 实际创建的就是一个 <code>Deployment</code> 对象（一盘菜）‌。</li>
+</ul>
+</li>
+<li>‌<strong>关键点</strong>‌：对象是运行时存在的实体，持有当前状态（比如 Pod 是否运行正常）‌。</li>
+</ul>
+<p><strong>资源清单（Manifest）</strong>‌</p>
+<ul>
+<li><p>‌通俗解释‌：资源清单是“需求说明书”，用 YAML 或 JSON 格式写下你的需求。例如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span>       <span class="comment"># 用哪个版本的“工具”（API 版本）</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span>            <span class="comment"># 要创建什么（资源类型）</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-pod</span>    <span class="comment"># 实例名称</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span>      <span class="comment"># 容器名</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx</span>     <span class="comment"># 镜像地址:ml-citation&#123;ref=&quot;8&quot; data=&quot;citationList&quot;&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>‌<strong>作用</strong>‌：把这份清单提交给 K8S，它就会按你的要求创建并管理对应的对象‌。</p>
+</li>
+</ul>
+<p><strong>三者的关系总结：</strong></p>
+<ol>
+<li>‌<strong>资源</strong>‌是抽象的功能分类（如 Pod、Service）。</li>
+<li>‌<strong>对象</strong>‌是资源的实际实例（如一个名为 <code>nginx-pod</code> 的 Pod）。</li>
+<li>‌<strong>资源清单</strong>‌是生成对象的“配方”（YAML&#x2F;JSON 文件）‌。</li>
+</ol>
+<p>‌<strong>类比</strong>‌：</p>
+<ul>
+<li>资源 &#x3D; 乐高积木的类型（比如车轮、窗户）。</li>
+<li>对象 &#x3D; 拼好的乐高模型（比如一辆车）。</li>
+<li>资源清单 &#x3D; 拼装说明书（告诉你怎么拼）‌。</li>
+</ul>
+<p>通过这种机制，K8S 实现了对应用的声明式管理（你只需描述“想要什么”，而非“如何做”）‌。</p>
+<h3 id="资源类型"><a href="#资源类型" class="headerlink" title="资源类型"></a>资源类型</h3><h4 id="命名空间级别"><a href="#命名空间级别" class="headerlink" title="命名空间级别"></a>命名空间级别</h4><h5 id="工作负载型资源-Workload"><a href="#工作负载型资源-Workload" class="headerlink" title="工作负载型资源 (Workload)"></a>工作负载型资源 (Workload)</h5><p>用于管理容器化应用的生命周期：</p>
+<ul>
+<li><code>Pod</code>：最基本的可调度单位，包含一个或多个容器‌。</li>
+<li><code>Deployment</code>：管理无状态应用，支持滚动更新和回滚‌。</li>
+<li><code>StatefulSet</code>：管理有状态应用，提供稳定的存储和唯一标识‌。</li>
+<li><code>DaemonSet</code>：确保每个节点运行一个 Pod 副本‌。</li>
+<li><code>Job</code> &#x2F; <code>CronJob</code>：用于一次性或定时任务‌。</li>
+</ul>
+<h5 id="服务发现及负载均衡型资源‌"><a href="#服务发现及负载均衡型资源‌" class="headerlink" title="服务发现及负载均衡型资源‌"></a>服务发现及负载均衡型资源‌</h5><ul>
+<li><code>Service</code>：定义服务端点，实现内部或外部访问和负载均衡‌。</li>
+<li><code>Ingress</code>：管理外部访问的路由规则‌。</li>
+</ul>
+<h5 id="配置与存储型资源"><a href="#配置与存储型资源" class="headerlink" title="配置与存储型资源"></a>配置与存储型资源</h5><ul>
+<li><code>Volume</code>：提供持久化存储支持‌。</li>
+<li><code>ConfigMap</code> &#x2F; <code>Secret</code>：分别存储非敏感配置和敏感数据‌。</li>
+<li><code>CSI</code>：扩展第三方存储接口‌。</li>
+</ul>
+<h4 id="集群级资源‌"><a href="#集群级资源‌" class="headerlink" title="集群级资源‌"></a>集群级资源‌</h4><ul>
+<li><code>Namespace</code>：逻辑隔离资源，支持多租户管理‌。</li>
+<li><code>Node</code>：代表集群中的物理或虚拟机‌。</li>
+</ul>
+<h4 id="元数据型资源"><a href="#元数据型资源" class="headerlink" title="元数据型资源"></a>元数据型资源</h4><ul>
+<li><code>HPA</code> (HorizontalPodAutoscaler)：基于指标自动扩缩容‌。</li>
+<li><code>LimitRange</code>：定义资源限制范围‌。</li>
+</ul>
+<h3 id="资源的编写"><a href="#资源的编写" class="headerlink" title="资源的编写"></a>资源的编写</h3><h4 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h4><p>资源清单必须包含以下核心字段‌：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">group/version</span>  <span class="comment"># 资源所属的 API 组和版本</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ResourceType</span>         <span class="comment"># 资源类型（如 Deployment、Service）</span></span><br><span class="line"><span class="attr">metadata:</span>                  <span class="comment"># 元数据</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">string</span>             <span class="comment"># 资源名称</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">string</span>        <span class="comment"># 所属命名空间（可选）默认是</span></span><br><span class="line"><span class="attr">spec:</span>                      <span class="comment"># 资源的详细配置</span></span><br><span class="line">  <span class="attr">containers:</span>              <span class="comment"># 容器列表（以 Pod 为例）</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">string</span>           <span class="comment"># 容器名称</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">string</span>          <span class="comment"># 容器镜像</span></span><br><span class="line">    <span class="attr">imagePullPolicy:</span> <span class="string">Always|Never|IfNotPresent</span>  <span class="comment"># 镜像拉取策略（可选）</span></span><br></pre></td></tr></table></figure>
+
+<p>资源清单的字段需严格遵循 K8S API 规范，可通过 <code>kubectl explain</code> 命令查询字段定义‌。</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250411162010.png"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250411162157.png"></p>
+<p><strong>示例</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-demo</span></span><br><span class="line">  <span class="attr">namesapce:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-1</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">busybox-1</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/tools:busybox</span></span><br><span class="line">    <span class="attr">command:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;bin/bash&quot;</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;-c&quot;</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;sleep 3600&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>创建Pod</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f yaml-name.yaml</span><br></pre></td></tr></table></figure>
+
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250411170611.png"></p>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 获取容器运行ip</span></span><br><span class="line">kubectl get pod -o wide</span><br><span class="line"><span class="comment"># 进入容器</span></span><br><span class="line">kubectl <span class="built_in">exec</span> -it pod名称 -c 容器名称 -- /bin/bash</span><br><span class="line"><span class="comment"># 通过标签筛选pod</span></span><br><span class="line">kubectl get pod --show-labels</span><br><span class="line">kubectl get pod -l 标签名</span><br><span class="line"><span class="comment"># 查看容器日志</span></span><br><span class="line">kubectl logs pod名称 -c 容器名称</span><br></pre></td></tr></table></figure>
+
+
+
+
+<div class="article-footer fs14">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+</article>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2024/09/26/React%E5%9F%BA%E7%A1%80/">React基础</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/">rpc基础</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E7%9A%84%E5%8F%98%E9%9D%A9"><span class="toc-text">基础设施的变革</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E6%9C%BA%E5%9C%BA%E6%99%AF"><span class="toc-text">单机场景</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F%E9%83%A8%E7%BD%B2"><span class="toc-text">传统方式部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E9%83%A8%E7%BD%B2"><span class="toc-text">虚拟部署</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8%E9%83%A8%E7%BD%B2"><span class="toc-text">容器部署</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E5%9C%BA%E6%99%AF-IAAS"><span class="toc-text">集群场景-IAAS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E5%9C%BA%E6%99%AF-PAAS"><span class="toc-text">集群场景-PAAS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kubernetes-%E7%AE%80%E4%BB%8B"><span class="toc-text">Kubernetes 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81-Kubernetes%EF%BC%9F"><span class="toc-text">为什么需要 Kubernetes？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Kubernetes-%E5%8A%9F%E8%83%BD"><span class="toc-text">Kubernetes 功能</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kubernetes-%E7%BB%84%E4%BB%B6"><span class="toc-text">Kubernetes 组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Control-Plane-Components%EF%BC%88%E6%8E%A7%E5%88%B6%E5%B9%B3%E9%9D%A2%EF%BC%89"><span class="toc-text">Control Plane Components（控制平面）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Node%EF%BC%88%E5%B7%A5%E4%BD%9C%E8%8A%82%E7%82%B9%EF%BC%89"><span class="toc-text">Node（工作节点）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%EF%BC%88Addons%EF%BC%89"><span class="toc-text">插件（Addons）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5"><span class="toc-text">概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8"><span class="toc-text">容器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Pause-%E5%AE%B9%E5%99%A8"><span class="toc-text">Pause 容器</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%80%8C%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E2%80%8C"><span class="toc-text">‌基础概念‌</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E2%80%8C"><span class="toc-text">核心功能‌</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%B8%E5%9E%8B%E8%A1%8C%E4%B8%BA%E7%89%B9%E5%BE%81"><span class="toc-text">典型行为特征</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pod"><span class="toc-text">Pod</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kubernetes-%E5%AE%89%E8%A3%85"><span class="toc-text">Kubernetes 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Minikube-%E5%AE%89%E8%A3%85-Kubernetes"><span class="toc-text">Minikube 安装 Kubernetes</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Minikube"><span class="toc-text">安装 Minikube</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%AE%89%E8%A3%85"><span class="toc-text">虚拟机安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%85%8D%E7%BD%AE"><span class="toc-text">虚拟机配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Docker-%E7%8E%AF%E5%A2%83"><span class="toc-text">安装 Docker 环境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">资源清单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95%EF%BC%9F"><span class="toc-text">什么是资源清单？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E7%B1%BB%E5%9E%8B"><span class="toc-text">资源类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E7%BA%A7%E5%88%AB"><span class="toc-text">命名空间级别</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E5%9E%8B%E8%B5%84%E6%BA%90-Workload"><span class="toc-text">工作负载型资源 (Workload)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%9E%8B%E8%B5%84%E6%BA%90%E2%80%8C"><span class="toc-text">服务发现及负载均衡型资源‌</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%AD%98%E5%82%A8%E5%9E%8B%E8%B5%84%E6%BA%90"><span class="toc-text">配置与存储型资源</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E7%BA%A7%E8%B5%84%E6%BA%90%E2%80%8C"><span class="toc-text">集群级资源‌</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE%E5%9E%8B%E8%B5%84%E6%BA%90"><span class="toc-text">元数据型资源</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-text">资源的编写</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-text">结构</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">常用命令</span></a></li></ol></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel blur'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+<script type="text/javascript">
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js`,
+    marked: `https://cdn.jsdelivr.net/npm/marked@13.0.1/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')){
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+    
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function(response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response.json();
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function(data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function(error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+  };
+</script>
+
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.29.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    }
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3.1/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
