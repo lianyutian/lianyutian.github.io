@@ -1,0 +1,966 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.31.0" theme-name="Stellar" theme-version="1.31.0">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  
+  <title>llmops - Lianyutian</title>
+
+  
+    <meta name="description" content="什么是 LLM？ ‌定义‌大语言模型（LLM）是一种基于深度学习技术的人工智能模型，通过海量文本数据训练获得自然语言的理解与生成能力。其核心目标是模拟人类语言逻辑，处理文本推理、问答、翻译等任务‌。 ‌核心特点‌ ‌大规模训练数据‌：依赖互联网公开文本、书籍、代码等多样化语料库，学习语言的复杂规律和上下文关联‌。 ‌无监督学习‌：多数 LLM 通过自监督学习（如预测掩码词、生成连贯文本）自动提取语">
+<meta property="og:type" content="article">
+<meta property="og:title" content="llmops">
+<meta property="og:url" content="http://example.com/2025/02/20/llmops%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="什么是 LLM？ ‌定义‌大语言模型（LLM）是一种基于深度学习技术的人工智能模型，通过海量文本数据训练获得自然语言的理解与生成能力。其核心目标是模拟人类语言逻辑，处理文本推理、问答、翻译等任务‌。 ‌核心特点‌ ‌大规模训练数据‌：依赖互联网公开文本、书籍、代码等多样化语料库，学习语言的复杂规律和上下文关联‌。 ‌无监督学习‌：多数 LLM 通过自监督学习（如预测掩码词、生成连贯文本）自动提取语">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2025-02-20T16:17:53.000Z">
+<meta property="article:modified_time" content="2025-07-04T09:29:58.342Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="pthon">
+<meta property="article:tag" content="llm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="pthon,llm">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.31.0">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/assets/20240507174529.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main" ff="title">Lianyutian</div><div class="sub cap">学无止境</div></a></div></header>
+
+<div class="nav-area">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<nav class="menu dis-select"><a class="nav-item active" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+
+
+<widget class="widget-wrapper post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2025/03/27/%E7%A4%BE%E5%8C%BA%E5%95%86%E5%9F%8E/"><span class="title">'社区商城'</span></a><a class="item title" href="/2024/06/24/%E6%90%AD%E5%BB%BA%E4%BA%91%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"><span class="title">搭建云开发环境</span></a><a class="item title" href="/2025/02/20/python%E5%9F%BA%E7%A1%80/"><span class="title">python基础</span></a><a class="item title" href="/2025/03/25/xxl-job/"><span class="title">xxl-job基础</span></a><a class="item title" href="/2025/03/27/%E4%BA%91%E7%8E%AF%E5%A2%83/"><span class="title">'云环境'</span></a><a class="item title" href="/2025/03/28/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="title">'区块链'</span></a><a class="item title" href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/"><span class="title">rpc基础</span></a><a class="item title" href="/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/"><span class="title">protobuf基础</span></a><a class="item title" href="/2024/11/26/cloud-mall-vue/"><span class="title">cloud-mall-vue</span></a><a class="item title" href="/2024/09/10/k8s%E5%9F%BA%E7%A1%80/"><span class="title">k8s基础</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-02-20T16:17:53.000Z">2025-02-20</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-07-04T09:29:58.342Z">2025-07-04</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>llmops</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="什么是-LLM？"><a href="#什么是-LLM？" class="headerlink" title="什么是 LLM？"></a>什么是 LLM？</h2><ol>
+<li>‌<strong>定义</strong>‌<br>大语言模型（LLM）是一种基于深度学习技术的人工智能模型，通过海量文本数据训练获得自然语言的理解与生成能力。其核心目标是模拟人类语言逻辑，处理文本推理、问答、翻译等任务‌。</li>
+<li>‌<strong>核心特点</strong>‌<ul>
+<li>‌<strong>大规模训练数据</strong>‌：依赖互联网公开文本、书籍、代码等多样化语料库，学习语言的复杂规律和上下文关联‌。</li>
+<li>‌<strong>无监督学习</strong>‌：多数 LLM 通过自监督学习（如预测掩码词、生成连贯文本）自动提取语言特征，无需人工标注数据‌。</li>
+<li>‌<strong>参数规模</strong>‌：模型参数量通常达到百亿甚至千亿级别，通过增加参数提升对复杂语义的捕捉能力‌。</li>
+</ul>
+</li>
+<li>‌<strong>应用场景</strong>‌<ul>
+<li>‌<strong>智能对话系统</strong>‌：如 ChatGPT 等产品，提供拟人化交互体验‌。</li>
+<li>‌<strong>代码生成与补全</strong>‌：辅助开发者快速编写程序（如 GitHub Copilot）‌。</li>
+<li>‌<strong>多语言翻译</strong>‌：支持跨语言文本的高质量转换‌。</li>
+</ul>
+</li>
+<li>‌<strong>技术要点</strong>‌<ul>
+<li>‌<strong>Token 处理</strong>‌：文本输入被拆分为最小单元（Token），模型通过分析 Token 序列生成结果‌。</li>
+<li>‌<strong>Temperature 参数</strong>‌：控制生成文本的随机性，值越高输出越多样化，值越低则越保守‌。</li>
+<li>‌<strong>超参数优化</strong>‌：包括学习率、批次大小等，直接影响模型训练效率和效果‌。</li>
+</ul>
+</li>
+</ol>
+<h2 id="大模型基础单位-Token"><a href="#大模型基础单位-Token" class="headerlink" title="大模型基础单位 Token"></a>大模型基础单位 Token</h2><p><strong>基本定义</strong>‌</p>
+<ul>
+<li>‌<strong>最小处理单元</strong>‌：Token 是大型语言模型（LLM）处理文本时的基本单位，代表模型能理解和生成的最小意义片段‌。</li>
+<li>‌<strong>形式多样性</strong>‌：根据标记化方案的不同，Token 可以是单词（如 <code>apple</code>）、子词（如 <code>trans-</code>、<code>form-er</code>）或单个字符（如汉字“我”）‌。</li>
+</ul>
+<p><strong>核心特性</strong>‌</p>
+<ol>
+<li>‌<strong>上下文依赖性</strong>‌<ul>
+<li>Token 的划分并非固定，同一词汇在不同上下文中可能被拆分为不同 Token。例如，“苹果”在“苹果派”中可能被整体视为一个 Token，而单独出现时也可能作为独立 Token 存在‌。</li>
+<li>这种灵活性使模型能更精准地捕捉语言中的组合语义（如复合词、短语）‌。</li>
+</ul>
+</li>
+<li>‌<strong>数值化表示</strong>‌<ul>
+<li>文本输入后，Token 会被转换为数字标识符（如向量），供模型进行数学运算和模式识别‌。</li>
+<li>例如，句子 <code>Hello, world!</code> 会被拆分为 <code>Hello</code> 和 <code>world</code> 两个 Token，并分别映射为唯一数值‌。</li>
+</ul>
+</li>
+<li>‌<strong>处理限制</strong>‌<ul>
+<li>LLM 对输入&#x2F;输出的 Token 数量有上限（如 4K、32K），这由模型架构的计算复杂度决定‌。</li>
+<li>英文中通常 1 Token ≈ 4 字符，但中文等表意文字可能以单字为 Token，导致相同文本长度下 Token 数量更多‌。</li>
+</ul>
+</li>
+</ol>
+<h2 id="大模型局限性"><a href="#大模型局限性" class="headerlink" title="大模型局限性"></a>大模型局限性</h2><p><strong>知识依赖性与实时性局限</strong>‌</p>
+<ol>
+<li>‌<strong>训练数据决定知识边界</strong>‌<br>LLM 的知识完全依赖其训练数据集，无法覆盖未学习过的专业领域或非公开数据（如企业内部文档）‌。若训练数据存在错误或偏见，模型输出的答案可能不准确‌。</li>
+<li>‌<strong>信息更新延迟</strong>‌<br>模型无法实时获取最新信息（如 2025 年的政治事件或科技动态），导致回答时效性受限‌。</li>
+</ol>
+<p><strong>幻觉问题与理解偏差</strong>‌</p>
+<ol>
+<li>‌<strong>虚构与事实混淆</strong>‌<br>LLM 可能生成看似合理但完全错误的回答，例如虚构历史事件或科学结论‌。这种“幻觉”源于模型通过概率匹配生成文本，而非基于真实理解‌。</li>
+<li>‌<strong>语义理解浅层化</strong>‌<br>模型对输入的解读停留在模式匹配层面，缺乏深层语义理解。例如，它能生成关于“爱”的优美文字，但无法真正理解其情感内涵‌。</li>
+</ol>
+<h2 id="Python-环境安装"><a href="#Python-环境安装" class="headerlink" title="Python 环境安装"></a>Python 环境安装</h2><p>下载 python 安装包</p>
+<p><a target="_blank" rel="noopener" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a></p>
+<p>创建项目</p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250306134514.png" alt="图2"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250306134629.png" alt="图3"></p>
+<h2 id="项目初始化"><a href="#项目初始化" class="headerlink" title="项目初始化"></a>项目初始化</h2><h3 id="项目架构"><a href="#项目架构" class="headerlink" title="项目架构"></a>项目架构</h3><p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250306134855.png" alt="图1"></p>
+<h3 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">|---app // 应用入口集合</span><br><span class="line">| ├---__init__.py</span><br><span class="line">| └---http</span><br><span class="line">|---config // 应用配置文件</span><br><span class="line">| ├---__init__.py</span><br><span class="line">| ├---config.py</span><br><span class="line">| └---default_config.py</span><br><span class="line">|---internal // 应用所有内部文件夹</span><br><span class="line">| ├---core // LLM核心文件，集成LangChain、LLM、Embedding等非逻辑的代码</span><br><span class="line">| | |---agent</span><br><span class="line">| | |---chain</span><br><span class="line">| | |---prompt</span><br><span class="line">| | |---model_runtime</span><br><span class="line">| | |---moderation</span><br><span class="line">| | |---tool</span><br><span class="line">| | |---vector_store</span><br><span class="line">| | └---...</span><br><span class="line">| ├---exception // 通用公共异常目录</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | ├---exception.py</span><br><span class="line">| | └---...</span><br><span class="line">| ├---extension // Flask扩展文件目录</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | ├---database_extension.py</span><br><span class="line">| | └---...</span><br><span class="line">| ├---handler // 路由处理器、控制器目录</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | ├---account_handler.py</span><br><span class="line">| | └---...</span><br><span class="line">| ├---middleware // 应用中间件目录，包含校验是否登录</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | └---middleware.py</span><br><span class="line">| | └---...</span><br><span class="line">| ├---migration // 数据库迁移文件目录，自动生成</span><br><span class="line">| | ├---versions</span><br><span class="line">| | └---...</span><br><span class="line">| ├---model // 数据库模型文件目录</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | ├---account.py</span><br><span class="line">| | └---...</span><br><span class="line">| ├---router // 应用路由文件夹</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | ├---router.py</span><br><span class="line">| | └---...</span><br><span class="line">| ├---schedule // 调度任务、定时任务文件夹</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | └---...</span><br><span class="line">| ├---schema // 请求和响应的结构体</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | └---...</span><br><span class="line">| ├---server // 构建的应用，与app文件夹对应</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | └---...</span><br><span class="line">| ├---service // 服务层文件夹</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | ├---oauth_service.py</span><br><span class="line">| | └---...</span><br><span class="line">| ├---task // 任务文件夹，支持即时任务+延迟任务</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | └---...</span><br><span class="line">|---pkg // 扩展包文件夹</span><br><span class="line">| ├---__init__.py</span><br><span class="line">| |---oauth</span><br><span class="line">| | ├---__init__.py</span><br><span class="line">| | ├---github_oauth.py</span><br><span class="line">| | └---...</span><br><span class="line">| └---... ├---storage // 本地存储文件夹</span><br><span class="line">├---test // 测试目录</span><br><span class="line">├---venv // 虚拟环境</span><br><span class="line">├---.env // 应用配置文件</span><br><span class="line">├---.gitignore // 配置git忽略文件</span><br><span class="line">├---requirements.txt // 第三方包依赖管理</span><br><span class="line">└---README.md // 项目说明文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="实现第一个-GPT-聊天机器人"><a href="#实现第一个-GPT-聊天机器人" class="headerlink" title="实现第一个 GPT 聊天机器人"></a>实现第一个 GPT 聊天机器人</h2><h3 id="创建服务"><a href="#创建服务" class="headerlink" title="创建服务"></a>创建服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install Flask</span><br></pre></td></tr></table></figure>
+
+<p>创建接口请求处理器</p>
+<blockquote>
+<p>llmops-api&#x2F;internal&#x2F;handler&#x2F;app_handler.py</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">AppHandler</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;应用控制器&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">ping</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;ping&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;ping&quot;</span>: <span class="string">&quot;pong&quot;</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建路由"><a href="#创建路由" class="headerlink" title="创建路由"></a>创建路由</h3><p>引入依赖注入包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install injector</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>llmops-api&#x2F;internal&#x2F;router&#x2F;router.py</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> dataclasses <span class="keyword">import</span> dataclass</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask, Blueprint</span><br><span class="line"><span class="keyword">from</span> injector <span class="keyword">import</span> inject</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> internal.handler <span class="keyword">import</span> AppHandler</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@inject</span></span><br><span class="line"><span class="meta">@dataclass</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Router</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;路由&quot;&quot;&quot;</span></span><br><span class="line">    app_handler: AppHandler</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">register_router</span>(<span class="params">self, app: Flask</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;注册路由&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># 创建蓝图</span></span><br><span class="line">        bp = Blueprint(<span class="string">&#x27;llmops&#x27;</span>, __name__, url_prefix=<span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将 url 与对应控制器方法做绑定</span></span><br><span class="line">        bp.add_url_rule(<span class="string">&#x27;/ping&#x27;</span>, view_func=<span class="variable language_">self</span>.app_handler.ping)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 注册蓝图</span></span><br><span class="line">        app.register_blueprint(bp)</span><br></pre></td></tr></table></figure>
+
+<p><strong>创建 http 服务引擎</strong></p>
+<blockquote>
+<p>llmops-api&#x2F;internal&#x2F;server&#x2F;http.py</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> internal.router <span class="keyword">import</span> Router</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Http</span>(<span class="title class_ inherited__">Flask</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;http服务引擎&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, *args, route: Router, **kwargs</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(*args, **kwargs)</span><br><span class="line">        route.register_router(<span class="variable language_">self</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>实例化 HTTP 服务引擎</strong></p>
+<blockquote>
+<p>llmops-api&#x2F;app&#x2F;http&#x2F;app.py</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> injector <span class="keyword">import</span> Injector</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> internal.router <span class="keyword">import</span> Router</span><br><span class="line"><span class="keyword">from</span> internal.server <span class="keyword">import</span> Http</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">injector = Injector()</span><br><span class="line">app = Http(__name__, route=injector.get(Router))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>设置为 Flask 服务运行</strong></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250306143829.png"></p>
+<p><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250306143917.png"></p>
+<h2 id="接入-OPENAI-实现聊天功能"><a href="#接入-OPENAI-实现聊天功能" class="headerlink" title="接入 OPENAI 实现聊天功能"></a>接入 OPENAI 实现聊天功能</h2><p><a target="_blank" rel="noopener" href="https://platform.openai.com/docs/quickstart">https://platform.openai.com/docs/quickstart</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install openai</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>internal&#x2F;handler&#x2F;app_handler.py</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AppHandler</span>:</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">completion</span>(<span class="params">self</span>):</span><br><span class="line">        client = OpenAI(</span><br><span class="line">            api_key=<span class="string">&quot;sk-hDQdejxq7OmwLg0jRtuQaU2o0qwWoY36hwdNfLE5jJcLYc05&quot;</span>,</span><br><span class="line">            base_url=<span class="string">&quot;https://api.chatanywhere.tech&quot;</span></span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        query = request.json.get(<span class="string">&quot;query&quot;</span>)</span><br><span class="line"></span><br><span class="line">        completion = client.chat.completions.create(</span><br><span class="line">            model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>,</span><br><span class="line">            messages=[</span><br><span class="line">                &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;You are a helpful assistant.&quot;</span>&#125;,</span><br><span class="line">                &#123;</span><br><span class="line">                    <span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">                    <span class="string">&quot;content&quot;</span>: query</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> completion.choices[<span class="number">0</span>].message.content</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/chat">https://platform.openai.com/docs/api-reference/chat</a></p>
+<p><strong>OPENAI 返回示例</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;chatcmpl-123&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;object&quot;</span><span class="punctuation">:</span> <span class="string">&quot;chat.completion&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;created&quot;</span><span class="punctuation">:</span> <span class="number">1677652288</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;model&quot;</span><span class="punctuation">:</span> <span class="string">&quot;gpt-4o-mini&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;system_fingerprint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fp_44709d6fcb&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;choices&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;index&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;assistant&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;\n\nHello there, how may I assist you today?&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;logprobs&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;finish_reason&quot;</span><span class="punctuation">:</span> <span class="string">&quot;stop&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;usage&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;prompt_tokens&quot;</span><span class="punctuation">:</span> <span class="number">9</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;completion_tokens&quot;</span><span class="punctuation">:</span> <span class="number">12</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;total_tokens&quot;</span><span class="punctuation">:</span> <span class="number">21</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;completion_tokens_details&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;reasoning_tokens&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;accepted_prediction_tokens&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;rejected_prediction_tokens&quot;</span><span class="punctuation">:</span> <span class="number">0</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="环境变量配置"><a href="#环境变量配置" class="headerlink" title="环境变量配置"></a>环境变量配置</h2><h2 id="校验入参"><a href="#校验入参" class="headerlink" title="校验入参"></a>校验入参</h2><p><a target="_blank" rel="noopener" href="https://flask-wtf.readthedocs.io/en/1.2.x/">https://flask-wtf.readthedocs.io/en/1.2.x/</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U Flask-WTF</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://flask-wtf.readthedocs.io/en/1.2.x/quickstart/#creating-forms">https://flask-wtf.readthedocs.io/en/1.2.x/quickstart/#creating-forms</a></p>
+<p><strong>内置验证器</strong></p>
+<p><a target="_blank" rel="noopener" href="https://wtforms.readthedocs.io/en/3.2.x/validators/#built-in-validators">https://wtforms.readthedocs.io/en/3.2.x/validators/#built-in-validators</a></p>
+<blockquote>
+<p>llmops-api&#x2F;internal&#x2F;schema&#x2F;app_schema.py</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CompletionReq</span>(<span class="title class_ inherited__">FlaskForm</span>):</span><br><span class="line">    query = StringField(<span class="string">&quot;query&quot;</span>, validators=[</span><br><span class="line">        DataRequired(message=<span class="string">&quot;query is required&quot;</span>, ),</span><br><span class="line">        Length(<span class="built_in">max</span>=<span class="number">1000</span>, message=<span class="string">&quot;query must be less than 1000 characters&quot;</span>)</span><br><span class="line">    ])</span><br></pre></td></tr></table></figure>
+
+<h1 id="前端搭建"><a href="#前端搭建" class="headerlink" title="前端搭建"></a>前端搭建</h1><h2 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h2><blockquote>
+<p>PS D:\work\workspace\llmops &gt; yarn create vue<br>yarn create v1.22.22<br>[1&#x2F;4] Resolving packages…<br>[2&#x2F;4] Fetching packages…<br>[3&#x2F;4] Linking dependencies…<br>[4&#x2F;4] Building fresh packages…<br>success Installed “<a href="mailto:&#x63;&#x72;&#101;&#97;&#x74;&#x65;&#45;&#118;&#x75;&#x65;&#x40;&#x33;&#46;&#x31;&#53;&#x2e;&#49;">&#x63;&#x72;&#101;&#97;&#x74;&#x65;&#45;&#118;&#x75;&#x65;&#x40;&#x33;&#46;&#x31;&#53;&#x2e;&#49;</a>“ with binaries:</p>
+<ul>
+<li>create-vue<br>[##] 2&#x2F;2┌  Vue.js - The Progressive JavaScript Framework</li>
+</ul>
+<p>│<br>◇  请输入项目名称：<br>│  llmops-ui<br>│<br>◇  请选择要包含的功能： (↑&#x2F;↓ 切换，空格选择，a 全选，回车确认)<br>│  TypeScript, Router（单页面应用开发）, Pinia（状态管理）, Vitest（单元测试）, ESLint（错误预防）, Prettier（代码格式化）<br>│<br>◇  是否引入 Oxlint 以加快检测？（试验阶段）<br>│  No</p>
+<p>正在初始化项目 D:\work\workspace\llmops\llmops-ui…<br>│<br>└  项目初始化完成，可执行以下命令：</p>
+<p>cd llmops-ui<br>yarn<br>yarn format<br>yarn dev</p>
+<p>| 可选：使用以下命令在项目目录中初始化 Git：</p>
+<p>git init &amp;&amp; git add -A &amp;&amp; git commit -m “initial commit”</p>
+<p>Done in 270.24s.</p>
+</blockquote>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><blockquote>
+<p>|—public  &#x2F;&#x2F; 项目的公共资源文件夹</p>
+<p>|—src  &#x2F;&#x2F; 项目的代码文件夹</p>
+<p>| ├—assets &#x2F;&#x2F; 资源文件夹: 图片&#x2F;样式&#x2F;图标</p>
+<p>| | ├—images</p>
+<p>| | ├—styles</p>
+<p>| ├—components  &#x2F;&#x2F; 组件文件夹</p>
+<p>| | ├—<strong>tests</strong>  &#x2F;&#x2F; 测试文件夹</p>
+<p>| ├—config  &#x2F;&#x2F; 项目配置文件夹</p>
+<p>| | ├—index.ts</p>
+<p>| ├—hooks  &#x2F;&#x2F; hooks 文件夹</p>
+<p>| ├—router  &#x2F;&#x2F; 路由文件夹</p>
+<p>| | ├—index.ts</p>
+<p>| ├—services  &#x2F;&#x2F; 项目服务文件夹</p>
+<p>| | ├—apps.ts</p>
+<p>| | ├—datasets.ts</p>
+<p>| ├—stores  &#x2F;&#x2F; 状态管理文件夹</p>
+<p>| | ├—account.ts</p>
+<p>| | |—auth.ts</p>
+<p>| ├—utils  &#x2F;&#x2F; 工具文件夹</p>
+<p>| | ├—auth.ts</p>
+<p>| | ├—request.ts</p>
+<p>| | ├—storage.ts</p>
+<p>| ├—views  &#x2F;&#x2F; 项目页面文件夹</p>
+<p>|  ├—layouts</p>
+<p>|   ├—DefaultLayout.vue</p>
+<p>|   ├—BlankLayout.vue</p>
+<p>| | ├—pages</p>
+<p>| | | ├—HomeView.vue</p>
+<p>| | ├—auth</p>
+<p>| | | ├—LoginView.vue</p>
+<p>| | ├—App.vue  &#x2F;&#x2F; 应用主组件</p>
+<p>| | ├—main.ts  &#x2F;&#x2F; 应用 js 入口文件</p>
+<p>|—.eslintrc.cjs  &#x2F;&#x2F; 代码格式化配置</p>
+<p>|—.gitignore  &#x2F;&#x2F; git 忽略配置</p>
+<p>|—.prettierrc.json  &#x2F;&#x2F; 代码美化配置</p>
+<p>|—env.d.ts  &#x2F;&#x2F; 项目 TypeScript 变量类型声明</p>
+<p>|—index.html  &#x2F;&#x2F; 应用 html 入口文件</p>
+<p>|—package.json  &#x2F;&#x2F; 依赖包管理</p>
+<p>|—README.md  &#x2F;&#x2F; 阅读说明</p>
+<p>|—tsconfig.app.json  &#x2F;&#x2F; ts 配置</p>
+<p>|—tsconfig.json</p>
+<p>|—tsconfig.node.json</p>
+<p>|—tsconfig.vitest.json</p>
+<p>|—vite.config.ts  &#x2F;&#x2F; vite 编译配置</p>
+<p>|—vitest.config.ts  &#x2F;&#x2F; 测试框架配置</p>
+<p>|—yarn.lock  &#x2F;&#x2F; yarn 锁</p>
+</blockquote>
+<h2 id="引入组件"><a href="#引入组件" class="headerlink" title="引入组件"></a>引入组件</h2><h3 id="arco-design"><a href="#arco-design" class="headerlink" title="arco-design"></a>arco-design</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev @arco-design/web-vue</span><br></pre></td></tr></table></figure>
+
+<p><strong>按需引入</strong></p>
+<p>如果使用模板方式进行开发，可以使用 <a target="_blank" rel="noopener" href="https://github.com/antfu/unplugin-vue-components">unplugin-vue-components</a> 和 <a target="_blank" rel="noopener" href="https://github.com/antfu/unplugin-auto-import">unplugin-auto-import</a> 这两款插件来开启按需加载及自动导入的支持。<br>插件会自动解析模板中的使用到的组件，并导入组件和对应的样式文件。<br>需要组件库 <code>version &gt;= 2.11.0</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yarn add --dev unplugin-vue-components</span><br><span class="line">yarn add --dev unplugin-auto-import</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>vite.config.ts</p>
+</blockquote>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fileURLToPath, <span class="variable constant_">URL</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;node:url&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> vue <span class="keyword">from</span> <span class="string">&#x27;@vitejs/plugin-vue&#x27;</span></span><br><span class="line"><span class="keyword">import</span> vueDevTools <span class="keyword">from</span> <span class="string">&#x27;vite-plugin-vue-devtools&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">AutoImport</span> <span class="keyword">from</span> <span class="string">&#x27;unplugin-auto-import/vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Components</span> <span class="keyword">from</span> <span class="string">&#x27;unplugin-vue-components/vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">ArcoResolver</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;unplugin-vue-components/resolvers&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://vite.dev/config/</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="title function_">vue</span>(),</span><br><span class="line">    <span class="title function_">vueDevTools</span>(),</span><br><span class="line">    <span class="title class_">AutoImport</span>(&#123;</span><br><span class="line">      <span class="attr">resolvers</span>: [<span class="title class_">ArcoResolver</span>()],</span><br><span class="line">    &#125;),</span><br><span class="line">    <span class="title class_">Components</span>(&#123;</span><br><span class="line">      <span class="attr">resolvers</span>: [</span><br><span class="line">        <span class="title class_">ArcoResolver</span>(&#123;</span><br><span class="line">          <span class="attr">sideEffect</span>: <span class="literal">true</span>,</span><br><span class="line">        &#125;),</span><br><span class="line">      ],</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">resolve</span>: &#123;</span><br><span class="line">    <span class="attr">alias</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;@&#x27;</span>: <span class="title function_">fileURLToPath</span>(<span class="keyword">new</span> <span class="title function_">URL</span>(<span class="string">&#x27;./src&#x27;</span>, <span class="keyword">import</span>.<span class="property">meta</span>.<span class="property">url</span>)),</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="tailwindcss"><a href="#tailwindcss" class="headerlink" title="tailwindcss"></a>tailwindcss</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add tailwindcss --dev @tailwindcss/vite</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>vite.config.ts</p>
+</blockquote>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tailwindcss <span class="keyword">from</span> <span class="string">&#x27;@tailwindcss/vite&#x27;</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="title function_">tailwindcss</span>(),</span><br><span class="line">  ],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h1 id="什么是-Embedding？"><a href="#什么是-Embedding？" class="headerlink" title="什么是 Embedding？"></a>什么是 Embedding？</h1></article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    </div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2025/02/21/Flask%E5%9F%BA%E7%A1%80/">Flask</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2025/02/20/python%E5%9F%BA%E7%A1%80/">python基础</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-LLM%EF%BC%9F"><span class="toc-text">什么是 LLM？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80%E5%8D%95%E4%BD%8D-Token"><span class="toc-text">大模型基础单位 Token</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-text">大模型局限性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python-%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85"><span class="toc-text">Python 环境安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">项目初始化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84"><span class="toc-text">项目架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="toc-text">项目结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E7%AC%AC%E4%B8%80%E4%B8%AA-GPT-%E8%81%8A%E5%A4%A9%E6%9C%BA%E5%99%A8%E4%BA%BA"><span class="toc-text">实现第一个 GPT 聊天机器人</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1"><span class="toc-text">创建服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%B7%AF%E7%94%B1"><span class="toc-text">创建路由</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A5%E5%85%A5-OPENAI-%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E5%8A%9F%E8%83%BD"><span class="toc-text">接入 OPENAI 实现聊天功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE"><span class="toc-text">环境变量配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%A1%E9%AA%8C%E5%85%A5%E5%8F%82"><span class="toc-text">校验入参</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF%E6%90%AD%E5%BB%BA"><span class="toc-text">前端搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE"><span class="toc-text">创建项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E5%85%A5%E7%BB%84%E4%BB%B6"><span class="toc-text">引入组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#arco-design"><span class="toc-text">arco-design</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tailwindcss"><span class="toc-text">tailwindcss</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Embedding%EF%BC%9F"><span class="toc-text">什么是 Embedding？</span></a></div><div class="widget-footer">
+
+<a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.535 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.465 8.535C19.072 22 16.714 22 12 22s-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"dateCreated":"2025-02-20T16:17:53+00:00","dateModified":"2025-07-04T09:29:58+00:00","datePublished":"2025-02-20T16:17:53+00:00","description":"","headline":"llmops","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/02/20/llmops%E5%BC%80%E5%8F%91/"},"publisher":{"@type":"Organization","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png","logo":{"@type":"ImageObject","url":"/assets/20240507174529.png"}},"url":"http://example.com/2025/02/20/llmops%E5%BC%80%E5%8F%91/","keywords":"pthon, llm","image":[]}</script>
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      let retryTimes = 3;
+      utils.onLoading(el);
+      function req() {
+        return new Promise((resolve, reject) => {
+          let status = 0; // 0 等待 1 完成 2 超时
+          let timer = setTimeout(() => {
+            if (status === 0) {
+              status = 2;
+              timer = null;
+              reject('请求超时');
+              if (retryTimes == 0) {
+                onFailure();
+              }
+            }
+          }, 5000);
+          fetch(url).then(function (response) {
+            if (status !== 2) {
+              clearTimeout(timer);
+              resolve(response);
+              timer = null;
+              status = 1;
+            }
+            if (response.ok) {
+              return response;
+            }
+            throw new Error('Network response was not ok.');
+          }).then(function (data) {
+            retryTimes = 0;
+            utils.onLoadSuccess(el);
+            callback(data);
+          }).catch(function (error) {
+            if (retryTimes > 0) {
+              retryTimes -= 1;
+              setTimeout(() => {
+                req();
+              }, 5000);
+            } else {
+              utils.onLoadFailure(el);
+              onFailure();
+            }
+          });
+        });
+      }
+      req();
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+
+<!-- required -->
+<script src="/js/main.js?v=1.31.0" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    applyThemeToGiscus(theme)
+  }
+
+  const applyThemeToGiscus = (theme) => {
+    theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script defer src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+</script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error)';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const els = document.getElementsByClassName('ds-memos');
+    if (els != undefined && els.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
