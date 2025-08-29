@@ -1,0 +1,1249 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Kubernetes：Kubernetes Service - Lianyutian</title>
+
+  
+    <meta name="description" content="🥧本文介绍了Kubernetes中Service的作用">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kubernetes Service">
+<meta property="og:url" content="http://example.com/wiki/Kubernetes/Service/">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="🥧本文介绍了Kubernetes中Service的作用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2025-08-29T09:51:59.906Z">
+<meta property="article:modified_time" content="2025-08-29T09:51:59.906Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="Kubernetes、Rancher">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/wiki/Kubernetes/Service/","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"name":"Kubernetes Service","description":"🥧本文介绍了Kubernetes中Service的作用","url":"http://example.com/wiki/Kubernetes/Service/"}</script>
+  
+</head>
+<body>
+
+
+
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="/assets/wiki/Kubernetes/Kubernetes.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B"><div class="main">Kubernetes</div><div class="sub cap">Kubernetes的安装及概念</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item active" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/wiki/Kubernetes/" placeholder="在 Kubernetes 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<widget class="widget-wrapper doc-tree post-list"><div class="widget-header dis-select"><span class="name">基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B/#start"><span class="toc-text">Kubernetes简介</span></a><a class="link" href="/wiki/Kubernetes/Kubernetes%E5%AE%89%E8%A3%85/"><span class="toc-text">Kubernetes安装</span></a><a class="link" href="/wiki/Kubernetes/%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95/"><span class="toc-text">Kubernetes资源清单</span></a><a class="link" href="/wiki/Kubernetes/Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"><span class="toc-text">Kubernetes Pod</span></a><a class="link" href="/wiki/Kubernetes/%E6%8E%A7%E5%88%B6%E5%99%A8/"><span class="toc-text">Kubernetes控制器</span></a><a class="link active" href="/wiki/Kubernetes/Service/"><span class="toc-text">Kubernetes Service</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a><a class="link" href="/wiki/Kubernetes/%E5%AD%98%E5%82%A8/"><span class="toc-text">Kubernetes存储</span></a><a class="link" href="/wiki/Kubernetes/%E8%B0%83%E5%BA%A6%E5%99%A8/"><span class="toc-text">Kubernetes调度器</span></a><a class="link" href="/wiki/Kubernetes/Helm/"><span class="toc-text">Helm</span></a><a class="link" href="/wiki/Kubernetes/Ingress/"><span class="toc-text">Ingress</span></a></div><div class="widget-header dis-select"><span class="name">高可用</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85/"><span class="toc-text">Kubernetes 二进制安装</span></a></div><div class="widget-header dis-select"><span class="name">CICD</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Habor%E5%AE%89%E8%A3%85/"><span class="toc-text">Habor安装</span></a><a class="link" href="/wiki/Kubernetes/Rancher%E5%AE%89%E8%A3%85/"><span class="toc-text">Rancher安装</span></a></div><div class="widget-header dis-select"><span class="name">...</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Gitlab%E5%AE%89%E8%A3%85/"><span class="toc-text">Gitlab安装</span></a><a class="link" href="/wiki/Kubernetes/Jenkins%E5%AE%89%E8%A3%85/"><span class="toc-text">Jenkins安装</span></a><a class="link" href="/wiki/Kubernetes/loki%E5%AE%89%E8%A3%85/"><span class="toc-text">Loki安装</span></a><a class="link" href="/wiki/Kubernetes/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><span class="toc-text">Kubernetes常用命令</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B/">Kubernetes</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2025-08-29T09:51:59.906Z">2025-08-29</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Kubernetes Service</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h2><h3 id="Service概念"><a href="#Service概念" class="headerlink" title="Service概念"></a>Service概念</h3><p>Kubernetes 中 Service 是 将运行在一个或一组 <a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/workloads/pods/">Pod</a> 上的网络应用程序公开为网络服务的方法。</p>
+<p>Kubernetes 中 Service 的一个关键目标是让你无需修改现有应用以使用某种不熟悉的服务发现机制。 你可以在 Pod 集合中运行代码，无论该代码是为云原生环境设计的，还是被容器化的老应用。 你可以使用 Service 让一组 Pod 可在网络上访问，这样客户端就能与之交互。</p>
+<p>如果你使用 <a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/deployment/">Deployment</a> 来运行你的应用， Deployment 可以动态地创建和销毁 Pod。 在任何时刻，你都不知道有多少个这样的 Pod 正在工作以及它们健康与否； 你可能甚至不知道如何辨别健康的 Pod。 Kubernetes <a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/concepts/workloads/pods/">Pod</a> 的创建和销毁是为了匹配集群的预期状态。 Pod 是临时资源（你不应该期待单个 Pod 既可靠又耐用）。</p>
+<p> 每个 Pod 会获得属于自己的 IP 地址（Kubernetes 期待网络插件来保证这一点）。 对于集群中给定的某个 Deployment，这一刻运行的 Pod 集合可能不同于下一刻运行该应用的 Pod 集合。</p>
+<p>这就带来了一个问题：如果某组 Pod（称为“后端”）为集群内的其他 Pod（称为“前端”） 集合提供功能，前端要如何发现并跟踪要连接的 IP 地址，以便其使用负载的后端组件呢？</p>
+<p>Service API 是 Kubernetes 的组成部分，它是一种抽象，帮助你将 Pod 集合在网络上公开出去。 每个 Service 对象定义端点的一个逻辑集合（通常这些端点就是 Pod）以及如何访问到这些 Pod 的策略。</p>
+<h3 id="核心工作原理"><a href="#核心工作原理" class="headerlink" title="核心工作原理"></a>核心工作原理</h3><p><strong>kube-proxy:</strong> 监听 apiServer 将 Service 变化修改本地 iptables 规则<br><strong>iptables&#x2F;ipvs:</strong> 负责转发用户请求流量</p>
+<h4 id="Iptables"><a href="#Iptables" class="headerlink" title="Iptables"></a>Iptables</h4><p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/86d3d29c7b0ddb9236ea1e9ce47bd5823f3f467aa85cd1537e360c0399c05901.png" alt="图 93">  </p>
+<h4 id="Ipvs"><a href="#Ipvs" class="headerlink" title="Ipvs"></a>Ipvs</h4><p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/85fcd145cb1046f32979a83253b302b53e3585a971590acb6df95d895238b786.png" alt="图 94">  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改为ipvs</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">注意系统要支持 ipvs</span></span><br><span class="line">kubectl edit configmap kube-proxy -n kube-system</span><br><span class="line">kubectl delete pod -n kube-system -l k8s-app=kube-proxy</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/20e10b4e54a12b81094610193e5cc6750d1a8b11f25a18af35bc12fbf1785714.png" alt="图 95">  </p>
+<ol>
+<li>‌<strong>编辑kube-proxy配置</strong>‌：<ul>
+<li>命令：<code>kubectl edit configmap kube-proxy -n kube-system</code></li>
+<li>解释：此命令用于编辑kube-system命名空间中的kube-proxy  ConfigMap，通常用于更改kube-proxy的工作模式。</li>
+</ul>
+</li>
+<li>‌<strong>设置kube-proxy模式为ipvs</strong>‌：<ul>
+<li>在编辑界面中，将<code>mode</code>字段设置为<code>ipvs</code>。</li>
+<li>解释：ipvs模式是高性能的IP负载均衡模式，适用于大规模集群。</li>
+</ul>
+</li>
+<li>‌<strong>删除kube-proxy Pod</strong>‌：<ul>
+<li>命令：<code>kubectl delete pod -n kube-system -l k8s-app=kube-proxy</code></li>
+<li>解释：此命令用于删除kube-system命名空间中所有标签为<code>k8s-app=kube-proxy</code>的Pod，以便应用新的配置。</li>
+</ul>
+</li>
+</ol>
+<h3 id="Service类型"><a href="#Service类型" class="headerlink" title="Service类型"></a>Service类型</h3><p>Kubernetes Service 的类型主要包括以下几种：</p>
+<ol>
+<li>‌<strong>ClusterIP</strong>‌：这是默认类型，仅集群内部可以访问，通过自动分配的虚拟IP进行通信。</li>
+<li>‌<strong>NodePort</strong>‌：在 ClusterIP 的基础上，为每台机器绑定一个端口，可以通过 <code>&lt;NodeIP&gt;:NodePort</code> 的方式访问服务。</li>
+<li>‌<strong>LoadBalancer</strong>‌：在 NodePort 的基础上，借助云提供商创建一个外部负载均衡器，将外部请求转发到 <code>&lt;NodeIP&gt;:NodePort</code>。</li>
+<li>‌<strong>ExternalName</strong>‌：此类型将集群外部的服务引入到集群内部，集群内部可以直接使用这些服务，但需 Kubernetes 1.7 或更高版本的 kube-dns 支持。</li>
+</ol>
+<h3 id="Service类型模式详解"><a href="#Service类型模式详解" class="headerlink" title="Service类型模式详解"></a>Service类型模式详解</h3><p>以下是Kubernetes Service的四种核心模式详解及其应用场景：</p>
+<h4 id="ClusterIP（默认类型）"><a href="#ClusterIP（默认类型）" class="headerlink" title="ClusterIP（默认类型）"></a>ClusterIP（默认类型）</h4><p>‌<strong>核心机制</strong>‌</p>
+<ul>
+<li>分配集群内部虚拟IP（VIP），仅允许‌<strong>集群内访问</strong>‌。</li>
+<li>通过<code>kube-proxy</code>维护动态路由规则（iptables&#x2F;IPVS实现）。</li>
+<li>自动负载均衡到关联Pod（通过Label Selector匹配）‌。</li>
+</ul>
+<p>‌<strong>典型场景</strong>‌</p>
+<ul>
+<li>微服务间内部通信（如前端调用后端API）。</li>
+<li>数据库服务暴露给应用层。</li>
+</ul>
+<blockquote>
+<p><em>优势：安全隔离，无需暴露外部端口</em>‌</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/e5f824dea75d352b138b757a911adebf271658862ef2ec20b1de7b3a6f4d35a3.png" alt="图 96">  </p>
+<h4 id="NodePort"><a href="#NodePort" class="headerlink" title="NodePort"></a>NodePort</h4><p>‌<strong>三层扩展架构</strong>‌</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">A[外部请求] --&gt; B(NodeIP:30000-32767端口)</span><br><span class="line">B --&gt; C[ClusterIP虚拟IP]</span><br><span class="line">C --&gt; D[后端Pod]</span><br></pre></td></tr></table></figure>
+
+<p>‌<strong>核心特性</strong>‌</p>
+<ol>
+<li>在ClusterIP基础上，‌<strong>每个Node开放静态端口</strong>‌（默认30000-32767）。</li>
+<li>外部通过<code>&lt;任意NodeIP&gt;:&lt;NodePort&gt;</code>访问服务。</li>
+<li>需手动管理防火墙规则‌。</li>
+</ol>
+<p>‌<strong>运维场景</strong>‌</p>
+<ul>
+<li>开发测试环境临时访问。</li>
+<li>不支持LoadBalancer的本地集群。</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/e579274f44b90cd81a62b3e7f283c0ae3f6a72132bc684f5d02a7383a2783d1f.png" alt="图 97">  </p>
+<h4 id="LoadBalancer（云服务增强）"><a href="#LoadBalancer（云服务增强）" class="headerlink" title="LoadBalancer（云服务增强）"></a>LoadBalancer（云服务增强）</h4><p>‌<strong>工作流程</strong>‌</p>
+<ol>
+<li>创建Service时自动申请云平台负载均衡器。</li>
+<li>负载均衡器将流量导向所有Node的NodePort。</li>
+<li>NodePort转发至ClusterIP再到Pod‌。</li>
+</ol>
+<p>‌<strong>云服务差异</strong>‌</p>
+<table>
+<thead>
+<tr>
+<th>云平台</th>
+<th>实现特性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AWS</td>
+<td>自动创建NLB并配置安全组</td>
+</tr>
+<tr>
+<td>GCP</td>
+<td>集成健康检查与全球负载均衡</td>
+</tr>
+<tr>
+<td>Azure</td>
+<td>支持公网&#x2F;内网负载均衡器双模式</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><em>局限：依赖云厂商，本地集群无法直接使用</em>‌</p>
+</blockquote>
+<p><strong>本地使用 keepalive&#x2F;ipvs:</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/263826608b3ffaf8fc2f32fe09716662a9a9a6b6ee84744e5396443aa1cb586e.png" alt="图 98">  </p>
+<p><strong>云服务：</strong></p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/05d1d61f83270c6c3f54019ef7723fb6fa86024652f066a4be313623581ee9bd.png" alt="图 99">  </p>
+<h4 id="ExternalName（跨集群服务接入）"><a href="#ExternalName（跨集群服务接入）" class="headerlink" title="ExternalName（跨集群服务接入）"></a>ExternalName（跨集群服务接入）</h4><p>‌<strong>特殊实现机制</strong>‌</p>
+<ul>
+<li><p>创建CNAME记录指向外部域名（无IP分配）</p>
+</li>
+<li><p>依赖kube-dns 1.7+版本解析</p>
+</li>
+<li><p>示例配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">ExternalName</span></span><br><span class="line">  <span class="attr">externalName:</span> <span class="string">external-api.example.com</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>‌<strong>典型用例</strong>‌</p>
+<ul>
+<li>安全访问云数据库服务（如RDS）</li>
+<li>集成遗留系统无需服务发现改造</li>
+</ul>
+<blockquote>
+<p><em>注意：不提供负载均衡与代理功能</em>‌</p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/8c21bbd182668cf8ed85501d7ed9c502dfd6cb737c8e31c8d98c48c3ad0f475a.png" alt="图 100">  </p>
+<h3 id="Service-实验"><a href="#Service-实验" class="headerlink" title="Service 实验"></a>Service 实验</h3><h4 id="clusterIp"><a href="#clusterIp" class="headerlink" title="clusterIp"></a>clusterIp</h4><p><code>myapp-clusterip-deploy.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myapp-clusterip-deploy</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">      <span class="attr">release:</span> <span class="string">stabel</span></span><br><span class="line">      <span class="attr">svc:</span> <span class="string">clusterip</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">        <span class="attr">release:</span> <span class="string">stabel</span></span><br><span class="line">        <span class="attr">env:</span> <span class="string">test</span></span><br><span class="line">        <span class="attr">svc:</span> <span class="string">clusterip</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-container</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">        <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">        <span class="attr">readinessProbe:</span></span><br><span class="line">          <span class="attr">httpGet:</span></span><br><span class="line">            <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">/index1.html</span></span><br><span class="line">          <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">          <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p><code>myapp-service.yaml</code></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myapp-clusterip</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">ClusterIP</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">release:</span> <span class="string">stabel</span></span><br><span class="line">    <span class="attr">svc:</span> <span class="string">clusterip</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<p>当开始创建 pod 和 Service 时，可以看到 pod 未就绪的状态下是不会加入 Service, 当创建 index1.html 后 pod 就绪，Service 可以转发到就绪的 pod 下。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/8d48bb7cb9c34df5f2c01c3c27797afcea76e69912bb39e3026d1f75aee054fa.png" alt="图 101"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/da9bde86c4154c1b42c5ba5778fa3c21baa9bf93ead590bc32b1a98352756ea8.png" alt="图 102">  </p>
+<p>在 <code>myapp-clusterip-deploy-5c9cc9b64-hk69z</code> 容器中添加 index1.html 并修改 index.html 为 v2。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/c55905d201c332189f74a7290123dc90462c48fbafa1d025f6d921b1a54640a1.png" alt="图 103">  </p>
+<h4 id="使用域名访问Service"><a href="#使用域名访问Service" class="headerlink" title="使用域名访问Service"></a>使用域名访问Service</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">在集群k8s内部使用DNS解析域名</span></span><br><span class="line">svcName.nameSpaceName.svc.domainname.</span><br><span class="line">domainName集群默认域名是：cluster.local.</span><br><span class="line">示例：myapp-clusterip.default.svc.cluster.local.</span><br></pre></td></tr></table></figure>
+
+<h4 id="持久化链接"><a href="#持久化链接" class="headerlink" title="持久化链接"></a>持久化链接</h4><p>在Kubernetes中，<code>service.spec.sessionAffinity: ClientIP</code> 参数用于配置服务的会话保持机制。以下是详细说明和操作方法：</p>
+<h5 id="作用与原理"><a href="#作用与原理" class="headerlink" title="作用与原理"></a>作用与原理</h5><ol>
+<li><p><strong>核心功能</strong></p>
+<ul>
+<li>‌<strong>会话保持</strong>‌：将来自同一客户端IP的请求‌<strong>持续路由到同一个后端Pod</strong>‌</li>
+<li>‌<strong>解决有状态服务问题</strong>‌：适用于需要保持会话的应用（如登录会话、文件上传等场景）</li>
+</ul>
+</li>
+<li><p>‌<strong>工作流程</strong>‌</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant Client</span><br><span class="line">    participant Service</span><br><span class="line">    participant Pod1</span><br><span class="line">    participant Pod2</span><br><span class="line">    </span><br><span class="line">    Client-&gt;&gt;Service: 请求1 (IP:192.168.1.10)</span><br><span class="line">    Service-&gt;&gt;Pod1: 转发请求1 → 记录IP与Pod映射</span><br><span class="line">    Client-&gt;&gt;Service: 请求2 (IP:192.168.1.10)</span><br><span class="line">    Service-&gt;&gt;Pod1: 再次转发到相同Pod</span><br><span class="line">    Note right of Service: 同一IP的后续请求&lt;br/&gt;固定路由到Pod1</span><br><span class="line">    </span><br><span class="line">    Client-&gt;&gt;Service: 新客户端请求 (IP:192.168.1.20)</span><br><span class="line">    Service-&gt;&gt;Pod2: 首次请求分配新Pod</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>‌<strong>与默认模式对比</strong>‌</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>请求分发策略</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sessionAffinity: None</code> (默认)</td>
+<td>轮询&#x2F;随机负载均衡</td>
+<td>无状态服务</td>
+</tr>
+<tr>
+<td><code>sessionAffinity: ClientIP</code></td>
+<td>基于源IP固定路由</td>
+<td>有状态会话需求</td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<h5 id="配置参数详解"><a href="#配置参数详解" class="headerlink" title="配置参数详解"></a>配置参数详解</h5><ol>
+<li><p>‌<strong>核心参数</strong>‌</p>
+ <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">sessionAffinity:</span> <span class="string">ClientIP</span>  <span class="comment"># 必需参数</span></span><br><span class="line">  <span class="attr">sessionAffinityConfig:</span></span><br><span class="line">    <span class="attr">clientIP:</span></span><br><span class="line">      <span class="attr">timeoutSeconds:</span> <span class="number">10800</span>    <span class="comment"># 会话保持时间（秒）</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>‌<strong>超时机制</strong>‌</p>
+<ul>
+<li>‌<strong>timeoutSeconds</strong>‌：会话保持的有效期（默认值<code>10800</code>秒 &#x3D; 3小时）</li>
+<li>超过该时间未收到相同IP的请求，映射关系自动清除</li>
+<li>设置为<code>0</code>表示永不过期（不推荐）</li>
+</ul>
+</li>
+</ol>
+<h5 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h5><ol>
+<li>‌<strong>网络层依赖</strong>‌：<ul>
+<li>客户端真实IP必须能传递到Service（配置<code>externalTrafficPolicy: Local</code>）</li>
+<li>NodePort&#x2F;LoadBalancer类型需配置云厂商的保留客户端IP选项</li>
+</ul>
+</li>
+<li>‌<strong>局限性</strong>‌：<ul>
+<li>不支持基于Cookie的会话保持</li>
+<li>NAT网络下多个客户端可能共享相同公网IP（导致流量集中）</li>
+</ul>
+</li>
+<li>‌<strong>性能影响</strong>‌：<ul>
+<li>大规模集群中IP映射表可能占用内存</li>
+<li>建议配合<code>sessionAffinityConfig.timeoutSeconds</code>设置合理超时</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>💡 ‌<strong>最佳实践</strong>‌：需要精确会话保持时，建议在应用层实现（如JWT&#x2F;Cookie），该参数仅作为网络层辅助方案。</p>
+</blockquote>
+<h5 id="sessionAffinity-实验"><a href="#sessionAffinity-实验" class="headerlink" title="sessionAffinity 实验"></a>sessionAffinity 实验</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl edit svc myapp-clusterip</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/749997b149259f2e2a311b8c9f63440b01a7d76dd5f03e1c5aa7488064696f8b.png" alt="图 104">  </p>
+<p>再通过 Service 访问时，会一直转发到一个 pod。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/e3f19a00fa72a304de7cd8f6c567ae0cd1830e1ca31cb55ad0cfab77f8494ef3.png" alt="图 105">  </p>
+<h4 id="internalTrafficPolicy-实验"><a href="#internalTrafficPolicy-实验" class="headerlink" title="internalTrafficPolicy 实验"></a>internalTrafficPolicy 实验</h4><ol>
+<li>‌<strong>命令功能</strong>‌：该命令用于解释 Kubernetes 服务（Service）资源规格（spec）中的 <code>internalTrafficPolicy</code> 字段。</li>
+<li>‌<strong>字段含义</strong>‌：<code>internalTrafficPolicy</code> 描述了节点如何分发它们在 ClusterIP 上接收到的服务流量。</li>
+<li>‌<strong>枚举值</strong>‌：<ul>
+<li>‌<strong>Cluster</strong>：默认值，流量会均匀路由到服务的所有端点，可能受拓扑和其他功能的影响。</li>
+<li>‌<strong>Local</strong>：流量仅路由到与客户端 Pod 在同一节点上的服务端点，若无本地端点则丢弃流量。</li>
+</ul>
+</li>
+<li>‌<strong>应用场景</strong>‌：根据实际需求选择合适的策略，以优化服务访问效率和资源利用。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl edit svc myapp-clusterip</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/cbe19da4d715767ed1145842c98cc984ba444c061d11f61bf5eb16cc8029565b.png" alt="图 106">  </p>
+<p>就绪的 pod 运行在 node02和node03节点上。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/57b8ac5dcbaaf55e44e3c702bfc44584806ba23884d247bda70c31312b6f1705.png" alt="图 107">  </p>
+<p>此时在node01节点访问 Service 此流量会被丢弃。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/a618996728e0d236d78e8a1abd75228f906ba92c26a65c73826a41bbe0292def.png" alt="图 108">  </p>
+<p>在 node02和node03上访问 Service 时也只会到本地节点的 pod 上。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/6a35d0a8aaa58d77ac123b2b6c6cd040356f001b4658077d06651ff7a5656e1c.png" alt="图 109">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/411b7f0efaa77d14729d624efca378e66ace2e6304135ccacaa209962f826ab1.png" alt="图 110">  </p>
+<h4 id="NodePort实验"><a href="#NodePort实验" class="headerlink" title="NodePort实验"></a>NodePort实验</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myapp-nodeport-deploy</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">      <span class="attr">release:</span> <span class="string">stabel</span></span><br><span class="line">      <span class="attr">svc:</span> <span class="string">nodeport</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">        <span class="attr">release:</span> <span class="string">stabel</span></span><br><span class="line">        <span class="attr">env:</span> <span class="string">test</span></span><br><span class="line">        <span class="attr">svc:</span> <span class="string">nodeport</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-container</span></span><br><span class="line">          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">          <span class="attr">ports:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">            <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myapp-nodeport</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">NodePort</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">release:</span> <span class="string">stabel</span></span><br><span class="line">    <span class="attr">svc:</span> <span class="string">nodeport</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">nodePort:</span> <span class="number">30010</span> <span class="comment">#可以不指定由k8s集群配置</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f myapp-nodeport-deploy.yaml </span><br><span class="line">kubectl apply -f myapp-nodeport-service.yaml </span><br></pre></td></tr></table></figure>
+
+<p>使用 Service 能够正常调用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/b1e47087104f60ad646a83a2d8bf81da26a70cbfb59f20f300196fabdeaf53e5.png" alt="图 111">  </p>
+<p>在外部使用节点ip+端口也能正常访问。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/ee889b7f21989b0c2233c7c9ed80351edaf3caf0e7314a775f91b1fd7127fadf.png" alt="图 112">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/0eb1b75bc87c7d8737ecc1c62ebc9bd3d0e5d0449b36b443053884bd506b4403.png" alt="图 113">  </p>
+<h4 id="externalTrafficPolicy-实验"><a href="#externalTrafficPolicy-实验" class="headerlink" title="externalTrafficPolicy 实验"></a>externalTrafficPolicy 实验</h4><ol>
+<li>‌<strong>作用</strong>‌：该命令用于解释 Kubernetes 服务（Service）规格（spec）中的 <code>externalTrafficPolicy</code> 字段。</li>
+<li>‌<strong>字段含义</strong>‌：<code>externalTrafficPolicy</code> 描述了节点如何分发它们接收到的服务流量，这些流量来自服务的“外部面向”地址（如 NodePorts、ExternalIPs 和 LoadBalancer IPs）。</li>
+<li>‌<strong>可选值</strong>‌：<ul>
+<li>‌<strong>Cluster</strong>‌：默认值，表示流量会均匀路由到服务的所有端点。</li>
+<li>‌<strong>Local</strong>‌：流量仅路由到接收流量的节点上的本地端点，不伪装客户端源 IP。若发送到没有端点的节点，流量将被丢弃。</li>
+</ul>
+</li>
+<li>‌<strong>注意事项</strong>‌：<ul>
+<li>集群内部发送到 External IP 或 LoadBalancer IP 的流量始终遵循 “Cluster” 语义。</li>
+<li>集群内部发送到 NodePort 的客户端在选择节点时可能需要考虑流量策略。</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl edit svc myapp-nodeport</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/b7c1e0397da1bc5135ae5fb20e306837213de56d6db4996cd40e3565126e412c.png" alt="图 114">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/6a989f929cfb3a90dbf42458aa3b39d7264ab45d6e76f8a06fb58fbad33ad0a4.png" alt="图 116">  </p>
+<p>此时外部流量只能访问到本节点上的 pod。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/d1dfae28c635625e4c4fc06cf971795d715b7e233223b354488c97485d51dd47.png" alt="图 115">  </p>
+<h4 id="ExternalName-实验"><a href="#ExternalName-实验" class="headerlink" title="ExternalName 实验"></a>ExternalName 实验</h4><ol>
+<li><p>‌<strong>核心功能</strong>‌<br> 创建一种特殊类型的 Service，通过 ‌<strong>DNS CNAME 记录</strong>‌将 Kubernetes 集群内部的服务名称映射到外部域名（如第三方 API、数据库等），实现跨集群访问外部服务的透明代理。</p>
+</li>
+<li><p>‌<strong>工作原理</strong>‌</p>
+<ul>
+<li>‌<strong>DNS 重定向</strong>‌：当集群内应用访问该 Service 时，Kubernetes DNS 返回 <code>externalName</code> 字段指定的外部域名（如 <code>external-service.example.com</code>）的 CNAME 记录，而非 ClusterIP。</li>
+<li>‌<strong>无代理&#x2F;负载均衡</strong>‌：不同于其他 Service 类型，<code>ExternalName</code> 不创建代理、负载均衡器或 Endpoints，仅通过 DNS 机制转发请求。</li>
+</ul>
+</li>
+<li><p>‌<strong>主要用途</strong>‌</p>
+<ul>
+<li>‌<strong>集成外部服务</strong>‌：将集群内应用与外部服务（如云数据库、第三方 API）解耦，避免硬编码外部地址。</li>
+<li>‌<strong>简化地址迁移</strong>‌：若外部服务地址变更，只需更新 <code>externalName</code> 字段，无需重启应用。</li>
+<li>‌<strong>跨命名空间&#x2F;环境</strong>‌：访问其他 Namespace 的服务（需目标服务支持）或混合云环境的外部资源。</li>
+</ul>
+</li>
+<li><p>‌<strong>关键特性</strong>‌</p>
+<table>
+<thead>
+<tr>
+<th>‌<strong>特性</strong>‌</th>
+<th>‌<strong>说明</strong>‌</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‌<strong>无负载均衡</strong>‌</td>
+<td>不提供流量分发或健康检查，依赖外部服务的可用性。</td>
+</tr>
+<tr>
+<td>‌<strong>配置简化</strong>‌</td>
+<td>仅需声明 <code>type: ExternalName</code> 和 <code>externalName: &lt;目标域名&gt;</code>。</td>
+</tr>
+<tr>
+<td>‌<strong>集群内部访问</strong>‌</td>
+<td>只能通过 Kubernetes 集群内部的 DNS 名称访问该服务。</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>‌<strong>注意事项</strong>‌</p>
+<ul>
+<li>‌<strong>协议限制</strong>‌：不指定端口或协议，需确保外部服务兼容 DNS 解析机制。</li>
+<li>‌<strong>安全性</strong>‌：依赖外部服务的安全策略（如 TLS&#x2F;防火墙），不提供 Kubernetes 网络策略支持。</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>‌<strong>总结</strong>‌：<code>ExternalName</code> 本质是 DNS 别名，适用于透明桥接集群内外服务，但需明确其无代理、无负载均衡的特性限制。</p>
+</blockquote>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">my-service-1</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">ExternalName</span></span><br><span class="line">  <span class="attr">externalName:</span> <span class="string">www.baidu.com</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f my-ExternalName.yaml </span><br><span class="line">kubectl get svc</span><br><span class="line">kubectl exec -it myapp-nodeport-deploy-685dcc6ddf-fzjcf bin/bash</span><br><span class="line">ping my-service-1.default.svc.cluster.local.</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/3649813e79ce7242b11b27ca3550a3a474eeb995dc7ca687eb4160b90fe082a1.png" alt="图 117">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/efb3b302570d0781f5f28552647c0618dd1bcb61fd662e7514b14aebd07c6073.png" alt="图 118">  </p>
+<h3 id="Endpoints"><a href="#Endpoints" class="headerlink" title="Endpoints"></a>Endpoints</h3><p>Kubernetes 中的 Service 定义了一组 Pods 的逻辑集合及一个用户访问它们的策略。一个 Service 的目标 Pod 集合通常由 Label Selector 决定。</p>
+<p>Endpoints是一组实际服务的端点集合，每个 Endpoint 代表一个可访问的服务端点，即状态为 running 的 Pod 的可访问端点。</p>
+<p>一般 Pod 都不是一个独立的存在，所以一组 Pod 的端点合在一起称为 EndPoints。只有被 Service Selector 匹配且状态为 Running 的 Pod，才会被加入到与 Service 同名的Endpoints中，形成一组 Pod 的端点集合。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/15f2c736e6048b895e55b7a3624261a582a6a8f266d2f50481cc7d734308f6da.png" alt="图 119">  </p>
+<h4 id="Endpoint-的工作机制"><a href="#Endpoint-的工作机制" class="headerlink" title="Endpoint 的工作机制"></a>Endpoint 的工作机制</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">A[Service] --&gt; B(Endpoint)</span><br><span class="line">B --&gt; C[Pod 1&lt;br&gt;192.168.1.2:80]</span><br><span class="line">B --&gt; D[Pod 2&lt;br&gt;192.168.1.3:80]</span><br><span class="line">B --&gt; E[Pod 3&lt;br&gt;192.168.1.4:80]</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>自动创建‌：当 Service 定义了 selector（如app: nginx）时，Kubernetes 自动。<ul>
+<li>监控匹配该标签的 Pod</li>
+<li>将 Pod 的 IP 和端口填充到 Endpoint 对象</li>
+</ul>
+</li>
+<li>‌<strong>流量转发</strong>‌：Service 接收到请求后，根据负载均衡策略（如轮询）将流量分发到 Endpoint 中的 Pod。</li>
+</ol>
+<h4 id="Endpoint-的核心价值"><a href="#Endpoint-的核心价值" class="headerlink" title="Endpoint 的核心价值"></a>Endpoint 的核心价值</h4><ol>
+<li>‌<strong>服务发现</strong>‌<br>Pod 可通过 Service 名称访问后端，无需感知具体 IP 变化。</li>
+<li>‌<strong>动态更新</strong>‌<br>当 Pod 扩缩容或重启时，Endpoint 自动更新地址列表（例如新 Pod IP 自动加入）。</li>
+<li>‌<strong>解耦架构</strong>‌<br>应用只需访问 Service 名称，流量路由由 Endpoint 机制透明处理。</li>
+<li>‌<strong>混合云集成</strong>‌<br>通过手动配置 Endpoint，可将集群内服务与外部系统（如传统数据库）无缝连接。</li>
+</ol>
+<h4 id="与-ExternalName-的区别"><a href="#与-ExternalName-的区别" class="headerlink" title="与 ExternalName 的区别"></a>与 ExternalName 的区别</h4><table>
+<thead>
+<tr>
+<th>‌<strong>特性</strong>‌</th>
+<th>‌<strong>Endpoint</strong>‌</th>
+<th>‌<strong>ExternalName Service</strong>‌</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‌<strong>目标类型</strong>‌</td>
+<td>Pod 或外部 IP</td>
+<td>外部域名 (CNAME 记录)</td>
+</tr>
+<tr>
+<td>‌<strong>DNS 解析</strong>‌</td>
+<td>返回 Service 的 ClusterIP</td>
+<td>直接返回外部域名</td>
+</tr>
+<tr>
+<td>‌<strong>配置方式</strong>‌</td>
+<td>自动生成或手动定义 Endpoint 对象</td>
+<td>仅需在 Service 中设置 <code>externalName</code></td>
+</tr>
+<tr>
+<td>‌<strong>流量路径</strong>‌</td>
+<td>经过 kube-proxy 转发</td>
+<td>纯 DNS 重定向，无代理</td>
+</tr>
+<tr>
+<td>‌<strong>适用场景</strong>‌</td>
+<td>集群内 Pod 或混合云环境</td>
+<td>简单域名映射</td>
+</tr>
+</tbody></table>
+<h4 id="Endpoint实验"><a href="#Endpoint实验" class="headerlink" title="Endpoint实验"></a>Endpoint实验</h4><h5 id="自动关联（配置-selector）"><a href="#自动关联（配置-selector）" class="headerlink" title="自动关联（配置 selector）"></a>自动关联（配置 selector）</h5><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myapp-clusterip-deploy</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">      <span class="attr">release:</span> <span class="string">stabel</span></span><br><span class="line">      <span class="attr">svc:</span> <span class="string">clusterip</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">        <span class="attr">release:</span> <span class="string">stabel</span></span><br><span class="line">        <span class="attr">env:</span> <span class="string">test</span></span><br><span class="line">        <span class="attr">svc:</span> <span class="string">clusterip</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-container</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">        <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">          <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">        <span class="attr">readinessProbe:</span></span><br><span class="line">          <span class="attr">httpGet:</span></span><br><span class="line">            <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">            <span class="attr">path:</span> <span class="string">/index1.html</span></span><br><span class="line">          <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">          <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myapp-clusterip</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">ClusterIP</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">release:</span> <span class="string">stabel</span></span><br><span class="line">    <span class="attr">svc:</span> <span class="string">clusterip</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f myapp-clusterip-deploy.yaml </span><br><span class="line">kubectl apply -f myapp-service.yaml </span><br></pre></td></tr></table></figure>
+
+<p>可以看到创建 Service 时，自动创建了同名的 Endpoint。因为 Pod 未就绪所以 Pod ip 还未计入到该端点下。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/18d62fc9ea9269ea1c8c41c063d6ebf276f193f95c0135770a21de8c50f4702f.png" alt="图 120"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec -it myapp-clusterip-deploy-5c9cc9b64-5jg56 bin/bash</span><br><span class="line">echo &#x27;haha&#x27; &gt;&gt; /usr/local/nginx/html/index1.html</span><br><span class="line">kubectl exec -it myapp-clusterip-deploy-5c9cc9b64-67kbq bin/bash</span><br><span class="line">echo &#x27;haha&#x27; &gt;&gt; /usr/local/nginx/html/index1.html</span><br></pre></td></tr></table></figure>
+
+<p>可以看到当 Pod 就绪后，Pod IP 自动加入到了 Endpoint 中。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/d15f5c935c888e00884702968ebca318a0309a6e2bd1724340d846851ddb4aaf.png" alt="图 121">  </p>
+<h5 id="手动关联（无配置-selector）"><a href="#手动关联（无配置-selector）" class="headerlink" title="手动关联（无配置 selector）"></a>手动关联（无配置 selector）</h5><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-noselect</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">6666</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Endpoints</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="comment"># 这个名字要与创建的 Service 命名相同</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-noselect</span></span><br><span class="line"><span class="attr">subsets:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">addresses:</span></span><br><span class="line">      <span class="comment"># node2 节点 IP</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">ip:</span> <span class="number">10.37</span><span class="number">.129</span><span class="number">.11</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果 Endpoint 需要跟踪多个 ip (多个 pod 或者容器或者应用)，可以使用:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">addresses:</span></span><br><span class="line">  <span class="string">&#x27; - ip: 172.17.0.2</span></span><br><span class="line"><span class="string">   - ip: 172.17.0.3</span></span><br><span class="line"><span class="string">   - ip: 172.17.0.4&#x27;</span></span><br><span class="line">  <span class="string">...</span> <span class="string">...</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f service-noselect.yaml </span><br><span class="line">kubectl apply -f endpoints-noselect.yaml </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/9e27d046906e076afecf0603186a98c8af7a236251b73038d838aa9dd93ad71e.png" alt="图 123">  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">在 node2 节点执行</span></span><br><span class="line">docker run -itd -p 80:80 --net host wangyanglinux/myapp:v1</span><br></pre></td></tr></table></figure>
+
+<p>将 nginx 在 node2 节点启动后，此时可以访问。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/ce1dff675a6ecb32b90e994c8fc12a72988033a3c98817bfd3db510e7dda0c14.png" alt="图 124">  </p>
+<h5 id="访问未就绪的-Pod"><a href="#访问未就绪的-Pod" class="headerlink" title="访问未就绪的 Pod"></a>访问未就绪的 Pod</h5><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">readiness-httpget-pod</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">    <span class="attr">env:</span> <span class="string">test</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">readiness-httpget-container</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">    <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">    <span class="attr">readinessProbe:</span></span><br><span class="line">      <span class="attr">httpGet:</span></span><br><span class="line">        <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">        <span class="attr">path:</span> <span class="string">/index1.html</span></span><br><span class="line">      <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Service</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">ports:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">80</span><span class="number">-80</span></span><br><span class="line">    <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">protocol:</span> <span class="string">TCP</span></span><br><span class="line">    <span class="attr">targetPort:</span> <span class="number">80</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">ClusterIP</span></span><br></pre></td></tr></table></figure>
+
+<p>此时无法访问。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/eccc1fddec131b5464a3e237ced5081bdbf6fdac8b14f6ce4ddc64a97323a5b0.png" alt="图 125">  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl patch service myapp -p &#x27;&#123;&quot;spec&quot;:&#123;&quot;publishNotReadyAddresses&quot;: true&#125;&#125;&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>添加 <code>publishNotReadyAddresses:ture</code> 配置后。该配置使得 Service 能够抓取到为就绪的 Pod。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/2a7ae14cbfed8e8e5d0c745d8a3324b239b2c14be883bd6cef873f75f56af167.png" alt="图 128">  </p>
+</article>
+<div class="article-footer">
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/wiki/Kubernetes/%E6%8E%A7%E5%88%B6%E5%99%A8/">Kubernetes控制器</a></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/wiki/Kubernetes/%E5%AD%98%E5%82%A8/">Kubernetes存储</a></div></section></div>
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Service"><span class="toc-text">Service</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Service%E6%A6%82%E5%BF%B5"><span class="toc-text">Service概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">核心工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Iptables"><span class="toc-text">Iptables</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Ipvs"><span class="toc-text">Ipvs</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Service%E7%B1%BB%E5%9E%8B"><span class="toc-text">Service类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Service%E7%B1%BB%E5%9E%8B%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3"><span class="toc-text">Service类型模式详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ClusterIP%EF%BC%88%E9%BB%98%E8%AE%A4%E7%B1%BB%E5%9E%8B%EF%BC%89"><span class="toc-text">ClusterIP（默认类型）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NodePort"><span class="toc-text">NodePort</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LoadBalancer%EF%BC%88%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%A2%9E%E5%BC%BA%EF%BC%89"><span class="toc-text">LoadBalancer（云服务增强）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ExternalName%EF%BC%88%E8%B7%A8%E9%9B%86%E7%BE%A4%E6%9C%8D%E5%8A%A1%E6%8E%A5%E5%85%A5%EF%BC%89"><span class="toc-text">ExternalName（跨集群服务接入）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Service-%E5%AE%9E%E9%AA%8C"><span class="toc-text">Service 实验</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#clusterIp"><span class="toc-text">clusterIp</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9F%9F%E5%90%8D%E8%AE%BF%E9%97%AEService"><span class="toc-text">使用域名访问Service</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%81%E4%B9%85%E5%8C%96%E9%93%BE%E6%8E%A5"><span class="toc-text">持久化链接</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8%E4%B8%8E%E5%8E%9F%E7%90%86"><span class="toc-text">作用与原理</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3"><span class="toc-text">配置参数详解</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#sessionAffinity-%E5%AE%9E%E9%AA%8C"><span class="toc-text">sessionAffinity 实验</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#internalTrafficPolicy-%E5%AE%9E%E9%AA%8C"><span class="toc-text">internalTrafficPolicy 实验</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#NodePort%E5%AE%9E%E9%AA%8C"><span class="toc-text">NodePort实验</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#externalTrafficPolicy-%E5%AE%9E%E9%AA%8C"><span class="toc-text">externalTrafficPolicy 实验</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ExternalName-%E5%AE%9E%E9%AA%8C"><span class="toc-text">ExternalName 实验</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Endpoints"><span class="toc-text">Endpoints</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Endpoint-%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="toc-text">Endpoint 的工作机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Endpoint-%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BB%B7%E5%80%BC"><span class="toc-text">Endpoint 的核心价值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8E-ExternalName-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">与 ExternalName 的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Endpoint%E5%AE%9E%E9%AA%8C"><span class="toc-text">Endpoint实验</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%85%B3%E8%81%94%EF%BC%88%E9%85%8D%E7%BD%AE-selector%EF%BC%89"><span class="toc-text">自动关联（配置 selector）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E5%85%B3%E8%81%94%EF%BC%88%E6%97%A0%E9%85%8D%E7%BD%AE-selector%EF%BC%89"><span class="toc-text">手动关联（无配置 selector）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E6%9C%AA%E5%B0%B1%E7%BB%AA%E7%9A%84-Pod"><span class="toc-text">访问未就绪的 Pod</span></a></li></ol></li></ol></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
