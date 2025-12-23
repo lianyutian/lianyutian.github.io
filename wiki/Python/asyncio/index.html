@@ -1,0 +1,1109 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Python：Pytest asyncio简介 - Lianyutian</title>
+
+  
+    <meta name="description" content="🥧本文介绍了asyncio">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pytest asyncio简介">
+<meta property="og:url" content="http://example.com/wiki/Python/asyncio/">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="🥧本文介绍了asyncio">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2025-02-20T16:17:53.000Z">
+<meta property="article:modified_time" content="2025-12-23T08:50:16.725Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="asyncio">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/wiki/Python/asyncio/","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"name":"Pytest asyncio简介","description":"🥧本文介绍了asyncio","url":"http://example.com/wiki/Python/asyncio/"}</script>
+  
+</head>
+<body>
+
+
+
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="/assets/wiki/Python/python-svgrepo-com.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/wiki/Python/Python%E5%AE%89%E8%A3%85"><div class="main">Python</div><div class="sub cap">Python基础知识</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item active" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/wiki/Python/" placeholder="在 Python 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<widget class="widget-wrapper doc-tree post-list"><div class="widget-header dis-select"><span class="name">基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Python/Python%E5%AE%89%E8%A3%85/#start"><span class="toc-text">Python环境搭建</span></a><a class="link" href="/wiki/Python/%E5%9F%BA%E7%A1%80%E8%AF%AD%E6%B3%95/"><span class="toc-text">Python基础语法</span></a><a class="link" href="/wiki/Python/%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/"><span class="toc-text">Python基本数据类型</span></a><a class="link" href="/wiki/Python/%E8%BF%90%E7%AE%97%E7%AC%A6/"><span class="toc-text">Python运算符</span></a><a class="link" href="/wiki/Python/%E6%9D%A1%E4%BB%B6%E6%8E%A7%E5%88%B6/"><span class="toc-text">Python条件控制</span></a><a class="link" href="/wiki/Python/%E6%8E%A8%E5%AF%BC%E5%BC%8F/"><span class="toc-text">Python推导式</span></a><a class="link" href="/wiki/Python/%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E7%94%9F%E6%88%90%E5%99%A8/"><span class="toc-text">Python迭代器和生成器</span></a><a class="link" href="/wiki/Python/%E5%87%BD%E6%95%B0/"><span class="toc-text">Python函数</span></a><a class="link" href="/wiki/Python/%E8%A3%85%E9%A5%B0%E5%99%A8/"><span class="toc-text">Python装饰器</span></a><a class="link" href="/wiki/Python/%E9%94%99%E8%AF%AF%E5%92%8C%E5%BC%82%E5%B8%B8/"><span class="toc-text">Python错误和异常</span></a><a class="link" href="/wiki/Python/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"><span class="toc-text">Python面向对象</span></a><a class="link" href="/wiki/Python/%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E5%92%8C%E4%BD%9C%E7%94%A8%E5%9F%9F/"><span class="toc-text">Python命名空间和作用域</span></a><a class="link" href="/wiki/Python/%E6%9E%9A%E4%B8%BE/"><span class="toc-text">Python枚举</span></a></div><div class="widget-header dis-select"><span class="name">高级</span></div><div class="widget-body fs14"><a class="link active" href="/wiki/Python/asyncio/"><span class="toc-text">Pytest asyncio简介</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a><a class="link" href="/wiki/Python/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/"><span class="toc-text">Python依赖注入</span></a><a class="link" href="/wiki/Python/Pytest/"><span class="toc-text">Pytest简介</span></a></div><div class="widget-header dis-select"><span class="name">...</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Python/%E6%A8%A1%E5%9D%97%E4%B8%8E%E5%8C%85/"><span class="toc-text">Python模块</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/Python/Python%E5%AE%89%E8%A3%85/">Python</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2025-12-23T08:50:16.725Z">2025-12-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Pytest asyncio简介</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h3 id="Python-asyncio-的概念"><a href="#Python-asyncio-的概念" class="headerlink" title="Python asyncio 的概念"></a>Python asyncio 的概念</h3><p>asyncio 是 Python 标准库中的一个模块，用于支持异步编程。它于 Python 3.4 引入，并在后续版本中不断完善（如 Python 3.5 引入 async&#x2F;await 语法）。asyncio 的核心目标是处理 I&#x2F;O 密集型任务（如网络请求、文件读写、数据库操作），允许程序在等待 I&#x2F;O 操作时继续执行其他任务，从而实现并发而非并行（区别于多线程或多进程的并行执行）。</p>
+<ul>
+<li>关键概念：<ul>
+<li>**协程 (Coroutine)**：asyncio 的基础单位，使用 <code>async def</code> 定义的函数。协程是可暂停和恢复的函数，不阻塞主线程。它们通过 <code>await</code> 关键字在等待操作时让出控制权。</li>
+<li>**事件循环 (Event Loop)**：asyncio 的核心引擎，类似于一个调度器。它负责监控多个协程的执行状态，当一个协程等待 I&#x2F;O 时，切换到另一个就绪的协程。事件循环是单线程的，确保线程安全。</li>
+<li>**任务 (Task)**：协程的封装形式，使用 <code>asyncio.create_task()</code> 创建。任务允许协程在事件循环中并发运行，并提供取消、等待等管理功能。</li>
+<li><strong>Future</strong>：表示一个异步操作的未来结果的对象，与任务类似，但更底层。Future 可以设置结果或异常，用于手动控制异步操作。</li>
+<li><strong>异步上下文</strong>：包括队列 (asyncio.Queue)、锁 (asyncio.Lock)、信号量 (asyncio.Semaphore) 等，用于在异步环境中管理共享资源。</li>
+</ul>
+</li>
+</ul>
+<p>asyncio 不是真正的多线程，而是基于“协作式多任务”（cooperative multitasking），协程必须主动让出控制权（通过 await）。</p>
+<h3 id="Python-asyncio-的原理"><a href="#Python-asyncio-的原理" class="headerlink" title="Python asyncio 的原理"></a>Python asyncio 的原理</h3><p>asyncio 的原理建立在“非阻塞 I&#x2F;O”和“事件驱动”模型上，借鉴了 Node.js 的单线程事件循环，但更注重 Python 的语法友好性。</p>
+<h4 id="事件循环的工作机制"><a href="#事件循环的工作机制" class="headerlink" title="事件循环的工作机制"></a>事件循环的工作机制</h4><ul>
+<li>事件循环是一个无限循环，不断检查注册的协程或任务的状态。</li>
+<li>当一个协程遇到 <code>await</code> 时，它会暂停执行，并将控制权返回给事件循环。事件循环则轮询其他任务。</li>
+<li>底层依赖于操作系统提供的非阻塞 I&#x2F;O 接口（如 select、epoll、kqueue），这些接口允许程序检查多个文件描述符（sockets、files）的就绪状态，而不阻塞。</li>
+<li>示例流程：<ol>
+<li>创建事件循环：<code>loop = asyncio.get_event_loop()</code>（在 Python 3.7+ 中推荐使用 <code>asyncio.run()</code> 简化）。</li>
+<li>注册协程：通过 <code>asyncio.create_task(coro())</code> 或 <code>loop.create_task()</code>。</li>
+<li>运行循环：<code>asyncio.run(main())</code>，直到所有任务完成或异常发生。</li>
+<li>循环结束：处理清理，如关闭连接。</li>
+</ol>
+</li>
+</ul>
+<h4 id="协程的执行原理"><a href="#协程的执行原理" class="headerlink" title="协程的执行原理"></a>协程的执行原理</h4><ul>
+<li>协程是生成器（generator）的扩展，使用 <code>yield from</code>（旧语法）或 <code>await</code>。</li>
+<li>当协程被 <code>await</code> 时，它返回一个 <code>Awaitable</code> 对象（通常是 <code>Future</code> 或 <code>Task</code>），事件循环会等待其完成。</li>
+<li>协程栈：asyncio 维护一个协程调用栈，支持嵌套 <code>await</code>。</li>
+<li>异常处理：协程中的异常会传播到任务中，可通过 <code>task.exception()</code> 捕获。</li>
+</ul>
+<h4 id="与线程-进程的比较"><a href="#与线程-进程的比较" class="headerlink" title="与线程&#x2F;进程的比较"></a>与线程&#x2F;进程的比较</h4><ul>
+<li><strong>优势</strong>：低开销（无线程切换成本）、线程安全（单线程）、易于调试。</li>
+<li><strong>劣势</strong>：不适合 CPU 密集型任务（会阻塞事件循环）。对于 CPU 任务，可结合 <code>asyncio.to_thread()</code>（Python 3.9+）或多进程。</li>
+<li>GIL（Global Interpreter Lock）：asyncio 在单线程中运行，不受 GIL 影响，但如果结合多线程，仍需注意。</li>
+</ul>
+<h4 id="内部实现细节"><a href="#内部实现细节" class="headerlink" title="内部实现细节"></a>内部实现细节</h4><ul>
+<li>asyncio 使用 <code>selectors</code> 模块抽象底层 I&#x2F;O 多路复用。</li>
+<li><code>transport</code> 和 <code>protocol</code>：用于网络编程，如 <code>loop.create_connection()</code> 返回 transport（低级 I&#x2F;O）和 protocol（数据处理）。</li>
+<li>兼容性：asyncio 支持与其他异步库集成，如 aiohttp（HTTP 客户端&#x2F;服务器）、aiomysql 等。</li>
+</ul>
+<h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><h4 id="运行协程"><a href="#运行协程" class="headerlink" title="运行协程"></a>运行协程</h4><p>要运行一个协程，你可以使用 <code>asyncio.run()</code> 函数。它会创建一个事件循环，并运行指定的协程。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;Start&quot;</span>)</span><br><span class="line">  <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;End&quot;</span>)</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+<h4 id="并发执行多个任务"><a href="#并发执行多个任务" class="headerlink" title="并发执行多个任务"></a>并发执行多个任务</h4><p>你可以使用 <code>asyncio.gather()</code> 函数并发执行多个协程，并等待它们全部完成。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">task1</span>():</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;Task 1 started&quot;</span>)</span><br><span class="line">  <span class="keyword">await</span> asyncio.sleep(<span class="number">1</span>)</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;Task 1 finished&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">task2</span>():</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;Task 2 started&quot;</span>)</span><br><span class="line">  <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;Task 2 finished&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">  <span class="keyword">await</span> asyncio.gather(task1(), task2())</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+<h4 id="超时控制"><a href="#超时控制" class="headerlink" title="超时控制"></a>超时控制</h4><p>你可以使用 <code>asyncio.wait_for()</code> 函数为协程设置超时时间。如果协程在指定时间内未完成，将引发 <code>asyncio.TimeoutError</code> 异常。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">long_task</span>():</span><br><span class="line">  <span class="keyword">await</span> asyncio.sleep(<span class="number">10</span>)</span><br><span class="line">  <span class="built_in">print</span>(<span class="string">&quot;Task finished&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">  <span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">await</span> asyncio.wait_for(long_task(), timeout=<span class="number">5</span>)</span><br><span class="line">  <span class="keyword">except</span> asyncio.TimeoutError:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Task timed out&quot;</span>)</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+<h3 id="Python-asyncio-的应用"><a href="#Python-asyncio-的应用" class="headerlink" title="Python asyncio 的应用"></a>Python asyncio 的应用</h3><p>asyncio 广泛用于高并发场景，尤其在 Web 开发、爬虫和实时应用中。以下是典型应用和代码示例。</p>
+<h4 id="网络-I-O：异步-HTTP-请求"><a href="#网络-I-O：异步-HTTP-请求" class="headerlink" title="网络 I&#x2F;O：异步 HTTP 请求"></a>网络 I&#x2F;O：异步 HTTP 请求</h4><p>使用 aiohttp 库（需安装，但 asyncio 提供基础支持）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> aiohttp</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">fetch</span>(<span class="params">url</span>):</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> aiohttp.ClientSession() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> session.get(url) <span class="keyword">as</span> response:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">await</span> response.text()</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    urls = [<span class="string">&#x27;https://example.com&#x27;</span>, <span class="string">&#x27;https://python.org&#x27;</span>]</span><br><span class="line">    tasks = [asyncio.create_task(fetch(url)) <span class="keyword">for</span> url <span class="keyword">in</span> urls]</span><br><span class="line">    results = <span class="keyword">await</span> asyncio.gather(*tasks)</span><br><span class="line">    <span class="built_in">print</span>(results)</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+<p>应用：爬虫、API 调用。并发请求多个 URL，而不阻塞。</p>
+<h4 id="服务器应用：异步-Web-服务器"><a href="#服务器应用：异步-Web-服务器" class="headerlink" title="服务器应用：异步 Web 服务器"></a>服务器应用：异步 Web 服务器</h4><p>使用 asyncio 构建 echo 服务器。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">handle_echo</span>(<span class="params">reader, writer</span>):</span><br><span class="line">    data = <span class="keyword">await</span> reader.read(<span class="number">100</span>)</span><br><span class="line">    message = data.decode()</span><br><span class="line">    addr = writer.get_extra_info(<span class="string">&#x27;peername&#x27;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Received <span class="subst">&#123;message!r&#125;</span> from <span class="subst">&#123;addr!r&#125;</span>&quot;</span>)</span><br><span class="line">    writer.write(data)</span><br><span class="line">    <span class="keyword">await</span> writer.drain()</span><br><span class="line">    writer.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    server = <span class="keyword">await</span> asyncio.start_server(handle_echo, <span class="string">&#x27;127.0.0.1&#x27;</span>, <span class="number">8888</span>)</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> server:</span><br><span class="line">        <span class="keyword">await</span> server.serve_forever()</span><br><span class="line"></span><br><span class="line">asyncio.run(main())</span><br></pre></td></tr></table></figure>
+
+<p>应用：聊天服务器、WebSocket 服务。高并发连接处理。</p>
+<h4 id="文件-I-O-和定时任务"><a href="#文件-I-O-和定时任务" class="headerlink" title="文件 I&#x2F;O 和定时任务"></a>文件 I&#x2F;O 和定时任务</h4><p>异步读文件：使用 aiofiles 库。<br>定时：asyncio.sleep() 用于非阻塞延迟。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">delayed_task</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Starting delay&quot;</span>)</span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Delay complete&quot;</span>)</span><br><span class="line"></span><br><span class="line">asyncio.run(delayed_task())</span><br></pre></td></tr></table></figure>
+
+<p>应用：GUI 应用（如 Tkinter + asyncio）、定时器、日志处理。</p>
+<h4 id="其他高级应用"><a href="#其他高级应用" class="headerlink" title="其他高级应用"></a>其他高级应用</h4><ul>
+<li>数据库操作：使用 aiopg 或 asyncpg 进行异步 PostgreSQL 查询。</li>
+<li>消息队列：结合 aioamqp（AMQP）或 asyncio.Queue 实现生产者-消费者模式。</li>
+<li>微服务：在 FastAPI（基于 ASGI 和 asyncio）中构建异步 API。</li>
+<li>局限与扩展：对于阻塞代码，可用 loop.run_in_executor() 在线程池中运行。大型项目中，结合 uvloop（更快的事件循环实现）提升性能。</li>
+</ul>
+<h3 id="常用类、方法和函数"><a href="#常用类、方法和函数" class="headerlink" title="常用类、方法和函数"></a>常用类、方法和函数</h3><h4 id="核心函数"><a href="#核心函数" class="headerlink" title="核心函数"></a>核心函数</h4><table>
+<thead>
+<tr>
+<th align="left">方法&#x2F;函数</th>
+<th align="left">说明</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>asyncio.run(coro)</code></strong></td>
+<td align="left">运行异步主函数（Python 3.7+）</td>
+<td align="left"><code>asyncio.run(main())</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.create_task(coro)</code></strong></td>
+<td align="left">创建任务并加入事件循环</td>
+<td align="left"><code>task = asyncio.create_task(fetch_data())</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.gather(\*coros)</code></strong></td>
+<td align="left">并发运行多个协程</td>
+<td align="left"><code>await asyncio.gather(task1, task2)</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.sleep(delay)</code></strong></td>
+<td align="left">异步等待（非阻塞）</td>
+<td align="left"><code>await asyncio.sleep(1)</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.wait(coros)</code></strong></td>
+<td align="left">控制任务完成方式</td>
+<td align="left"><code>done, pending = await asyncio.wait([task1, task2])</code></td>
+</tr>
+</tbody></table>
+<h4 id="事件循环（Event-Loop）"><a href="#事件循环（Event-Loop）" class="headerlink" title="事件循环（Event Loop）"></a>事件循环（Event Loop）</h4><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>loop.run_until_complete(future)</code></strong></td>
+<td align="left">运行直到任务完成</td>
+<td align="left"><code>loop.run_until_complete(main())</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>loop.run_forever()</code></strong></td>
+<td align="left">永久运行事件循环</td>
+<td align="left"><code>loop.run_forever()</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>loop.stop()</code></strong></td>
+<td align="left">停止事件循环</td>
+<td align="left"><code>loop.stop()</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>loop.close()</code></strong></td>
+<td align="left">关闭事件循环</td>
+<td align="left"><code>loop.close()</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>loop.call_soon(callback)</code></strong></td>
+<td align="left">安排回调函数立即执行</td>
+<td align="left"><code>loop.call_soon(print, &quot;Hello&quot;)</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>loop.call_later(delay, callback)</code></strong></td>
+<td align="left">延迟执行回调</td>
+<td align="left"><code>loop.call_later(5, callback)</code></td>
+</tr>
+</tbody></table>
+<h4 id="协程（Coroutine）与任务（Task）"><a href="#协程（Coroutine）与任务（Task）" class="headerlink" title="协程（Coroutine）与任务（Task）"></a>协程（Coroutine）与任务（Task）</h4><table>
+<thead>
+<tr>
+<th align="left">方法&#x2F;装饰器</th>
+<th align="left">说明</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>@asyncio.coroutine</code></strong></td>
+<td align="left">协程装饰器（旧版，Python 3.4-3.7）</td>
+<td align="left"><code>@asyncio.coroutine</code> <code>def old_coro():</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>async def</code></strong></td>
+<td align="left">定义协程（Python 3.5+）</td>
+<td align="left"><code>async def fetch():</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>task.cancel()</code></strong></td>
+<td align="left">取消任务</td>
+<td align="left"><code>task.cancel()</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>task.done()</code></strong></td>
+<td align="left">检查任务是否完成</td>
+<td align="left"><code>if task.done():</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>task.result()</code></strong></td>
+<td align="left">获取任务结果（需任务完成）</td>
+<td align="left"><code>data = task.result()</code></td>
+</tr>
+</tbody></table>
+<h4 id="同步原语（类似threading）"><a href="#同步原语（类似threading）" class="headerlink" title="同步原语（类似threading）"></a>同步原语（类似<code>threading</code>）</h4><table>
+<thead>
+<tr>
+<th align="left">类</th>
+<th align="left">说明</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>asyncio.Lock()</code></strong></td>
+<td align="left">异步互斥锁</td>
+<td align="left"><code>lock = asyncio.Lock()</code> <code>async with lock:</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.Event()</code></strong></td>
+<td align="left">事件通知</td>
+<td align="left"><code>event = asyncio.Event()</code> <code>await event.wait()</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.Queue()</code></strong></td>
+<td align="left">异步队列</td>
+<td align="left"><code>queue = asyncio.Queue()</code> <code>await queue.put(item)</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.Semaphore()</code></strong></td>
+<td align="left">信号量</td>
+<td align="left"><code>sem = asyncio.Semaphore(5)</code> <code>async with sem:</code></td>
+</tr>
+</tbody></table>
+<h4 id="网络与子进程"><a href="#网络与子进程" class="headerlink" title="网络与子进程"></a>网络与子进程</h4><table>
+<thead>
+<tr>
+<th align="left">方法&#x2F;类</th>
+<th align="left">说明</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>asyncio.open_connection()</code></strong></td>
+<td align="left">建立TCP连接</td>
+<td align="left"><code>reader, writer = await asyncio.open_connection(&#39;host&#39;, 80)</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.start_server()</code></strong></td>
+<td align="left">创建TCP服务器</td>
+<td align="left"><code>server = await asyncio.start_server(handle, &#39;0.0.0.0&#39;, 8888)</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.create_subprocess_exec()</code></strong></td>
+<td align="left">创建子进程</td>
+<td align="left"><code>proc = await asyncio.create_subprocess_exec(&#39;ls&#39;)</code></td>
+</tr>
+</tbody></table>
+<h4 id="实用工具"><a href="#实用工具" class="headerlink" title="实用工具"></a>实用工具</h4><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">说明</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>asyncio.current_task()</code></strong></td>
+<td align="left">获取当前任务</td>
+<td align="left"><code>task = asyncio.current_task()</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.all_tasks()</code></strong></td>
+<td align="left">获取所有任务</td>
+<td align="left"><code>tasks = asyncio.all_tasks()</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.shield(coro)</code></strong></td>
+<td align="left">保护任务不被取消</td>
+<td align="left"><code>await asyncio.shield(critical_task)</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>asyncio.wait_for(coro, timeout)</code></strong></td>
+<td align="left">带超时的等待</td>
+<td align="left"><code>try: await asyncio.wait_for(task, 5)</code></td>
+</tr>
+</tbody></table>
+</article>
+<div class="article-footer">
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/wiki/Python/%E6%9E%9A%E4%B8%BE/">Python枚举</a></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/wiki/Python/%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5/">Python依赖注入</a></div></section></div>
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-asyncio-%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-text">Python asyncio 的概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-asyncio-%E7%9A%84%E5%8E%9F%E7%90%86"><span class="toc-text">Python asyncio 的原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%9C%BA%E5%88%B6"><span class="toc-text">事件循环的工作机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E7%A8%8B%E7%9A%84%E6%89%A7%E8%A1%8C%E5%8E%9F%E7%90%86"><span class="toc-text">协程的执行原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8E%E7%BA%BF%E7%A8%8B-%E8%BF%9B%E7%A8%8B%E7%9A%84%E6%AF%94%E8%BE%83"><span class="toc-text">与线程&#x2F;进程的比较</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="toc-text">内部实现细节</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-text">基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E5%8D%8F%E7%A8%8B"><span class="toc-text">运行协程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E6%89%A7%E8%A1%8C%E5%A4%9A%E4%B8%AA%E4%BB%BB%E5%8A%A1"><span class="toc-text">并发执行多个任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B6%85%E6%97%B6%E6%8E%A7%E5%88%B6"><span class="toc-text">超时控制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-asyncio-%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-text">Python asyncio 的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C-I-O%EF%BC%9A%E5%BC%82%E6%AD%A5-HTTP-%E8%AF%B7%E6%B1%82"><span class="toc-text">网络 I&#x2F;O：异步 HTTP 请求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BA%94%E7%94%A8%EF%BC%9A%E5%BC%82%E6%AD%A5-Web-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">服务器应用：异步 Web 服务器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6-I-O-%E5%92%8C%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1"><span class="toc-text">文件 I&#x2F;O 和定时任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8"><span class="toc-text">其他高级应用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%B1%BB%E3%80%81%E6%96%B9%E6%B3%95%E5%92%8C%E5%87%BD%E6%95%B0"><span class="toc-text">常用类、方法和函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%87%BD%E6%95%B0"><span class="toc-text">核心函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%EF%BC%88Event-Loop%EF%BC%89"><span class="toc-text">事件循环（Event Loop）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8D%8F%E7%A8%8B%EF%BC%88Coroutine%EF%BC%89%E4%B8%8E%E4%BB%BB%E5%8A%A1%EF%BC%88Task%EF%BC%89"><span class="toc-text">协程（Coroutine）与任务（Task）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8C%E6%AD%A5%E5%8E%9F%E8%AF%AD%EF%BC%88%E7%B1%BB%E4%BC%BCthreading%EF%BC%89"><span class="toc-text">同步原语（类似threading）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E4%B8%8E%E5%AD%90%E8%BF%9B%E7%A8%8B"><span class="toc-text">网络与子进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E7%94%A8%E5%B7%A5%E5%85%B7"><span class="toc-text">实用工具</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

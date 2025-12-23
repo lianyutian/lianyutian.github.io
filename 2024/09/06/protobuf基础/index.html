@@ -1,0 +1,1130 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>protobuf基础 - Lianyutian</title>
+
+  
+    <meta name="description" content="简介概述Protocol Buffers（protobuf）是由 Google 开发的一种语言中立、平台中立、可扩展的序列化结构数据的方法。 它用于将结构化数据序列化为字节流，并在网络中传输或存储到文件中。protobuf 的主要优点是高效、简单和支持跨语言互操作性。 https:&#x2F;&#x2F;protobuf.dev&#x2F;programming-guides&#x2F;proto3&#x2F; https:&#x2F;&#x2F;grpc.io&#x2F;d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="protobuf基础">
+<meta property="og:url" content="http://example.com/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="简介概述Protocol Buffers（protobuf）是由 Google 开发的一种语言中立、平台中立、可扩展的序列化结构数据的方法。 它用于将结构化数据序列化为字节流，并在网络中传输或存储到文件中。protobuf 的主要优点是高效、简单和支持跨语言互操作性。 https:&#x2F;&#x2F;protobuf.dev&#x2F;programming-guides&#x2F;proto3&#x2F; https:&#x2F;&#x2F;grpc.io&#x2F;d">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2024-09-06T10:13:50.000Z">
+<meta property="article:modified_time" content="2025-12-23T08:50:16.677Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="protobuf、Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="protobuf、Go">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"dateCreated":"2024-09-06T10:13:50+00:00","dateModified":"2025-12-23T08:50:16+00:00","datePublished":"2024-09-06T10:13:50+00:00","description":"","headline":"protobuf基础","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/"},"publisher":{"@type":"Organization","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png","logo":{"@type":"ImageObject","url":"/assets/20240507174529.png"}},"url":"http://example.com/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/","keywords":"protobuf、Go","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/assets/20240507174529.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Lianyutian</div><div class="sub cap">学无止境</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item active" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2025/03/27/%E7%A4%BE%E5%8C%BA%E5%95%86%E5%9F%8E/"><span class="title">'社区商城'</span></a><a class="item title" href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/"><span class="title">rpc基础</span></a><a class="item title" href="/2025/03/25/xxl-job/"><span class="title">xxl-job基础</span></a><a class="item title" href="/2025/03/27/%E4%BA%91%E7%8E%AF%E5%A2%83/"><span class="title">云环境</span></a><a class="item title" href="/2025/03/28/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="title">区块链</span></a><a class="item title" href="/2024/12/13/circle-shop/"><span class="title">circle-shop</span></a><a class="item title" href="/2024/11/26/cloud-mall-vue/"><span class="title">cloud-mall-vue</span></a><a class="item title" href="/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/"><span class="title">protobuf基础</span></a><a class="item title" href="/2024/09/26/React%E5%9F%BA%E7%A1%80/"><span class="title">React基础</span></a><a class="item title" href="/2024/05/29/ReentrantLock%E8%AF%A6%E8%A7%A3/"><span class="title">ReentrantLock详解</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Go/">Go</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-09-06T10:13:50.000Z">2024-09-06</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-12-23T08:50:16.677Z">2025-12-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>protobuf基础</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>Protocol Buffers（protobuf）是由 Google 开发的一种语言中立、平台中立、可扩展的序列化结构数据的方法。</p>
+<p>它用于将结构化数据序列化为字节流，并在网络中传输或存储到文件中。protobuf 的主要优点是高效、简单和支持跨语言互操作性。</p>
+<p><a target="_blank" rel="noopener" href="https://protobuf.dev/programming-guides/proto3/">https://protobuf.dev/programming-guides/proto3/</a></p>
+<p><a target="_blank" rel="noopener" href="https://grpc.io/docs/languages/go/quickstart/">https://grpc.io/docs/languages/go/quickstart/</a></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p><strong>下载 protoc：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/releases">https://github.com/protocolbuffers/protobuf/releases</a></p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906102707.png" alt="1"></p>
+<p><strong>添加 protoc 环境变量：</strong></p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906103032.png" alt="2"></p>
+<p><strong>检查：</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc --version</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906103200.png"></p>
+<p><strong>安装 vscode 插件</strong></p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906104638.png"></p>
+<h3 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h3><h4 id="新建-grpc-项目"><a href="#新建-grpc-项目" class="headerlink" title="新建 grpc 项目"></a>新建 grpc 项目</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">初始化go.mod</span></span><br><span class="line">执行 go mod init &#x27;grpc&#x27;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">安装 Go 的协议编译器插件</span></span><br><span class="line">go install google.golang.org/protobuf/cmd/protoc-gen-go@latest</span><br><span class="line">go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest</span><br></pre></td></tr></table></figure>
+
+<h4 id="生成-grpc-go程序"><a href="#生成-grpc-go程序" class="headerlink" title="生成 grpc go程序"></a>生成 grpc go程序</h4><figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">option</span> go_package=<span class="string">&quot;.;proto&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">service </span><span class="title class_">Greeter</span> &#123;</span><br><span class="line">    <span class="function"><span class="keyword">rpc</span> SayHello (HelloRequest) <span class="keyword">returns</span> (HelloReply)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">HelloRequest</span> &#123;</span><br><span class="line">    <span class="type">string</span> name = <span class="number">1</span>;<span class="comment">// 1是编号</span></span><br><span class="line">    <span class="type">int32</span> age = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">repeated</span> <span class="type">string</span> coures = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">HelloReply</span> &#123;</span><br><span class="line">    <span class="type">string</span> message = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative Hello.proto</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>在Hello.proto目录执行生成命令</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative Hello.proto</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906104142.png"></p>
+<h4 id="1-3-3-编写-Server"><a href="#1-3-3-编写-Server" class="headerlink" title="1.3.3 编写 Server"></a>1.3.3 编写 Server</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;context&quot;</span></span><br><span class="line"> <span class="string">&quot;grpc/proto&quot;</span></span><br><span class="line"> <span class="string">&quot;net&quot;</span></span><br><span class="line"></span><br><span class="line"> <span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Server <span class="keyword">struct</span> &#123;</span><br><span class="line"> proto.UnimplementedGreeterServer</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SayHello implements proto.GreeterServer.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s Server)</span></span> SayHello(ctx context.Context, req *proto.HelloRequest) (*proto.HelloReply, <span class="type">error</span>) &#123;</span><br><span class="line"> <span class="keyword">return</span> &amp;proto.HelloReply&#123;Message: <span class="string">&quot;hello &quot;</span> + req.Name&#125;, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"> gServer := grpc.NewServer()</span><br><span class="line"> proto.RegisterGreeterServer(gServer, &amp;Server&#123;&#125;)</span><br><span class="line"> lis, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:8080&quot;</span>)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(err)</span><br><span class="line"> &#125;</span><br><span class="line"> gServer.Serve(lis)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;context&quot;</span></span><br><span class="line"> <span class="string">&quot;grpc/proto&quot;</span></span><br><span class="line"> <span class="string">&quot;net&quot;</span></span><br><span class="line"></span><br><span class="line"> <span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Server <span class="keyword">struct</span> &#123;</span><br><span class="line"> proto.UnimplementedGreeterServer</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// SayHello implements proto.GreeterServer.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s Server)</span></span> SayHello(ctx context.Context, req *proto.HelloRequest) (*proto.HelloReply, <span class="type">error</span>) &#123;</span><br><span class="line"> <span class="keyword">return</span> &amp;proto.HelloReply&#123;Message: <span class="string">&quot;hello &quot;</span> + req.Name&#125;, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"> gServer := grpc.NewServer()</span><br><span class="line"> proto.RegisterGreeterServer(gServer, &amp;Server&#123;&#125;)</span><br><span class="line"> lis, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:8080&quot;</span>)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(err)</span><br><span class="line"> &#125;</span><br><span class="line"> gServer.Serve(lis)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-4-编写-Client"><a href="#1-3-4-编写-Client" class="headerlink" title="1.3.4 编写 Client"></a>1.3.4 编写 Client</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;context&quot;</span></span><br><span class="line"> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"> <span class="string">&quot;grpc/proto&quot;</span></span><br><span class="line"></span><br><span class="line"> <span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line"> <span class="string">&quot;google.golang.org/grpc/credentials/insecure&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"> conn, err := grpc.NewClient(<span class="string">&quot;localhost:8080&quot;</span>, grpc.WithTransportCredentials(insecure.NewCredentials()))</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(err)</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">defer</span> conn.Close()</span><br><span class="line"> c := proto.NewGreeterClient(conn)</span><br><span class="line"> reply, _ := c.SayHello(context.Background(), &amp;proto.HelloRequest&#123;Name: <span class="string">&quot;nige&quot;</span>&#125;)</span><br><span class="line"> fmt.Println(reply.Message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-5-运行程序"><a href="#1-3-5-运行程序" class="headerlink" title="1.3.5 运行程序"></a>1.3.5 运行程序</h4><p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906104502.png"></p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906104515.png"></p>
+<h2 id="2-定义一个消息"><a href="#2-定义一个消息" class="headerlink" title="2. 定义一个消息"></a>2. 定义一个消息</h2><p><a target="_blank" rel="noopener" href="https://protobuf.dev/programming-guides/proto3/">https://protobuf.dev/programming-guides/proto3/</a></p>
+<h3 id="2-1-定义消息类型"><a href="#2-1-定义消息类型" class="headerlink" title="2.1 定义消息类型"></a>2.1 <strong>定义消息类型</strong></h3><p>先来看一个非常简单的例子。假设你想定义一个”搜索请求”的消息格式，每一个请求含有一个查询字符串、你感兴趣的查询结果所在的页数，以及每一页多少条查询结果。可以采用如下的方式来定义消息类型的<code>.proto</code>文件了：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"><span class="keyword">message </span><span class="title class_">SearchRequest</span> &#123;</span><br><span class="line">  <span class="type">string</span> query = <span class="number">1</span>; <span class="comment">// 编号</span></span><br><span class="line">  <span class="type">int32</span> page_number = <span class="number">2</span>; <span class="comment">// 编号</span></span><br><span class="line">  <span class="type">int32</span> result_per_page = <span class="number">3</span>; <span class="comment">// 编号</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>文件的第一行指定了你正在使用 <code>proto3</code> 语法：如果你没有指定这个，编译器会使用 <code>proto2</code>。这个指定语法行必须是文件的非空非注释的第一个行。</li>
+<li><code>SearchRequest</code> 消息格式有3个字段，在消息中承载的数据分别对应于每一个字段。其中每个字段都有一个名字和一种类型。</li>
+</ul>
+<h3 id="2-2-指定字段类型"><a href="#2-2-指定字段类型" class="headerlink" title="2.2 指定字段类型"></a>2.2 <strong>指定字段类型</strong></h3><p>在上面的例子中，所有字段都是标量类型：两个整型（page_number和result_per_page），一个string类型（query）。当然，也可以为字段指定其他的类型，包括枚举（enumerations）或其他复合消息类型。</p>
+<h3 id="2-3-分配编号"><a href="#2-3-分配编号" class="headerlink" title="2.3 分配编号"></a>2.3 <strong>分配编号</strong></h3><p>必须在消息定义中为每个字段指定一个介于1和536,870,911之间的数字，并附带以下限制:</p>
+<ul>
+<li>给定的数字在该消息的所有字段中必须是唯一的。</li>
+<li>协议缓冲编号19,000至19,999是预留作实施之用。如果在消息中使用这些保留字段号之一，协议缓冲区编译器将发出告警。</li>
+<li>不能使用任何以前保留的字段号或分配给扩展名的任何字段号。</li>
+</ul>
+<blockquote>
+<p>编号不应该被重用。永远不要从保留列表中取出字段编号，以便用新的字段定义重用。请参见重用字段数的后果。</p>
+<p><a target="_blank" rel="noopener" href="https://protobuf.dev/programming-guides/proto3/#consequences">https://protobuf.dev/programming-guides/proto3/#consequences</a></p>
+</blockquote>
+<blockquote>
+<p>使用消息类型时，不能更改此编号，因为它以消息连接格式标识字段。“更改”字段编号等同于删除该字段并创建具有相同类型但具有新编号的新字段。有关如何正确执行此操作的信息，请参见删除字段。</p>
+<p><a target="_blank" rel="noopener" href="https://protobuf.dev/programming-guides/proto3/#deleting">https://protobuf.dev/programming-guides/proto3/#deleting</a></p>
+</blockquote>
+<blockquote>
+<p>注：[1,15]之内的标识号在编码的时候会占用一个字节。[16,2047]内的标识号则占用2个字节。所以应该为那些频繁出现的消息元素保留 [1,15]之内的标识号。切记：要为将来有能添加的、频繁出现的标识号预留一些标识号。</p>
+</blockquote>
+<h3 id="2-4-指定字段标签类型"><a href="#2-4-指定字段标签类型" class="headerlink" title="2.4 指定字段标签类型"></a>2.4 <strong>指定字段标签类型</strong></h3><p>在 Protocol Buffers（protobuf）中，消息字段可以是以下几种类型：</p>
+<ol>
+<li><strong>optional（可选字段）</strong>:<ul>
+<li>状态<ul>
+<li><strong>已设置</strong>: 如果字段被显式设置或从传输数据中解析出来，它会被序列化到数据流中。</li>
+<li><strong>未设置</strong>: 如果字段没有被设置，它会返回默认值，并且不会被序列化到数据流中。</li>
+</ul>
+</li>
+<li><strong>检查</strong>: 你可以检查一个可选字段是否被显式设置。</li>
+</ul>
+</li>
+<li><strong>repeated（重复字段）</strong>:<ul>
+<li><strong>特性</strong>: 这个字段可以在消息中出现零次或多次。所有的重复值的顺序都会被保留。</li>
+</ul>
+</li>
+<li><strong>map（映射字段）</strong>:<ul>
+<li><strong>特性</strong>: 这是一个键&#x2F;值对的字段类型，用于表示映射关系。具体细节可以参考有关映射字段的文档。</li>
+</ul>
+</li>
+<li><strong>隐式字段存在</strong>:<ul>
+<li><strong>默认状态</strong>: 如果没有显式指定字段标签，则假定字段为“隐式字段存在”状态。你不能显式设置一个字段为这种状态。</li>
+<li><strong>特性</strong>: 一个消息中可以有零个或一个这样的字段，但不能多于一个。你也不能确定这种类型的字段是否是从数据流中解析出来的。一个隐式存在的字段会被序列化到数据流中，除非它是默认值。</li>
+</ul>
+</li>
+<li><strong>proto3 中的默认打包编码</strong>:<ul>
+<li>对于 proto3 中的标量数值类型的重复字段，默认使用打包编码（packed encoding）。你可以了解更多关于打包编码的内容在 Protocol Buffer 编码文档中。</li>
+</ul>
+</li>
+</ol>
+<p>这些字段类型和特性帮助定义和控制如何在 Protocol Buffers 中处理数据。</p>
+<h3 id="2-5-添加更多消息类型"><a href="#2-5-添加更多消息类型" class="headerlink" title="2.5 添加更多消息类型"></a>2.5 <strong>添加更多消息类型</strong></h3><p>在一个.proto文件中可以定义多个消息类型。在定义多个相关的消息的时候，这一点特别有用——例如，如果想定义与SearchResponse消息类型对应的回复消息格式的话，你可以将它添加到相同的.proto文件中，如：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">SearchRequest</span> &#123;</span><br><span class="line">  <span class="type">string</span> query = <span class="number">1</span>;</span><br><span class="line">  <span class="type">int32</span> page_number = <span class="number">2</span>;</span><br><span class="line">  <span class="type">int32</span> result_per_page = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">message </span><span class="title class_">SearchResponse</span> &#123;</span><br><span class="line">  <span class="type">string</span> message = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-6-添加注释"><a href="#2-6-添加注释" class="headerlink" title="2.6 添加注释"></a>2.6 <strong>添加注释</strong></h3><p>向.proto文件添加注释，可以使用C&#x2F;C++&#x2F;java风格的双斜杠（&#x2F;&#x2F;） 语法格式，如：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">SearchRequest</span> &#123;</span><br><span class="line">  <span class="type">string</span> query = <span class="number">1</span>;</span><br><span class="line">  <span class="type">int32</span> page_number = <span class="number">2</span>;  <span class="comment">// Which page number do we want?</span></span><br><span class="line">  <span class="type">int32</span> result_per_page = <span class="number">3</span>;  <span class="comment">// Number of results to return per page.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-7-删除字段"><a href="#2-7-删除字段" class="headerlink" title="2.7 删除字段"></a>2.7 <strong>删除字段</strong></h3><p>如果删除操作不当，可能会导致严重的问题。</p>
+<p>当不再需要某个字段并且已经从客户端代码中删除了所有引用时，可以从消息中删除字段定义。但是，必须保留已删除的字段号。如果不保留字段编号，那么开发人员将来可以重用该编号。</p>
+<p>还应该保留字段名，以允许继续解析消息的 JSON 和 TextFormat 编码。</p>
+<h3 id="2-8-保留标识符（Reserved）"><a href="#2-8-保留标识符（Reserved）" class="headerlink" title="2.8 保留标识符（Reserved）"></a>2.8 <strong>保留标识符（Reserved）</strong></h3><p>如果通过完全删除字段或注释掉字段来更新消息类型，未来的开发人员在对类型进行更新时可以重用字段编号。这可能导致严重的问题，如重用字段数字的后果所述。要确保这种情况不会发生，请将已删除的字段号添加到保留列表中。</p>
+<p>如果未来的开发人员试图使用这些保留字段编号，则协议编译器将生成错误消息。现在有一种确保不会发生这种情况的方法就是指定保留标识符，protocol buffer的编译器会警告未来尝试使用这些字段标识符的用户。</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">Foo</span> &#123;</span><br><span class="line">  reserved <span class="number">2</span>, <span class="number">15</span>, <span class="number">9</span> to <span class="number">11</span>;</span><br><span class="line">  reserved <span class="string">&quot;foo&quot;</span>, <span class="string">&quot;bar&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：不要在同一行reserved声明中同时声明字段名字和标识号</p>
+</blockquote>
+<h3 id="2-9-从-proto文件生成了什么？"><a href="#2-9-从-proto文件生成了什么？" class="headerlink" title="2.9 从.proto文件生成了什么？"></a>2.9 <strong>从.proto文件生成了什么？</strong></h3><p>当用protocol buffer编译器来运行.proto文件时，编译器将生成所选择语言的代码，这些代码可以操作在.proto文件中定义的消息类型，包括获取、设置字段值，将消息序列化到一个输出流中，以及从一个输入流中解析消息。</p>
+<ul>
+<li>对于 Java，编译器生成一个。Java 文件，其中包含用于每种消息类型的类，以及用于创建消息类实例的特殊 Builder 类。</li>
+<li>对于 Go，编译器为文件中的每个消息类型生成一个. pb.Go 文件。</li>
+</ul>
+<p>你可以从如下的文档链接中获取每种语言更多API。<a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/reference/overview?hl=zh-cn">API Reference</a></p>
+<h3 id="2-10-标量数值类型"><a href="#2-10-标量数值类型" class="headerlink" title="2.10 标量数值类型"></a>2.10 <strong>标量数值类型</strong></h3><p>一个标量消息字段可以含有一个如下的类型——该表格展示了定义于<code>.proto</code>文件中的类型，以及与之对应的、在自动生成的访问类中定义的类型：</p>
+<table>
+<thead>
+<tr>
+<th>.proto Type</th>
+<th>Notes</th>
+<th>Python Type</th>
+<th>Go Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>double</td>
+<td></td>
+<td>float</td>
+<td>float64</td>
+</tr>
+<tr>
+<td>float</td>
+<td></td>
+<td>float</td>
+<td>float32</td>
+</tr>
+<tr>
+<td>int32</td>
+<td>使用变长编码，对于负值的效率很低，如果你的域有可能有负值，请使用sint64替代</td>
+<td>int</td>
+<td>int32</td>
+</tr>
+<tr>
+<td>uint32</td>
+<td>使用变长编码</td>
+<td>int</td>
+<td>uint32</td>
+</tr>
+<tr>
+<td>uint64</td>
+<td>使用变长编码</td>
+<td>int</td>
+<td>uint64</td>
+</tr>
+<tr>
+<td>sint32</td>
+<td>使用变长编码，这些编码在负值时比int32高效的多</td>
+<td>int</td>
+<td>int32</td>
+</tr>
+<tr>
+<td>sint64</td>
+<td>使用变长编码，有符号的整型值。编码时比通常的int64高效。</td>
+<td>int</td>
+<td>int64</td>
+</tr>
+<tr>
+<td>fixed32</td>
+<td>总是4个字节，如果数值总是比总是比228大的话，这个类型会比uint32高效。</td>
+<td>int</td>
+<td>uint32</td>
+</tr>
+<tr>
+<td>fixed64</td>
+<td>总是8个字节，如果数值总是比总是比256大的话，这个类型会比uint64高效。</td>
+<td>int</td>
+<td>uint64</td>
+</tr>
+<tr>
+<td>sfixed32</td>
+<td>总是4个字节</td>
+<td>int</td>
+<td>int32</td>
+</tr>
+<tr>
+<td>sfixed64</td>
+<td>总是8个字节</td>
+<td>int</td>
+<td>int64</td>
+</tr>
+<tr>
+<td>bool</td>
+<td></td>
+<td>bool</td>
+<td>bool</td>
+</tr>
+<tr>
+<td>string</td>
+<td>一个字符串必须是UTF-8编码或者7-bit ASCII编码的文本。</td>
+<td>str</td>
+<td>string</td>
+</tr>
+<tr>
+<td>bytes</td>
+<td>可能包含任意顺序的字节数据。</td>
+<td>str</td>
+<td>[]byte</td>
+</tr>
+</tbody></table>
+<p>你可以在文章<a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/encoding?hl=zh-cn">Protocol Buffer 编码</a>中，找到更多“序列化消息时各种类型如何编码”的信息。</p>
+<ol>
+<li>在java中，无符号32位和64位整型被表示成他们的整型对应形似，最高位被储存在标志位中。</li>
+<li>对于所有的情况，设定值会执行类型检查以确保此值是有效。</li>
+<li>64位或者无符号32位整型在解码时被表示成为ilong，但是在设置时可以使用int型值设定，在所有的情况下，值必须符合其设置其类型的要求。</li>
+<li>python中string被表示成在解码时表示成unicode。但是一个ASCIIstring可以被表示成str类型。</li>
+<li>Integer在64位的机器上使用，string在32位机器上使用。</li>
+</ol>
+<h3 id="2-11-默认值"><a href="#2-11-默认值" class="headerlink" title="2.11 默认值"></a>2.11 <strong>默认值</strong></h3><p>在解析消息时，如果编码的消息不包含特定的隐式存在元素，则访问解析对象中的相应字段将返回该字段的默认值。这些默认值是特定于类型的:</p>
+<ul>
+<li><p>对于strings，默认是一个空string</p>
+</li>
+<li><p>对于bytes，默认是一个空的bytes</p>
+</li>
+<li><p>对于bools，默认是false</p>
+</li>
+<li><p>对于数值类型，默认是0</p>
+</li>
+<li><p>对于枚举，默认是第一个定义的枚举值，必须为0;</p>
+</li>
+<li><p>对于消息字段，字段没有被设置，确切的值是根据语言确定的，详见<a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/reference/overview?hl=zh-cn">generated code guide</a></p>
+</li>
+<li><p>对于可重复字段的默认值是空（通常情况下是对应语言中空列表）。</p>
+<blockquote>
+<p>注意，对于标量消息字段，一旦解析了消息，就无法判断字段是显式设置为默认值(例如，布尔值是否设置为 false) ，还是根本没有设置: 在定义消息类型时应该记住这一点。例如，如果不希望某些行为在默认情况下也会发生，那么就不要有一个布尔值在设置为 false 时打开某些行为。还要注意，如果将标量消息字段设置为默认值，则该值将不会序列化。如果将浮点数或双精度值设置为 + 0，则不会序列化它，但 -0被认为是不同的，将被序列化。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="2-12-枚举"><a href="#2-12-枚举" class="headerlink" title="2.12 枚举"></a>2.12 枚举</h3><p>在定义消息类型时，可能希望其中一个字段只包含预定义的值列表中的一个。例如，假设你想为每个 SearchRequest 添加一个语料库字段，其中的语料库可以是 UNIVERSAL、 WEB、 IMAGES、 LOCAL、 NEWS、 PRODUCTS 或 VIDEO。可以非常简单地通过向消息定义添加枚举，并为每个可能的值添加一个常量来实现这一点。</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum </span><span class="title class_">Corpus</span> &#123;</span><br><span class="line">  CORPUS_UNSPECIFIED = <span class="number">0</span>;</span><br><span class="line">  CORPUS_UNIVERSAL = <span class="number">1</span>;</span><br><span class="line">  CORPUS_WEB = <span class="number">2</span>;</span><br><span class="line">  CORPUS_IMAGES = <span class="number">3</span>;</span><br><span class="line">  CORPUS_LOCAL = <span class="number">4</span>;</span><br><span class="line">  CORPUS_NEWS = <span class="number">5</span>;</span><br><span class="line">  CORPUS_PRODUCTS = <span class="number">6</span>;</span><br><span class="line">  CORPUS_VIDEO = <span class="number">7</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">SearchRequest</span> &#123;</span><br><span class="line">  <span class="type">string</span> query = <span class="number">1</span>;</span><br><span class="line">  <span class="type">int32</span> page_number = <span class="number">2</span>;</span><br><span class="line">  <span class="type">int32</span> results_per_page = <span class="number">3</span>;</span><br><span class="line">  Corpus corpus = <span class="number">4</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Corpus 枚举的第一个常量映射为零: 每个枚举定义必须包含一个常量，该常量作为其第一个元素映射为零。这是因为:</p>
+<ul>
+<li>必须有一个零值，这样我们就可以使用0作为数字默认值。</li>
+<li>零值需要成为第一个元素，以便与 Proto2语义兼容，其中第一个枚举值是默认值，除非显式指定了不同的值。</li>
+</ul>
+<p>可以通过为不同的枚举常数赋相同的值来定义别名。为此，您需要将 allow _ alias 选项设置为 true。否则，当发现别名时，协议缓冲区编译器将生成警告消息。尽管所有别名值在反序列化过程中都是有效的，但在序列化过程中始终使用第一个值。</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum </span><span class="title class_">EnumAllowingAlias</span> &#123;</span><br><span class="line">  <span class="keyword">option</span> allow_alias = <span class="literal">true</span>;</span><br><span class="line">  EAA_UNSPECIFIED = <span class="number">0</span>;</span><br><span class="line">  EAA_STARTED = <span class="number">1</span>;</span><br><span class="line">  EAA_RUNNING = <span class="number">1</span>;</span><br><span class="line">  EAA_FINISHED = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">enum </span><span class="title class_">EnumNotAllowingAlias</span> &#123;</span><br><span class="line">  ENAA_UNSPECIFIED = <span class="number">0</span>;</span><br><span class="line">  ENAA_STARTED = <span class="number">1</span>;</span><br><span class="line">  <span class="comment">// ENAA_RUNNING = 1;  // Uncommenting this line will cause a warning message.</span></span><br><span class="line">  ENAA_FINISHED = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>枚举常量必须在32位整型值的范围内。因为enum值是使用可变编码方式的，对负数不够高效，因此不推荐在enum中使用负数。如上例所示，可以在 一个消息定义的内部或外部定义枚举——这些枚举可以在.proto文件中的任何消息定义里重用。当然也可以在一个消息中声明一个枚举类型，而在另一个不同 的消息中使用它——采用MessageType.EnumType的语法格式。</p>
+<p>当对一个使用了枚举的.proto文件运行protocol buffer编译器的时候，生成的代码中将有一个对应的enum（对Java或C++来说），或者一个特殊的EnumDescriptor类（对 Python来说），它被用来在运行时生成的类中创建一系列的整型值符号常量（symbolic constants）。</p>
+<p>在反序列化的过程中，无法识别的枚举值会被保存在消息中，虽然这种表示方式需要依据所使用语言而定。在那些支持开放枚举类型超出指定范围之外的语言中（例如C++和Go），为识别的值会被表示成所支持的整型。在使用封闭枚举类型的语言中（Java），使用枚举中的一个类型来表示未识别的值，并且可以使用所支持整型来访问。在其他情况下，如果解析的消息被序列号，未识别的值将保持原样。</p>
+<p>关于如何在你的应用程序的消息中使用枚举的更多信息，请查看所选择的语言<a target="_blank" rel="noopener" href="http://code.google.com/intl/zh-CN/apis/protocolbuffers/docs/reference/overview.html%E3%80%82">generated code guide</a></p>
+<h2 id="3-使用其他类型消息"><a href="#3-使用其他类型消息" class="headerlink" title="3. 使用其他类型消息"></a>3. 使用其他类型消息</h2><h3 id="3-1-导入定义"><a href="#3-1-导入定义" class="headerlink" title="3.1 导入定义"></a>3.1 导入定义</h3><p>在上面的例子中，Result消息类型与SearchResponse是定义在同一文件中的。如果想要使用的消息类型已经在其他.proto文件中已经定义过了呢？</p>
+<p>你可以通过导入（importing）其他<code>.proto</code>文件中的定义来使用它们。要导入其他<code>.proto</code>文件的定义，你需要在你的文件中添加一个导入声明，如：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;myproject/other_protos.proto&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>默认情况下你只能使用直接导入的<code>.proto</code>文件中的定义. 然而， 有时候你需要移动一个<code>.proto</code>文件到一个新的位置， 可以不直接移动<code>.proto</code>文件， 只需放入一个伪 <code>.proto</code> 文件在老的位置， 然后使用<code>import public</code>转向新的位置。<code>import public</code> 依赖性会通过任意导入包含<code>import public</code>声明的<code>proto</code>文件传递。例如：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这是新的proto</span></span><br><span class="line"><span class="comment">// All definitions are moved here</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这是旧的proto</span></span><br><span class="line"><span class="comment">// 这是所有客户端正在导入的包</span></span><br><span class="line"><span class="keyword">import</span> public <span class="string">&quot;new.proto&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;other.proto&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 客户端proto</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;old.proto&quot;</span>;</span><br><span class="line"><span class="comment">// 现在你可以使用新旧两种包的proto定义了。</span></span><br></pre></td></tr></table></figure>
+
+<p>通过在编译器命令行参数中使用<code>-I/--proto_path</code>protocal 编译器会在指定目录搜索要导入的文件。如果没有给出标志，编译器会搜索编译命令被调用的目录。通常你只要指定proto_path标志为你的工程根目录就好。并且指定好导入的正确名称就好。</p>
+<h3 id="3-2-嵌套类型"><a href="#3-2-嵌套类型" class="headerlink" title="3.2 嵌套类型"></a>3.2 嵌套类型</h3><p>你可以在其他消息类型中定义、使用消息类型，在下面的例子中，Result消息就定义在SearchResponse消息内，如：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">SearchResponse</span> &#123;</span><br><span class="line">  <span class="keyword">message </span><span class="title class_">Result</span> &#123;</span><br><span class="line">    <span class="type">string</span> url = <span class="number">1</span>;</span><br><span class="line">    <span class="type">string</span> title = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">repeated</span> <span class="type">string</span> snippets = <span class="number">3</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">repeated</span> Result results = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果你想在它的父消息类型的外部重用这个消息类型，你需要以Parent.Type的形式使用它，如：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">SomeOtherMessage</span> &#123;</span><br><span class="line">  SearchResponse.Result result = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，你也可以将消息嵌套任意多层，如：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">message </span><span class="title class_">Outer</span> &#123;                  <span class="comment">// Level 0</span></span><br><span class="line">  <span class="keyword">message </span><span class="title class_">MiddleAA</span> &#123;  <span class="comment">// Level 1</span></span><br><span class="line">    <span class="keyword">message </span><span class="title class_">Inner</span> &#123;   <span class="comment">// Level 2</span></span><br><span class="line">      <span class="type">int64</span> ival = <span class="number">1</span>;</span><br><span class="line">      <span class="type">bool</span>  booly = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">message </span><span class="title class_">MiddleBB</span> &#123;  <span class="comment">// Level 1</span></span><br><span class="line">    <span class="keyword">message </span><span class="title class_">Inner</span> &#123;   <span class="comment">// Level 2</span></span><br><span class="line">      <span class="type">int32</span> ival = <span class="number">1</span>;</span><br><span class="line">      <span class="type">bool</span>  booly = <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-定义服务"><a href="#4-定义服务" class="headerlink" title="4. 定义服务"></a>4. 定义服务</h2><p>如果想要将消息类型用在RPC(远程方法调用)系统中，可以在<code>.proto</code>文件中定义一个RPC服务接口，protocol buffer编译器将会根据所选择的不同语言生成服务接口代码及存根。如，想要定义一个RPC服务并具有一个方法，该方法能够接收 SearchRequest并返回一个SearchResponse，此时可以在.proto文件中进行如下定义：</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">service </span><span class="title class_">SearchService</span> &#123;</span><br><span class="line">  <span class="function"><span class="keyword">rpc</span> Search (SearchRequest) <span class="keyword">returns</span> (SearchResponse)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最直观的使用protocol buffer的RPC系统是<a target="_blank" rel="noopener" href="https://github.com/grpc/grpc-experiments">gRPC</a>一个由谷歌开发的语言和平台中的开源的PRC系统，gRPC在使用protocl buffer时非常有效，如果使用特殊的protocol buffer插件可以直接为您从.proto文件中产生相关的RPC代码。</p>
+<p>如果你不想使用gRPC，也可以使用protocol buffer用于自己的RPC实现，你可以从<a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers/docs/proto?hl=zh-cn#services">proto2语言指南中找到更多信息</a></p>
+<p>还有一些第三方开发的PRC实现使用Protocol Buffer。参考<a target="_blank" rel="noopener" href="https://github.com/google/protobuf/blob/master/docs/third_party.md">第三方插件wiki</a>查看这些实现的列表。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/">rpc基础</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2024/09/04/Gorm%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">Gorm基础学习</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hello-World"><span class="toc-text">Hello World</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA-grpc-%E9%A1%B9%E7%9B%AE"><span class="toc-text">新建 grpc 项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%9F%E6%88%90-grpc-go%E7%A8%8B%E5%BA%8F"><span class="toc-text">生成 grpc go程序</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-%E7%BC%96%E5%86%99-Server"><span class="toc-text">1.3.3 编写 Server</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-4-%E7%BC%96%E5%86%99-Client"><span class="toc-text">1.3.4 编写 Client</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-5-%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="toc-text">1.3.5 运行程序</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E6%B6%88%E6%81%AF"><span class="toc-text">2. 定义一个消息</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%AE%9A%E4%B9%89%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B"><span class="toc-text">2.1 定义消息类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%8C%87%E5%AE%9A%E5%AD%97%E6%AE%B5%E7%B1%BB%E5%9E%8B"><span class="toc-text">2.2 指定字段类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%88%86%E9%85%8D%E7%BC%96%E5%8F%B7"><span class="toc-text">2.3 分配编号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E6%8C%87%E5%AE%9A%E5%AD%97%E6%AE%B5%E6%A0%87%E7%AD%BE%E7%B1%BB%E5%9E%8B"><span class="toc-text">2.4 指定字段标签类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E6%B7%BB%E5%8A%A0%E6%9B%B4%E5%A4%9A%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B"><span class="toc-text">2.5 添加更多消息类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E6%B7%BB%E5%8A%A0%E6%B3%A8%E9%87%8A"><span class="toc-text">2.6 添加注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-%E5%88%A0%E9%99%A4%E5%AD%97%E6%AE%B5"><span class="toc-text">2.7 删除字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-%E4%BF%9D%E7%95%99%E6%A0%87%E8%AF%86%E7%AC%A6%EF%BC%88Reserved%EF%BC%89"><span class="toc-text">2.8 保留标识符（Reserved）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-9-%E4%BB%8E-proto%E6%96%87%E4%BB%B6%E7%94%9F%E6%88%90%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">2.9 从.proto文件生成了什么？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-10-%E6%A0%87%E9%87%8F%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="toc-text">2.10 标量数值类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-11-%E9%BB%98%E8%AE%A4%E5%80%BC"><span class="toc-text">2.11 默认值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-12-%E6%9E%9A%E4%B8%BE"><span class="toc-text">2.12 枚举</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96%E7%B1%BB%E5%9E%8B%E6%B6%88%E6%81%AF"><span class="toc-text">3. 使用其他类型消息</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%AF%BC%E5%85%A5%E5%AE%9A%E4%B9%89"><span class="toc-text">3.1 导入定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%B5%8C%E5%A5%97%E7%B1%BB%E5%9E%8B"><span class="toc-text">3.2 嵌套类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AE%9A%E4%B9%89%E6%9C%8D%E5%8A%A1"><span class="toc-text">4. 定义服务</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

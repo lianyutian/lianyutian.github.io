@@ -1,0 +1,1037 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Kubernetes：Kubernetes Pod - Lianyutian</title>
+
+  
+    <meta name="description" content="🥧本文介绍了Kubernetes中Pod的生命周期">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kubernetes Pod">
+<meta property="og:url" content="http://example.com/wiki/Kubernetes/Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="🥧本文介绍了Kubernetes中Pod的生命周期">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2025-12-23T08:50:16.723Z">
+<meta property="article:modified_time" content="2025-12-23T08:50:16.723Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="Kubernetes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/wiki/Kubernetes/Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"name":"Kubernetes Pod","description":"🥧本文介绍了Kubernetes中Pod的生命周期","url":"http://example.com/wiki/Kubernetes/Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"}</script>
+  
+</head>
+<body>
+
+
+
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="/assets/wiki/Kubernetes/Kubernetes.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B"><div class="main">Kubernetes</div><div class="sub cap">Kubernetes的安装及概念</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item active" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/wiki/Kubernetes/" placeholder="在 Kubernetes 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<widget class="widget-wrapper doc-tree post-list"><div class="widget-header dis-select"><span class="name">基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B/#start"><span class="toc-text">Kubernetes简介</span></a><a class="link" href="/wiki/Kubernetes/Kubernetes%E5%AE%89%E8%A3%85/"><span class="toc-text">Kubernetes安装</span></a><a class="link" href="/wiki/Kubernetes/%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95/"><span class="toc-text">Kubernetes资源清单</span></a><a class="link active" href="/wiki/Kubernetes/Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"><span class="toc-text">Kubernetes Pod</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a><a class="link" href="/wiki/Kubernetes/%E6%8E%A7%E5%88%B6%E5%99%A8/"><span class="toc-text">Kubernetes控制器</span></a><a class="link" href="/wiki/Kubernetes/Service/"><span class="toc-text">Kubernetes Service</span></a><a class="link" href="/wiki/Kubernetes/%E5%AD%98%E5%82%A8/"><span class="toc-text">Kubernetes存储</span></a><a class="link" href="/wiki/Kubernetes/%E8%B0%83%E5%BA%A6%E5%99%A8/"><span class="toc-text">Kubernetes调度器</span></a><a class="link" href="/wiki/Kubernetes/Helm/"><span class="toc-text">Helm</span></a><a class="link" href="/wiki/Kubernetes/Ingress/"><span class="toc-text">Ingress</span></a></div><div class="widget-header dis-select"><span class="name">高可用</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85/"><span class="toc-text">Kubernetes 二进制安装</span></a></div><div class="widget-header dis-select"><span class="name">CICD</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Habor%E5%AE%89%E8%A3%85/"><span class="toc-text">Habor安装</span></a><a class="link" href="/wiki/Kubernetes/Rancher%E5%AE%89%E8%A3%85/"><span class="toc-text">Rancher安装</span></a></div><div class="widget-header dis-select"><span class="name">...</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Gitlab%E5%AE%89%E8%A3%85/"><span class="toc-text">Gitlab安装</span></a><a class="link" href="/wiki/Kubernetes/Jenkins%E5%AE%89%E8%A3%85/"><span class="toc-text">Jenkins安装</span></a><a class="link" href="/wiki/Kubernetes/loki%E5%AE%89%E8%A3%85/"><span class="toc-text">Loki安装</span></a><a class="link" href="/wiki/Kubernetes/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><span class="toc-text">Kubernetes常用命令</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B/">Kubernetes</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2025-12-23T08:50:16.723Z">2025-12-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Kubernetes Pod</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="Pod的生命周期"><a href="#Pod的生命周期" class="headerlink" title="Pod的生命周期"></a>Pod的生命周期</h2><p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/eadd6d8967afe598b0f018b27fe4c53573d7e174adec19ca64a195af9c44b0a8.png" alt="图 32">  </p>
+<h3 id="init容器"><a href="#init容器" class="headerlink" title="init容器"></a>init容器</h3><h4 id="init容器概念"><a href="#init容器概念" class="headerlink" title="init容器概念"></a>init容器概念</h4><p>Init 容器是一种特殊容器，在 Pod 内的应用容器启动之前运行。Init 容器可以包括一些应用镜像中不存在的实用工具和安装脚本。</p>
+<p>每个 Pod 中可以包含多个容器， 应用运行在这些容器里面，同时 Pod 也可以有一个或多个先于应用容器启动的 Init 容器。</p>
+<p>Init 容器与普通的容器非常像，除了如下两点：</p>
+<ul>
+<li>Init 容器总是运行到完成为止(返回码为0)。</li>
+<li>每个 Init 容器都必须在下一个 Init 启动之前成功完成（如果有10个 Init 容器，第10个初始化失败则必须再从第一个重新开始初始化）。</li>
+</ul>
+<p>如果 Pod 的 Init 容器失败，kubelet 会不断地重启该 Init 容器直到该容器成功为止。然而，如果 Pod 对应的 <code>restartPolicy</code> 值为 “Never”，并且 Pod 的 Init 容器失败， 则 Kubernetes 会将整个 Pod 状态设置为失败。</p>
+<h4 id="与普通容器区别"><a href="#与普通容器区别" class="headerlink" title="与普通容器区别"></a>与普通容器区别</h4><ul>
+<li>常规的 Init 容器（即不包括边车容器）不支持 <code>lifecycle</code>、<code>livenessProbe</code>、<code>readinessProbe</code> 或 <code>startupProbe</code> 字段。</li>
+<li>Init 容器必须在 Pod 准备就绪之前完成运行；而边车容器在 Pod 的生命周期内继续运行， 它支持一些探针。</li>
+<li>如果为一个 Pod 指定了多个 Init 容器，这些容器会按顺序逐个运行。 每个 Init 容器必须运行成功，下一个才能够运行。当所有的 <strong>Init 容器</strong>运行完成时， Kubernetes 才会为 Pod 初始化<strong>应用容器</strong>并像平常一样运行。</li>
+<li>Init 容器与应用容器具备不同的镜像，可以把一些危险工具放在 Init 容器中。</li>
+<li>Init 容器多个之间是线性启动的，可以执行一些延迟性的操作。</li>
+</ul>
+<h4 id="init容器阻塞示例"><a href="#init容器阻塞示例" class="headerlink" title="init容器阻塞示例"></a>init容器阻塞示例</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">initc-1</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app.kubernetes.io/name:</span> <span class="string">initc</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-container</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">busybox:1.28</span></span><br><span class="line">    <span class="attr">command:</span> [<span class="string">&#x27;sh&#x27;</span>, <span class="string">&#x27;-c&#x27;</span>, <span class="string">&#x27;echo The app is running! &amp;&amp; sleep 3600&#x27;</span>]</span><br><span class="line">  <span class="attr">initContainers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">init-myservice</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">busybox:1.28</span></span><br><span class="line">    <span class="attr">command:</span> [<span class="string">&#x27;sh&#x27;</span>, <span class="string">&#x27;-c&#x27;</span>, <span class="string">&quot;until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done&quot;</span>]</span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">init-mydb</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">busybox:1.28</span></span><br><span class="line">    <span class="attr">command:</span> [<span class="string">&#x27;sh&#x27;</span>, <span class="string">&#x27;-c&#x27;</span>, <span class="string">&quot;until nslookup mydb.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for mydb; sleep 2; done&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>通过运行下面的命令启动 Pod：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vi inti-1-pod.yaml</span><br><span class="line">kubectl apply -f inti-1-pod.yaml</span><br></pre></td></tr></table></figure>
+
+<p>使用下面的命令检查其状态：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pod</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/4c19144dff09a8a0a7dc37f0bf436335091d5f80e2046135b959417faa1c0c70.png" alt="图 37">  </p>
+<p>可以看到 myapp-pod 容器还未就绪。</p>
+<p>查看 myapp-pod 状态。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl describe pod myapp-pod</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/f52451b60ef776b09cae5f6740b40cb694bea79c15009c3494a5c7a279b4c51f.png" alt="图 38">  </p>
+<p>可以看到启动事件卡在启动 Init 容器，init-myservice 上。</p>
+<p>查看 init-myservice 容器日志。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl logs myapp-pod -c init-myservice</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/b91784860603067051c21909acf8dbfb81b00090af28a149b15dd83ecdf5a651.png" alt="图 39">  </p>
+<p>可以看到 init-myservice 容器一直在等待 myservice。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建 service</span></span><br><span class="line">kubectl create svc clusterip myservice --tcp=80:80</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看 svc</span></span><br><span class="line">kubectl get svc</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/a44d6da68643336cdd4fe018cfd0ab1b6169642c669e48311d0d8ca216ef52fb.png" alt="图 40"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/31290b48cd571a2c68f9c82141c5eb29d2dcb9245dee5443251c6f8676ac182b.png" alt="图 41"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/9cd845fcef2c2096121756f86a39ae3fc408e0d22f01777da148bf3a3b1fe557.png" alt="图 42">  </p>
+<p>可以看到 init-myservie 容器创建成功，现在在等待 init-mydb 容器创建。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create svc clusterip mydb --tcp=80:80</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/f216a9702e18fac33235cfab8ebae6dc53c6d0712e74b3c85e803a357fdf40f5.png" alt="图 43"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/dc0f1482f662c385327b84237c0b584a0704246fc652c2fe1cdd3645efb965b0.png" alt="图 44">  </p>
+<p>初始化容器都创建成功后，应用容器才开始创建。</p>
+<h4 id="init-容器返回示例"><a href="#init-容器返回示例" class="headerlink" title="init 容器返回示例"></a>init 容器返回示例</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: myapp-pod</span><br><span class="line">  labels: </span><br><span class="line">    app.kubernetes.io/name: MyApp</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: myapp</span><br><span class="line">    image: wangyanglinux/myapp:v1.0</span><br><span class="line">  initContainers:</span><br><span class="line">  - name: randexit</span><br><span class="line">    image: wangyanglinux/tools:randexitv1</span><br><span class="line">    args: [&quot;--exitcode=1&quot;]</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/86f043f5793e0f45fccc156803cd263897445922f936ce6b8262c19f051c0192.png" alt="图 45">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/b12efb581a742bb0fd83be91760607fe0932e2d7115f4dc213f036c2ceab9fe2.png" alt="图 46">  </p>
+<p>Init 容器返回码不为 0 时，会重新创建 Init 容器。</p>
+<p>修改容器部署文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: myapp-pod</span><br><span class="line">  labels: </span><br><span class="line">    app.kubernetes.io/name: MyApp</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">  - name: myapp</span><br><span class="line">    image: wangyanglinux/myapp:v1.0</span><br><span class="line">  initContainers:</span><br><span class="line">  - name: randexit</span><br><span class="line">    image: wangyanglinux/tools:randexitv1</span><br><span class="line">    args: [&quot;--exitcode=0&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>重新部署pod。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl delete pod myapp-pod</span><br><span class="line">kubectl apply -f inti-2-pod.yaml </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/52ae3645e64dbb3699dbda4ce538489aedeb399d51a4fc84324a8b4c16530558.png" alt="图 48">  </p>
+<h3 id="探针"><a href="#探针" class="headerlink" title="探针"></a>探针</h3><p>诊断探针是由 <strong>kubelet</strong> 对容器进行的周期性检查。要执行诊断，kubelet 既可以在容器内执行代码，也可以发出一个网络请求。</p>
+<ul>
+<li>exec<br>在容器内执行指定命令。如果命令退出时返回码为 0 则认为诊断成功。</li>
+<li>grpc<br>使用 gRPC 执行一个远程过程调用。目标应该实现 gRPC 健康检查。如果响应的状态是 “SERVING”，则认为诊断成功。</li>
+<li>httpGet<br>对容器的 IP 地址上指定端口和路径执行 HTTP GET 请求。如果响应的状态码大于等于 200 且小于 400，则诊断被认为是成功的。</li>
+<li>tcpSocket<br>对容器的 IP 地址上的指定端口执行 TCP 检查。如果端口打开，则诊断被认为是成功的。如果远程系统（容器）在打开连接后立即将其关闭，这算作是健康的。</li>
+</ul>
+<blockquote>
+<p>注意：<br>和其他机制不同，exec 探针的实现涉及每次执行时创建&#x2F;复制多个进程。因此，在集群中具有较高 pod 密度、较低的 initialDelaySeconds 和 periodSeconds 时长的时候，配置任何使用 exec 机制的探针可能会增加节点的 CPU 负载。这种场景下，请考虑使用其他探针机制以避免额外的开销。</p>
+</blockquote>
+<p>每次探测结果会是以下三种之一：</p>
+<ul>
+<li>成功：表示容器通过了检查。</li>
+<li>失败：表示容器未通过检查。</li>
+<li>未知：检查失败，因此不会执行任何操作。</li>
+</ul>
+<h4 id="探针类型"><a href="#探针类型" class="headerlink" title="探针类型"></a>探针类型</h4><p>针对运行中的容器，kubelet 可以选择是否执行以下三种探针，以及如何针对探测结果作出反应：</p>
+<ul>
+<li>livenessProbe<br>指示容器是否正在运行。如果存活态探测失败，则 kubelet 会杀死容器，并且容器将根据其重启策略决定未来。如果容器不提供存活探针，则默认状态为 Success<ul>
+<li>成功：静默</li>
+<li>失败：根据重启的策略进行重启的动作</li>
+<li>未知：静默</li>
+</ul>
+</li>
+<li>readinessProbe<br>指示容器是否准备好为请求提供服务。如果就绪态探测失败， EndpointSlice 控制器将从与该 Pod 匹配的所有 Service 的 EndpointSlice 中删除该 Pod 的 IP 地址。初始延迟之前的就绪态的状态值默认为 Failure。如果容器不提供就绪态探针，则默认状态为 Success。（如果 pod 内部的容器不添加就绪探测，则状态默认就绪。如果添加了就绪探测，只有就绪通过后，才标记修改为就绪状态。当前 pod 内所有的容器都就绪，才标记当前的 pod 就绪）<ul>
+<li>成功：将当前容器标记为就绪</li>
+<li>失败：静默</li>
+<li>未知：静默</li>
+</ul>
+</li>
+<li>startupProbe<br>指示容器中的应用是否已经启动。如果提供了启动探针，则所有其他探针都会被禁用，直到此探针成功为止。如果启动探测失败，kubelet 将杀死容器，而容器依其重启策略进行重启。 如果容器没有提供启动探测，则默认状态为 Success。<ul>
+<li>成功：就绪探测开始执行</li>
+<li>失败：超出探测时间会进行重启。</li>
+<li>未知：静默</li>
+</ul>
+</li>
+</ul>
+<h4 id="探针选项"><a href="#探针选项" class="headerlink" title="探针选项"></a>探针选项</h4><p>选项说明：</p>
+<ul>
+<li>initialDelaySeconds：容器启动后要等待多少秒后探针就开始工作，单位’秒’，默认是 0 秒， 最小值也是 0。</li>
+<li>periodSeconds：执行探测的时间间隔（单位是秒），默认为 10 秒，最小值是 1。</li>
+<li>timeoutSeconds：探针执行检测请求后，等待响应的超时时间（单位秒），默认为 1 秒，最小值是 1 秒。</li>
+<li>successThreshold：探针检测后认为成功的最小连接成功次数，默认值为 1。必须为 1 才能激活和启动。最小值为 1。</li>
+<li>failureThreshold：探测失败的重试次数，重试一定次数后将认为失败，默认值为 3，最小值为 1。</li>
+</ul>
+<h4 id="就绪探针测试"><a href="#就绪探针测试" class="headerlink" title="就绪探针测试"></a>就绪探针测试</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建两个 pod </span></span><br><span class="line"><span class="comment"># 1-pod-demo.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-1</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-1</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2-pod-demo.yaml</span></span><br><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-2</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-1</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建 pod</span></span><br><span class="line">kubectl apply -f 1-pod-demo.yaml </span><br><span class="line">kubectl apply -f 2-pod-demo.yaml </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建 svc (service名称为 myapp 时默认绑定到中 labels 为 myapp 的 pod)</span></span><br><span class="line">kubectl create svc clusterip myapp --tcp=80:80</span><br><span class="line">kubectl get svc</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/7db50125b124ad62a87cf247f86bd5d155deb5fbd5fe5024df91d78fea5d13bc.png" alt="图 53">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/005b52f589512c49cefd8bb03529ab6f061fb3680b3dc190f834d981e3718cda.png" alt="图 54">  </p>
+<p>可以看到请求被负载均衡到了 pod1 和 pod2, 此时创建 pod3。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">readiness-httpget-pod</span></span><br><span class="line"> <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"> <span class="attr">labels:</span></span><br><span class="line">   <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line">   <span class="attr">env:</span> <span class="string">test</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">containers:</span></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">readiness-httpget-container</span></span><br><span class="line">   <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">   <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">   <span class="comment"># 这里回去访问 index1.html 成功才会标记为就绪状态</span></span><br><span class="line">   <span class="attr">readinessProbe:</span></span><br><span class="line">     <span class="attr">httpGet:</span></span><br><span class="line">       <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">       <span class="attr">path:</span> <span class="string">/index1.html</span></span><br><span class="line">     <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">     <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f readiness-httpget-pod.yaml </span><br><span class="line">kubectl describe pod readiness-httpget-pod</span><br><span class="line">cd /usr/local/nginx/html</span><br><span class="line">echo &quot;dao ci yi you&quot; &gt;&gt; index1.html</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/70a5505b43ff98642c2af700867146d73db269836b0f906ac54df9a076d31ae7.png" alt="图 49">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/11628e409ec3ba30701c816d957342976e528e9ca39097495d70568d719a6407.png" alt="图 50">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/b4f2cd6d95c9ca12e53eb57371ecac6692424e3caf8055fbd1ff7c9759b5da4b.png" alt="图 55">  </p>
+<p>可以看到 pod 一直处于为就绪状态，请求也不会走到 pod3。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec -it readiness-httpget-pod -c readiness-httpget-container -- /bin/bash</span><br><span class="line">cd /usr/local/nginx/html</span><br><span class="line">echo &quot;dao ci yi you&quot; &gt;&gt; index1.html</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/47f46dac18887bf7fbfadc626d04987e984a0b69754f5ece251a197f82cb5fda.png" alt="图 51"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/fa8194a584cb1a4786d5267d990afaa8a65c6ce1ac70b1a2cc25b9a1011a9829.png" alt="图 52">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/64da71ea3eb4c2b4948221e0efbe33ae291d4186f0db790454b284426f457bee.png" alt="图 56">  </p>
+<p>创建 index1.html 后 pod 就绪状态改为成功状态，请求也能够走到 pod3。就绪探测保证了提供给用户的服务时可用的。</p>
+<p>其他检查方式：</p>
+<ul>
+<li><p>基于 exec 方式</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">readiness-exec-pod</span></span><br><span class="line"> <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">containers:</span></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">readiness-exec-container</span></span><br><span class="line">   <span class="attr">image:</span> <span class="string">wangyanglinux/tools:busybox</span></span><br><span class="line">   <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">   <span class="attr">command:</span> [<span class="string">&quot;/bin/sh&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;touch /tmp/live ; sleep  60; rm -rf /tmp/live;sleep 3600&quot;</span>]</span><br><span class="line">   <span class="attr">readinessProbe:</span></span><br><span class="line">     <span class="attr">exec:</span></span><br><span class="line">       <span class="attr">command:</span> [<span class="string">&quot;test&quot;</span>,<span class="string">&quot;-e&quot;</span>,<span class="string">&quot;/tmp/live&quot;</span>]</span><br><span class="line">     <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">     <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>基于 Tcp check 方式</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">readiness-tcp-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">containers:</span></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">readiness-exec-container</span></span><br><span class="line">   <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">   <span class="attr">readinessProbe:</span></span><br><span class="line">     <span class="attr">initialDelaySeconds:</span> <span class="number">5</span></span><br><span class="line">     <span class="attr">timeoutSeconds:</span> <span class="number">1</span></span><br><span class="line">     <span class="attr">tcpSocket:</span></span><br><span class="line">       <span class="attr">port:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="存活探针测试"><a href="#存活探针测试" class="headerlink" title="存活探针测试"></a>存活探针测试</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">liveness-exec-pod</span></span><br><span class="line"> <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">containers:</span></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">liveness-exec-container</span></span><br><span class="line">   <span class="attr">image:</span> <span class="string">wangyanglinux/tools:busybox</span></span><br><span class="line">   <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">   <span class="comment"># 启动时创建 /tmp/live 目录，睡眠 60s 删除 /tmp/live 再睡眠 3600</span></span><br><span class="line">   <span class="attr">command:</span> [<span class="string">&quot;/bin/sh&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;touch /tmp/live ; sleep 60; rm -rf /tmp/live;sleep 3600&quot;</span>]</span><br><span class="line">   <span class="attr">livenessProbe:</span></span><br><span class="line">     <span class="attr">exec:</span></span><br><span class="line">       <span class="comment"># 查看 /tmp/live 目录是否存在，不存在存活探测失败</span></span><br><span class="line">       <span class="attr">command:</span> [<span class="string">&quot;test&quot;</span>,<span class="string">&quot;-e&quot;</span>,<span class="string">&quot;/tmp/live&quot;</span>]</span><br><span class="line">     <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">     <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/5dfb0a88bd8985b59d8070018d48a0831121034e2e736e8a487935bdce97b345.png" alt="图 57">  </p>
+<p>可以看到 pod 重建了两次，当存活探针探测 pod 存活状态失败时，会将 pod 删除重建已达到自愈的目的，所以这里显示重启次数增加。</p>
+<p>其他检查方式：</p>
+<ul>
+<li><p>基于 HTTP Get 方式</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">liveness-httpget-pod</span></span><br><span class="line"> <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">containers:</span></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">liveness-httpget-container</span></span><br><span class="line">   <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">   <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">   <span class="attr">ports:</span></span><br><span class="line">   <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">     <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">   <span class="attr">livenessProbe:</span></span><br><span class="line">     <span class="attr">httpGet:</span></span><br><span class="line">       <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">       <span class="attr">path:</span> <span class="string">/index.html</span></span><br><span class="line">     <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">     <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br><span class="line">     <span class="attr">timeoutSeconds:</span> <span class="number">3</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>基于 TCP Check 方式</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">liveness-tcp-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">containers:</span></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">liveness-tcp-container</span></span><br><span class="line">   <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">   <span class="attr">livenessProbe:</span></span><br><span class="line">     <span class="attr">initialDelaySeconds:</span> <span class="number">5</span></span><br><span class="line">     <span class="attr">timeoutSeconds:</span> <span class="number">1</span></span><br><span class="line">     <span class="attr">tcpSocket:</span></span><br><span class="line">       <span class="attr">port:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="启动探针测试"><a href="#启动探针测试" class="headerlink" title="启动探针测试"></a>启动探针测试</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line"> <span class="attr">name:</span> <span class="string">startupprobe-1</span></span><br><span class="line"> <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line"> <span class="attr">containers:</span></span><br><span class="line"> <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-container</span></span><br><span class="line">   <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">   <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span></span><br><span class="line">   <span class="attr">ports:</span></span><br><span class="line">   <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span></span><br><span class="line">     <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">   <span class="attr">readinessProbe:</span></span><br><span class="line">     <span class="attr">httpGet:</span></span><br><span class="line">       <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">       <span class="attr">path:</span> <span class="string">/index2.html</span></span><br><span class="line">     <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">     <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br><span class="line">   <span class="attr">startupProbe:</span></span><br><span class="line">     <span class="attr">httpGet:</span></span><br><span class="line">       <span class="attr">path:</span> <span class="string">/index1.html</span></span><br><span class="line">       <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">     <span class="attr">failureThreshold:</span> <span class="number">30</span></span><br><span class="line">     <span class="attr">periodSeconds:</span> <span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>应用程序将会有最多 5 分钟 failureThreshold <em>periodSeconds（30</em> 10 &#x3D; 300s）的时间来完成其启动过程。如果在这个时间内还未探测成功，那么 k8s 会重建该 pod。<br><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/2a2bf15bc881b45261fe451a702def7bc9a816ce910233b93477c35e10889ef7.png" alt="图 62">  </p>
+</blockquote>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/890ec5218ca83c5be65e04f37963c17cdb642b0a4654037fff25b8dcb547b744.png" alt="图 59">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/1b1551c8d4cd2a952e60afa37f4d88c089a80ca97200468c8cf6cf1bb2daf682.png" alt="图 58">  </p>
+<p>可以看到当前启动探测失败。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">创建 /index1.html 文件</span></span><br><span class="line">kubectl exec -it startupprobe-1 /bin/bash</span><br><span class="line">cd /usr/local/nginx/html/</span><br><span class="line">echo &quot;hahaha&quot; &gt;&gt; index1.html</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/1ffb91a297ae1de3e3b8d9c7f8ae6cfe37b772cc897d3c3d925af48da2478bdd.png" alt="图 60">  </p>
+<p>此时还处于未就绪状态，因为 index2.html 文件未创建。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl exec -it startupprobe-1 /bin/bash</span><br><span class="line">cd /usr/local/nginx/html/</span><br><span class="line">echo &quot;gagaga&quot; &gt;&gt; index2.html</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/26191aa3b3bcaa1aba4844e4bc2b8def1f6069b7938e7c7fc7b199e76ac679fe.png" alt="图 61">  </p>
+<p>当 index2.html 文件创建成功后，就绪探测也成功了。</p>
+<h3 id="钩子"><a href="#钩子" class="headerlink" title="钩子"></a>钩子</h3><p>Pod hook(钩子) 是由 Kubernetes 管理的 kubelet 发起的，当容器中的进程启动后或容器中的进程终止之前运行，这是包含在容器的生命周期之中。可以同时为 Pod 中的所有容器都配置 hook。</p>
+<p>Hook 的类型包括两种：</p>
+<ul>
+<li>exec：执行一段命令</li>
+<li>HTTP: 发送 HTTP 请求</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">lifecycle-httpget-pod</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">lifecycle-httpget-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">lifecycle-httpget-container</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">lifecycle:</span></span><br><span class="line">      <span class="attr">postStart:</span></span><br><span class="line">        <span class="attr">httpGet:</span></span><br><span class="line">          <span class="comment"># 替换自身IP</span></span><br><span class="line">          <span class="attr">host:</span> <span class="number">10.37</span><span class="number">.129</span><span class="number">.10</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">index.html</span></span><br><span class="line">          <span class="attr">port:</span> <span class="number">1234</span></span><br><span class="line">      <span class="attr">preStop:</span></span><br><span class="line">        <span class="attr">httpGet:</span></span><br><span class="line">          <span class="attr">host:</span> <span class="number">10.37</span><span class="number">.129</span><span class="number">.10</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">hostname.html</span> </span><br><span class="line">          <span class="attr">port:</span> <span class="number">1234</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">开启一个测试 webServer</span></span><br><span class="line">docker run -it --rm -p 1234:80 wangyanglinux/myapp:v1.0</span><br><span class="line">kubectl apply -f lifecycle-httpget-pod.yaml </span><br></pre></td></tr></table></figure>
+
+<p>可以看到启动后钩子被执行：<br><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/7b8e073c538a73cdb33902f6648f47384f5f812be4cb1796b4a0a651874b5c2e.png" alt="图 63"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl delete pod lifecycle-httpget-pod</span><br></pre></td></tr></table></figure>
+
+<p>可以看到停止前钩子被执行：<br><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/577aa72c76c7511e402a8981e52e51296367bf7bdfca504c4ca419f2cdd485f5.png" alt="图 64">  </p>
+<p>exec Hook 示例：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">lifecycle-exec-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">lifecycle-exec-container</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1</span></span><br><span class="line">    <span class="attr">lifecycle:</span></span><br><span class="line">      <span class="attr">postStart:</span></span><br><span class="line">        <span class="attr">exec:</span></span><br><span class="line">          <span class="attr">command:</span> [<span class="string">&quot;/bin/sh&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;echo postStart &gt; /usr/share/message&quot;</span>]</span><br><span class="line">      <span class="attr">preStop:</span></span><br><span class="line">        <span class="attr">exec:</span></span><br><span class="line">          <span class="attr">command:</span> [<span class="string">&quot;/bin/sh&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;echo preStop &gt; /usr/share/message&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="整个生命周期示例"><a href="#整个生命周期示例" class="headerlink" title="整个生命周期示例"></a>整个生命周期示例</h3><p>目标：完成 pod 启动成功</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">lifecycle-pod</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">lifecycle-pod</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">busybox-container</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/tools:busybox</span></span><br><span class="line">    <span class="attr">command:</span> [<span class="string">&quot;/bin/sh&quot;</span>,<span class="string">&quot;-c&quot;</span>,<span class="string">&quot;touch /tmp/live ; sleep 600; rm  -rf / tmp/live; sleep 3600&quot;</span>]</span><br><span class="line">    <span class="comment"># 存活探针</span></span><br><span class="line">    <span class="attr">livenessProbe:</span></span><br><span class="line">      <span class="attr">exec:</span> </span><br><span class="line">        <span class="attr">command:</span> [<span class="string">&quot;test&quot;</span>, <span class="string">&quot;-e&quot;</span>, <span class="string">&quot;/tmp/live&quot;</span>]</span><br><span class="line">      <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br><span class="line">    <span class="comment"># 钩子</span></span><br><span class="line">    <span class="attr">lifecycle:</span></span><br><span class="line">      <span class="attr">postStart:</span></span><br><span class="line">        <span class="attr">httpGet:</span></span><br><span class="line">          <span class="comment"># 替换自身IP</span></span><br><span class="line">          <span class="attr">host:</span> <span class="number">10.37</span><span class="number">.129</span><span class="number">.10</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">index.html</span></span><br><span class="line">          <span class="attr">port:</span> <span class="number">1234</span></span><br><span class="line">      <span class="attr">preStop:</span></span><br><span class="line">        <span class="attr">httpGet:</span></span><br><span class="line">          <span class="attr">host:</span> <span class="number">10.37</span><span class="number">.129</span><span class="number">.10</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">hostname.html</span> </span><br><span class="line">          <span class="attr">port:</span> <span class="number">1234</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-container</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">    <span class="attr">livenessProbe:</span></span><br><span class="line">      <span class="attr">httpGet:</span></span><br><span class="line">        <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">        <span class="attr">path:</span> <span class="string">/index.html</span></span><br><span class="line">      <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br><span class="line">      <span class="attr">timeoutSeconds:</span> <span class="number">3</span></span><br><span class="line">    <span class="comment"># 就绪探针</span></span><br><span class="line">    <span class="attr">readinessProbe:</span></span><br><span class="line">      <span class="attr">httpGet:</span></span><br><span class="line">        <span class="attr">port:</span> <span class="number">80</span></span><br><span class="line">        <span class="attr">path:</span> <span class="string">/index1.html</span></span><br><span class="line">      <span class="attr">initialDelaySeconds:</span> <span class="number">1</span></span><br><span class="line">      <span class="attr">periodSeconds:</span> <span class="number">3</span></span><br><span class="line">  <span class="comment"># 初始化容器</span></span><br><span class="line">  <span class="attr">initContainers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">init-myservice</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/tools:busybox</span></span><br><span class="line">    <span class="attr">command:</span> [<span class="string">&#x27;sh&#x27;</span>, <span class="string">&#x27;-c&#x27;</span>, <span class="string">&#x27;until nslookup myservice; do echo waiting for myservice; sleep 2; done;&#x27;</span>]</span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">init-mydb</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/tools:busybox</span></span><br><span class="line">    <span class="attr">command:</span> [<span class="string">&#x27;sh&#x27;</span>, <span class="string">&#x27;-c&#x27;</span>, <span class="string">&#x27;until nslookup mydb; do echo waiting for mydb; sleep 2; done;&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/f80f5459ad0929e7f10f3332961becc31e56406780805cb1c1373bdc29a6eef3.png" alt="图 65"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f lifecycle-httpget-pod.yaml </span><br><span class="line">kubectl create svc clusterip myservice --tcp=80:80</span><br><span class="line">kubectl create svc clusterip mydb --tcp=80:80</span><br><span class="line">docker run -it --<span class="built_in">rm</span> -p 1234:80 wangyanglinux/myapp:v1.0</span><br><span class="line">kubectl <span class="built_in">exec</span> -it lifecycle-pod -c myapp-container /bin/bash</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;hahah&quot;</span> &gt;&gt; index1.html</span><br><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></table></figure>
+
+<p> <img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/c88803d2a29a103db88ce26756aab1e2afbe187a975cd44d15f6cb393f9fa3f4.png" alt="图 66">  </p>
+<h3 id="Pod-调度流程"><a href="#Pod-调度流程" class="headerlink" title="Pod 调度流程"></a>Pod 调度流程</h3><p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/89dfda50717a6e24d4392053338c15ca61f519689760444a0838fe6c7c80038e.png" alt="图 67">  </p>
+</article>
+<div class="article-footer">
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/wiki/Kubernetes/%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95/">Kubernetes资源清单</a></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/wiki/Kubernetes/%E6%8E%A7%E5%88%B6%E5%99%A8/">Kubernetes控制器</a></div></section></div>
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">Pod的生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#init%E5%AE%B9%E5%99%A8"><span class="toc-text">init容器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#init%E5%AE%B9%E5%99%A8%E6%A6%82%E5%BF%B5"><span class="toc-text">init容器概念</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%8E%E6%99%AE%E9%80%9A%E5%AE%B9%E5%99%A8%E5%8C%BA%E5%88%AB"><span class="toc-text">与普通容器区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#init%E5%AE%B9%E5%99%A8%E9%98%BB%E5%A1%9E%E7%A4%BA%E4%BE%8B"><span class="toc-text">init容器阻塞示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#init-%E5%AE%B9%E5%99%A8%E8%BF%94%E5%9B%9E%E7%A4%BA%E4%BE%8B"><span class="toc-text">init 容器返回示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A2%E9%92%88"><span class="toc-text">探针</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A2%E9%92%88%E7%B1%BB%E5%9E%8B"><span class="toc-text">探针类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A2%E9%92%88%E9%80%89%E9%A1%B9"><span class="toc-text">探针选项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%B1%E7%BB%AA%E6%8E%A2%E9%92%88%E6%B5%8B%E8%AF%95"><span class="toc-text">就绪探针测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%98%E6%B4%BB%E6%8E%A2%E9%92%88%E6%B5%8B%E8%AF%95"><span class="toc-text">存活探针测试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E6%8E%A2%E9%92%88%E6%B5%8B%E8%AF%95"><span class="toc-text">启动探针测试</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%92%A9%E5%AD%90"><span class="toc-text">钩子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E4%B8%AA%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%A4%BA%E4%BE%8B"><span class="toc-text">整个生命周期示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pod-%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B"><span class="toc-text">Pod 调度流程</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

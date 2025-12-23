@@ -1,0 +1,1683 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>区块链 - Lianyutian</title>
+
+  
+    <meta name="description" content="🥧本文介绍了区块链基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="区块链">
+<meta property="og:url" content="http://example.com/2025/03/28/%E5%8C%BA%E5%9D%97%E9%93%BE/">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="🥧本文介绍了区块链基础">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2025-03-28T08:40:02.000Z">
+<meta property="article:modified_time" content="2025-12-23T08:50:16.678Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="区块链、比特币、ETH">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="区块链、比特币、ETH">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"dateCreated":"2025-03-28T08:40:02+00:00","dateModified":"2025-12-23T08:50:16+00:00","datePublished":"2025-03-28T08:40:02+00:00","description":"","headline":"区块链","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2025/03/28/%E5%8C%BA%E5%9D%97%E9%93%BE/"},"publisher":{"@type":"Organization","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png","logo":{"@type":"ImageObject","url":"/assets/20240507174529.png"}},"url":"http://example.com/2025/03/28/%E5%8C%BA%E5%9D%97%E9%93%BE/","keywords":"区块链、比特币、ETH","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/assets/20240507174529.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Lianyutian</div><div class="sub cap">学无止境</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item active" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2025/03/27/%E7%A4%BE%E5%8C%BA%E5%95%86%E5%9F%8E/"><span class="title">'社区商城'</span></a><a class="item title" href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/"><span class="title">rpc基础</span></a><a class="item title" href="/2025/03/25/xxl-job/"><span class="title">xxl-job基础</span></a><a class="item title" href="/2025/03/27/%E4%BA%91%E7%8E%AF%E5%A2%83/"><span class="title">云环境</span></a><a class="item title" href="/2025/03/28/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="title">区块链</span></a><a class="item title" href="/2024/12/13/circle-shop/"><span class="title">circle-shop</span></a><a class="item title" href="/2024/11/26/cloud-mall-vue/"><span class="title">cloud-mall-vue</span></a><a class="item title" href="/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/"><span class="title">protobuf基础</span></a><a class="item title" href="/2024/09/26/React%E5%9F%BA%E7%A1%80/"><span class="title">React基础</span></a><a class="item title" href="/2024/05/29/ReentrantLock%E8%AF%A6%E8%A7%A3/"><span class="title">ReentrantLock详解</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2025-03-28T08:40:02.000Z">2025-03-28</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-12-23T08:50:16.678Z">2025-12-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>区块链</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="比特币"><a href="#比特币" class="headerlink" title="比特币"></a>比特币</h2><h3 id="密码学中-Hash-函数性质"><a href="#密码学中-Hash-函数性质" class="headerlink" title="密码学中 Hash 函数性质"></a>密码学中 Hash 函数性质</h3><h4 id="本质属性‌"><a href="#本质属性‌" class="headerlink" title="本质属性‌"></a>本质属性‌</h4><ol>
+<li><p><strong>‌固定输出长度‌</strong><br>无论输入数据大小，哈希函数始终生成固定长度的摘要（如 SHA-256 输出 256 位）。</p>
+</li>
+<li><p><strong>‌确定性‌</strong><br>相同输入必定产生相同哈希值。</p>
+</li>
+<li><p><strong>‌高效性‌</strong><br>可快速计算任意输入的哈希值，满足实时应用需求。</p>
+</li>
+</ol>
+<h4 id="安全特性‌"><a href="#安全特性‌" class="headerlink" title="安全特性‌"></a>安全特性‌</h4><ol>
+<li><p><strong>‌单向性（抗原像攻击）‌</strong><br>给定哈希值 h，无法通过计算推导出原始输入 M（数学不可逆）。</p>
+</li>
+<li><p><strong>‌弱抗碰撞性（抗第二原像攻击）‌</strong><br>给定 M1 和 H(M1)，难以找到另一消息 M2≠M1 使得 H(M1)&#x3D;H(M2)。</p>
+</li>
+<li><p><strong>‌强抗碰撞性‌</strong><br>难以找到任意两个不同消息 M1≠M2 满足 H(M1)&#x3D;H(M2)。</p>
+</li>
+<li><p><strong>‌雪崩效应‌</strong><br>输入数据的微小改动（如 1 比特变化）会导致输出哈希值显著变化（平均 50% 比特翻转）。</p>
+</li>
+</ol>
+<h3 id="密码学中的数字签名机制解析"><a href="#密码学中的数字签名机制解析" class="headerlink" title="密码学中的数字签名机制解析"></a>密码学中的数字签名机制解析</h3><h4 id="一、核心原理"><a href="#一、核心原理" class="headerlink" title="一、核心原理"></a>一、核心原理</h4><ol>
+<li><p><strong>非对称加密体系</strong>  </p>
+<ul>
+<li>基于公钥密码学，每个用户拥有<strong>私钥</strong>（保密）和<strong>公钥</strong>（公开）的密钥对。</li>
+<li>私钥用于生成签名，公钥用于验证签名可信性。</li>
+</ul>
+</li>
+<li><p><strong>签名生成流程</strong>  </p>
+<ul>
+<li><strong>信息哈希化</strong>：对待签名数据计算哈希值（如SHA-256）。</li>
+<li><strong>私钥加密</strong>：用私钥加密哈希值生成数字签名（包含r,s参数）。</li>
+<li><strong>绑定传输</strong>：将原始数据与签名共同发送。</li>
+</ul>
+</li>
+<li><p><strong>签名验证流程</strong>  </p>
+<ul>
+<li><strong>哈希计算</strong>：接收方独立计算原始数据哈希值。</li>
+<li><strong>签名解密</strong>：用签名者公钥解密签名获得哈希值。</li>
+<li><strong>对比验证</strong>：比对两个哈希值，一致则验证通过。</li>
+</ul>
+</li>
+</ol>
+<h4 id="二、关键特性"><a href="#二、关键特性" class="headerlink" title="二、关键特性"></a>二、关键特性</h4><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>实现机制</strong></th>
+<th><strong>安全价值</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不可伪造性</td>
+<td>私钥唯一控制签名生成权</td>
+<td>防止身份冒充</td>
+</tr>
+<tr>
+<td>不可抵赖性</td>
+<td>签名与私钥强绑定</td>
+<td>追溯责任主体</td>
+</tr>
+<tr>
+<td>数据完整性</td>
+<td>哈希值变化导致验证失败</td>
+<td>防内容篡改</td>
+</tr>
+<tr>
+<td>身份认证</td>
+<td>公钥可公开验证签名来源</td>
+<td>确认发送方身份</td>
+</tr>
+</tbody></table>
+<h4 id="三、主流算法实现"><a href="#三、主流算法实现" class="headerlink" title="三、主流算法实现"></a>三、主流算法实现</h4><ul>
+<li><p><strong>ECDSA（椭圆曲线签名）</strong>  </p>
+<ul>
+<li>比特币采用 secp256k1 曲线，以160位密钥实现高安全性。</li>
+<li>优势：计算量小、签名长度短（典型65字节）。</li>
+</ul>
+</li>
+<li><p><strong>多重签名技术</strong>  </p>
+<ul>
+<li>需多个私钥共同授权交易（如M-of-N模式）。</li>
+<li>应用场景：联合账户、资金托管。</li>
+</ul>
+</li>
+</ul>
+<h4 id="四、工作模型图解"><a href="#四、工作模型图解" class="headerlink" title="四、工作模型图解"></a>四、工作模型图解</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">A[原始数据] --&gt; B(哈希运算)</span><br><span class="line">B --&gt; C[数据摘要]</span><br><span class="line">D[私钥] --&gt; E(加密签名)</span><br><span class="line">C --&gt; E</span><br><span class="line">E --&gt; F[数字签名]</span><br><span class="line">F --&gt; G&#123;传输&#125;</span><br><span class="line">G --&gt; H[接收方]</span><br><span class="line">H --&gt; I[公钥验证]</span><br><span class="line">I --&gt; J[签名有效性]</span><br></pre></td></tr></table></figure>
+
+<h3 id="比特币中使用到的-Hash-函数性质"><a href="#比特币中使用到的-Hash-函数性质" class="headerlink" title="比特币中使用到的 Hash 函数性质"></a>比特币中使用到的 Hash 函数性质</h3><p>比特币系统主要依赖密码学哈希函数的三个核心性质确保其安全性与功能性，具体应用及技术依据如下：</p>
+<h4 id="一、核心安全性质"><a href="#一、核心安全性质" class="headerlink" title="一、核心安全性质"></a>一、核心安全性质</h4><ol>
+<li><p><strong>抗碰撞性（Collision Resistance）</strong>  </p>
+<ul>
+<li>确保交易数据不可篡改，任何修改都会导致区块哈希值变化，破坏区块链连续性。  </li>
+<li>典型应用：区块头通过存储前一区块哈希值形成链式结构。</li>
+</ul>
+</li>
+<li><p><strong>单向性&#x2F;隐秘性（Hiding）</strong>  </p>
+<ul>
+<li>保护用户隐私，比特币地址由公钥经 SHA-256 和 RIPEMD-160 双重哈希生成，无法逆向推导。  </li>
+<li>典型应用：交易仅公开哈希后的地址，隐藏真实身份。</li>
+</ul>
+</li>
+<li><p><strong>谜题友好性（Puzzle Friendly）</strong>  </p>
+<ul>
+<li>支撑工作量证明（PoW），矿工需暴力枚举 Nonce 使区块头哈希满足难度目标。  </li>
+<li>典型应用：挖矿过程必须通过 SHA-256(SHA-256(BlockHeader)) 计算。</li>
+</ul>
+</li>
+</ol>
+<h4 id="二、辅助功能性质"><a href="#二、辅助功能性质" class="headerlink" title="二、辅助功能性质"></a>二、辅助功能性质</h4><table>
+<thead>
+<tr>
+<th><strong>性质</strong></th>
+<th><strong>应用场景</strong></th>
+<th><strong>技术价值</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>雪崩效应</strong></td>
+<td>交易微小改动导致哈希值剧变，触发分叉检测机制</td>
+<td>增强数据完整性验证灵敏度</td>
+</tr>
+<tr>
+<td><strong>固定输出长度</strong></td>
+<td>SHA-256统一输出256位哈希，简化区块头结构（80字节）</td>
+<td>提升网络传输与存储效率</td>
+</tr>
+<tr>
+<td><strong>确定性</strong></td>
+<td>相同交易始终生成相同哈希值，保障全节点验证一致性</td>
+<td>维护分布式账本共识基础</td>
+</tr>
+</tbody></table>
+<h4 id="三、算法实现扩展"><a href="#三、算法实现扩展" class="headerlink" title="三、算法实现扩展"></a>三、算法实现扩展</h4><ul>
+<li><strong>双重SHA-256</strong>：<br>区块头经过两次哈希运算降低碰撞概率，增强挖矿安全性。  </li>
+<li><strong>Merkle树结构</strong>：<br>交易哈希逐层聚合生成Merkle Root，利用抗碰撞性实现高效验证。</li>
+</ul>
+<blockquote>
+<p>注：比特币通过经济激励机制（如PoW消耗资源）将哈希性质转化为去中心化信任基石。</p>
+</blockquote>
+<h3 id="比特币签名机制详解"><a href="#比特币签名机制详解" class="headerlink" title="比特币签名机制详解"></a>比特币签名机制详解</h3><h4 id="一、核心组件"><a href="#一、核心组件" class="headerlink" title="一、核心组件"></a>一、核心组件</h4><ol>
+<li><p><strong>非对称加密体系</strong>  </p>
+<ul>
+<li>采用椭圆曲线数字签名算法(ECDSA)，基于 secp256k1 曲线。</li>
+<li>每个用户拥有私钥(保密)和公钥(公开)的密钥对。</li>
+</ul>
+</li>
+<li><p><strong>签名生成流程</strong>  </p>
+<ul>
+<li>私钥签名：用私钥对交易哈希值加密生成数字签名。  </li>
+<li>公钥验证：通过公钥解密签名验证交易真实性。</li>
+</ul>
+</li>
+</ol>
+<h4 id="二、完整签名过程"><a href="#二、完整签名过程" class="headerlink" title="二、完整签名过程"></a>二、完整签名过程</h4><ol>
+<li><p><strong>交易构造</strong>  </p>
+<ul>
+<li>包含发送方地址、接收方地址、转账金额等数据。  </li>
+<li>系统自动生成唯一交易ID防止重复。</li>
+</ul>
+</li>
+<li><p><strong>哈希计算</strong>  </p>
+<ul>
+<li>对交易内容进行 SHA-256 哈希运算。  </li>
+<li>确保任何微小修改都会导致哈希值剧变。</li>
+</ul>
+</li>
+<li><p><strong>签名生成</strong>  </p>
+<ul>
+<li>使用私钥加密交易哈希值。  </li>
+<li>生成包含(r,s)两个参数的ECDSA签名。</li>
+</ul>
+</li>
+<li><p><strong>广播验证</strong>  </p>
+<ul>
+<li>将原始交易、签名和公钥广播至网络。  </li>
+<li>节点通过公钥验证签名与交易哈希的匹配性。</li>
+</ul>
+</li>
+</ol>
+<h4 id="三、安全特性"><a href="#三、安全特性" class="headerlink" title="三、安全特性"></a>三、安全特性</h4><table>
+<thead>
+<tr>
+<th><strong>特性</strong></th>
+<th><strong>实现方式</strong></th>
+<th><strong>防护目标</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>不可伪造性</td>
+<td>只有私钥持有者能生成有效签名</td>
+<td>防止交易伪造</td>
+</tr>
+<tr>
+<td>不可抵赖性</td>
+<td>签名与私钥强绑定</td>
+<td>防止发送方否认交易</td>
+</tr>
+<tr>
+<td>数据完整性</td>
+<td>哈希值变化导致验证失败</td>
+<td>防止交易内容篡改</td>
+</tr>
+</tbody></table>
+<h4 id="四、技术优势"><a href="#四、技术优势" class="headerlink" title="四、技术优势"></a>四、技术优势</h4><ul>
+<li><strong>去中心化验证</strong>：任何节点都可使用公钥独立验证签名。  </li>
+<li><strong>隐私保护</strong>：地址由公钥哈希生成，实现伪匿名性。  </li>
+<li><strong>抗量子计算</strong>：secp256k1 曲线提供较高算法强度。</li>
+</ul>
+<h3 id="通俗版比特币签名流程（类比寄信）"><a href="#通俗版比特币签名流程（类比寄信）" class="headerlink" title="通俗版比特币签名流程（类比寄信）"></a>通俗版比特币签名流程（类比寄信）</h3><ol>
+<li><p><strong>准备信件</strong>（交易构造）<br>写清楚：谁给你转账（输入）、转给谁（输出）、转多少钱（金额）。<br>→ <em>就像填写汇款单：汇款人、收款人、金额</em>。</p>
+</li>
+<li><p><strong>按指纹</strong>（生成签名）  </p>
+<ul>
+<li><strong>浓缩内容</strong>：把整张“汇款单”压成一道防伪码（SHA-256哈希）。<br>→ <em>类似把文件塞进防篡改信封</em>。</li>
+<li><strong>盖私章</strong>：用只有你有的印章（私钥）在信封封口处盖章（ECDSA签名）。<br>→ <em>这个章包含特殊密码（r,s参数），别人仿不了</em>。</li>
+</ul>
+</li>
+<li><p><strong>寄出信件</strong>（广播交易）<br>把“盖好章的信封”（签名交易）+ 你的公开印章模（公钥）一起寄到邮局（区块链网络）。</p>
+</li>
+<li><p><strong>邮局验真伪</strong>（节点验证）  </p>
+<ul>
+<li>拆开信封重新计算防伪码（哈希值）。  </li>
+<li>用你的公开印章模核对封口章（公钥解密签名）。</li>
+<li>核对成功 → 交易有效，钱可转出 ✅ 。</li>
+<li>防伪码对不上或章不对 → 当场作废 ❌。</li>
+</ul>
+</li>
+</ol>
+<h4 id="关键点秒懂"><a href="#关键点秒懂" class="headerlink" title="关键点秒懂"></a>关键点秒懂</h4><table>
+<thead>
+<tr>
+<th><strong>概念</strong></th>
+<th><strong>生活比喻</strong></th>
+<th><strong>作用</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>私钥</strong></td>
+<td>你的专属印章</td>
+<td>只有你能盖章（签名）</td>
+</tr>
+<tr>
+<td><strong>公钥</strong></td>
+<td>印章的公开模子</td>
+<td>任何人都能核对你盖的章</td>
+</tr>
+<tr>
+<td><strong>交易哈希</strong></td>
+<td>信封里的防伪码</td>
+<td>保证内容没被掉包</td>
+</tr>
+<tr>
+<td><strong>签名</strong></td>
+<td>盖在封口的章</td>
+<td>证明是你本人寄的信</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 本质：<strong>不用暴露印章（私钥）就能向全网证明“这是我同意的交易”</strong></p>
+</blockquote>
+<h3 id="比特币的数据结构"><a href="#比特币的数据结构" class="headerlink" title="比特币的数据结构"></a>比特币的数据结构</h3><h4 id="一、核心数据结构组件"><a href="#一、核心数据结构组件" class="headerlink" title="一、核心数据结构组件"></a>一、核心数据结构组件</h4><ol>
+<li><p>‌<strong>哈希指针（Hash Pointer）</strong></p>
+<ul>
+<li>‌<strong>结构</strong>‌：包含指向数据块的指针 + 该数据块的哈希值（如 SHA-256）。</li>
+<li>‌<strong>作用</strong>‌：<ul>
+<li>检测数据篡改（哈希值不匹配即触发警报）。</li>
+<li>实现区块间链式连接（后一区块存前一区块的哈希指针）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>‌<strong>区块（Block）</strong></p>
+<ul>
+<li><p><strong>‌区块头（80字节）</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>长度</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>版本号</td>
+<td>4字节</td>
+<td>协议版本标识（如 BIP9 软分叉）</td>
+</tr>
+<tr>
+<td>前驱区块哈希</td>
+<td>32字节</td>
+<td>指向上一个区块的哈希值</td>
+</tr>
+<tr>
+<td>Merkle树根哈希</td>
+<td>32字节</td>
+<td>本区块交易的指纹摘要</td>
+</tr>
+<tr>
+<td>时间戳</td>
+<td>4字节</td>
+<td>区块生成时间（UNIX秒级）</td>
+</tr>
+<tr>
+<td>难度目标</td>
+<td>4字节</td>
+<td>PoW 挖矿目标值（压缩格式）</td>
+</tr>
+<tr>
+<td>随机数（Nonce）</td>
+<td>4字节</td>
+<td>动态调整以满足哈希条件</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>‌<strong>区块体</strong>‌：存储交易列表，含 1~4MB 交易数据。</p>
+</li>
+<li><p><strong>区块结构：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[区块头] --&gt; B[版本号]</span><br><span class="line">    A --&gt; C[前驱区块哈希]</span><br><span class="line">    A --&gt; D[Merkle根哈希]</span><br><span class="line">    A --&gt; E[时间戳]</span><br><span class="line">    A --&gt; F[难度目标]</span><br><span class="line">    A --&gt; G[Nonce]</span><br><span class="line">    H[区块体] --&gt; I[交易列表]</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>‌<strong>默克尔树（Merkle Tree）</strong></p>
+<ul>
+<li>‌<strong>结构</strong>‌：二叉树，叶子节点为交易哈希，非叶节点为子节点哈希的组合。</li>
+<li>‌<strong>生成逻辑</strong>：<br><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/9cf44f1d7c8f3d45c7002b26203a8eeb9490d155a79b1ddbad0a879339cb9fe7.png" alt="图 0"></li>
+<li><strong>‌作用‌：</strong><ul>
+<li>快速验证交易存在性（只需 O(log n) 量级路径）。</li>
+<li>防篡改：修改任意交易将导致根哈希变化。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="二、全局链式结构"><a href="#二、全局链式结构" class="headerlink" title="二、全局链式结构"></a>二、全局链式结构</h4><ol>
+<li><p>‌<strong>区块链（Blockchain）</strong></p>
+<ul>
+<li><p>由区块通过哈希指针串联的链表，首个区块为 ‌<strong>创世区块（Genesis Block）</strong></p>
+</li>
+<li><p>特性：</p>
+<ul>
+<li>‌<strong>防篡改链</strong>‌：修改任一区块将引发后续所有区块哈希值连锁失效</li>
+<li>‌<strong>轻节点验证</strong>‌：只需保存最近区块哈希值即可验证历史数据完整性</li>
+</ul>
+</li>
+<li><p>链式结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    Genesis[创世区块] --&gt; Block1[区块1]</span><br><span class="line">    Block1 --&gt; Block2[区块2]</span><br><span class="line">    Block2 --&gt; Block3[...]</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>‌<strong>交易数据结构</strong>‌</p>
+<ul>
+<li><p>‌<strong>输入（Input）</strong>：引用前序交易的输出（UTXO：Unspent Transaction Output，未花费交易输出）及解锁脚本</p>
+</li>
+<li><p>‌<strong>输出（Output）</strong>：包含接收方地址、转账金额及锁定脚本</p>
+</li>
+<li><p>‌<strong>CoinBase交易</strong>‌：矿工奖励交易（无输入来源，2025年 3.125 BTC&#x2F;区块）</p>
+</li>
+<li><p><strong>交易结构：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    T[交易] --&gt; V[版本号]</span><br><span class="line">    T --&gt; IN[输入列表]</span><br><span class="line">    T --&gt; OUT[输出列表]</span><br><span class="line">    T --&gt; L[锁定时间]</span><br><span class="line">    IN --&gt; PREV[前序交易哈希]</span><br><span class="line">    IN --&gt; INDEX[输出索引]</span><br><span class="line">    IN --&gt; SCRIPT[解锁脚本]</span><br><span class="line">    OUT --&gt; VALUE[金额]</span><br><span class="line">    OUT --&gt; SCRIPT[锁定脚本]</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h4 id="三、关键特性与优化"><a href="#三、关键特性与优化" class="headerlink" title="三、关键特性与优化"></a>三、关键特性与优化</h4><table>
+<thead>
+<tr>
+<th>‌<strong>特性</strong>‌</th>
+<th>‌<strong>实现方式</strong>‌</th>
+<th>‌<strong>技术价值</strong>‌</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据完整性</td>
+<td>哈希指针 + Merkle树</td>
+<td>任何篡改可被节点快速侦测</td>
+</tr>
+<tr>
+<td>高效验证</td>
+<td>Merkle Proof 路径验证</td>
+<td>轻节点无需下载完整交易历史</td>
+</tr>
+<tr>
+<td>扩容能力</td>
+<td>区块大小动态调整（SegWit升级）</td>
+<td>提升交易吞吐量</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 ‌<strong>示例</strong>‌：若攻击者篡改区块N的交易，将导致：</p>
+<ol>
+<li>区块N的哈希值改变 → 区块N+1的“前驱哈希”失效</li>
+<li>Merkle树根哈希变化 → 区块头数据无效</li>
+<li>全网节点拒绝该链，攻击失败</li>
+</ol>
+</blockquote>
+<p>比特币通过哈希指针、区块头元数据及默克尔树的嵌套设计，构建了去中心化、抗篡改且可高效验证的分布式账本系统。</p>
+<h3 id="比特币的分布式共识"><a href="#比特币的分布式共识" class="headerlink" title="比特币的分布式共识"></a>比特币的分布式共识</h3><p>比特币通过‌<strong>工作量证明（PoW）共识机制</strong>‌实现分布式共识，结合最长链原则和激励机制，确保全网节点对账本状态达成一致。以下是核心流程与技术要点：</p>
+<h4 id="一、共识机制核心流程"><a href="#一、共识机制核心流程" class="headerlink" title="一、共识机制核心流程"></a>一、共识机制核心流程</h4><ol>
+<li>‌<strong>交易广播与打包</strong>‌<br>用户发起交易后向全网广播，节点收集交易并验证合法性（如签名有效性、UTXO未重复支出）。验证通过的交易进入‌<strong>内存池（mempool）</strong>，等待矿工打包‌。</li>
+<li>‌<strong>工作量证明（PoW）竞争</strong>‌<br>矿工将交易打包成候选区块，通过计算寻找满足特定条件的‌<strong>Nonce值</strong>‌（即区块头的哈希值需小于目标值，如以多个0开头）。此过程需大量算力，<strong>最快解出Nonce的矿工获得记账权</strong>‌。<br>‌<strong>数学本质</strong>‌：<code>SHA256(SHA256(区块头 + Nonce)) [9][12&lt; Target</code></li>
+<li>‌<strong>区块广播与验证</strong>‌<br>成功挖矿的节点将新区块广播至全网，其他节点验证：<ul>
+<li>Nonce值是否满足难度要求</li>
+<li>区块内所有交易是否合法（如UTXO有效性）</li>
+<li>区块是否链接到当前最长链的末端。</li>
+</ul>
+</li>
+<li>‌<strong>最长链原则</strong>‌<br>若出现临时分叉（如两个矿工同时解出Nonce），节点默认在‌<strong>最先收到的有效区块</strong>‌后继续挖矿。当某一分叉后续区块更多（链更长）时，全网节点将切换至最长链，丢弃短链上的区块‌。</li>
+<li>‌<strong>确认与不可逆性</strong>‌<br>交易被打包进区块视为‌<strong>1次确认</strong>‌，后续每新增一个区块增加1次确认。6次确认后（约1小时），交易被视作不可逆——因攻击者需重构超过6个区块，算力成本极高‌。</li>
+</ol>
+<h4 id="二、关键支撑技术"><a href="#二、关键支撑技术" class="headerlink" title="二、关键支撑技术"></a>二、关键支撑技术</h4><ol>
+<li>‌<strong>PoW的安全设计</strong>‌<ul>
+<li>‌<strong>51%攻击防御</strong>‌：恶意节点需掌控全网51%以上算力才可能篡改历史交易，但实际成本远超收益（电力、硬件投入）‌。</li>
+<li>‌<strong>难度动态调整</strong>‌：每2016个区块（约两周）根据全网算力调整哈希目标值，维持平均10分钟出块速度‌。</li>
+</ul>
+</li>
+<li>‌<strong>经济激励机制</strong>‌<ul>
+<li>‌<strong>区块奖励</strong>‌：成功挖矿的矿工获得新生成的比特币（初始12.5 BTC，每4年减半）及区块内交易手续费‌。</li>
+<li>‌<strong>成本约束</strong>‌：矿工投入的硬件与电力成本形成“沉没成本”，激励其维护系统而非破坏‌。</li>
+</ul>
+</li>
+</ol>
+<h4 id="三、对比其他共识机制"><a href="#三、对比其他共识机制" class="headerlink" title="三、对比其他共识机制"></a>三、对比其他共识机制</h4><table>
+<thead>
+<tr>
+<th>‌<strong>机制</strong>‌</th>
+<th>‌<strong>核心逻辑</strong>‌</th>
+<th>‌<strong>比特币适用性</strong>‌</th>
+<th>‌<strong>局限性</strong>‌</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PoW</td>
+<td>算力竞争解题</td>
+<td>高安全性，去中心化最佳</td>
+<td>能耗巨大，效率低‌13</td>
+</tr>
+<tr>
+<td>PoS</td>
+<td>持币数量与时长决定</td>
+<td>节能，但易导致中心化垄断</td>
+<td>无利益攻击风险‌13</td>
+</tr>
+<tr>
+<td>DPoS</td>
+<td>持币者选举代理节点</td>
+<td>效率高，适合高频交易场景</td>
+<td>弱化去中心化特性‌19</td>
+</tr>
+</tbody></table>
+<h4 id="四、共识挑战与应对"><a href="#四、共识挑战与应对" class="headerlink" title="四、共识挑战与应对"></a>四、共识挑战与应对</h4><ul>
+<li>‌<strong>分叉处理</strong>‌<br>硬分叉（如BCH）需社区共识支持；软分叉（如SegWit）保持向后兼容，通过节点升级实现‌。</li>
+<li>‌<strong>女巫攻击防御</strong>‌<br>PoW要求节点付出真实算力成本，防止恶意创建大量虚假节点‌。</li>
+</ul>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>比特币通过‌<strong>PoW算力竞争+最长链原则+经济激励</strong>‌的三元框架达成分布式共识，在去中心化与安全性间取得平衡。尽管存在能耗问题，但其51%攻击防御机制和链上数据的不可篡改性，使其成为当前最稳健的公有链共识模型‌。</p>
+<h3 id="防范双花攻击及验证交易合法性"><a href="#防范双花攻击及验证交易合法性" class="headerlink" title="防范双花攻击及验证交易合法性"></a>防范双花攻击及验证交易合法性</h3><h4 id="一、防范双花攻击的关键机制"><a href="#一、防范双花攻击的关键机制" class="headerlink" title="一、防范双花攻击的关键机制"></a>一、防范双花攻击的关键机制</h4><ol>
+<li>‌<strong>UTXO模型（未花费交易输出）</strong><br>比特币采用UTXO而非账户余额模型。每笔交易的输入必须引用先前未花费的输出，并生成新的UTXO。系统实时校验UTXO集合，确保同一笔资金无法被重复引用，从数据结构上杜绝“广播冲突型双花” ‌。</li>
+<li>‌<strong>工作量证明（PoW）与最长链原则</strong>‌<ul>
+<li>矿工通过算力竞争将交易打包入区块，6次确认后交易视为不可逆（因攻击者需重构超6个区块，算力成本极高）。</li>
+<li>节点默认接受‌<strong>最长有效链</strong>‌作为主链。攻击者需控制51%算力才可能构造替代链实施“交易回滚型双花”，但实际成本远超收益 ‌。</li>
+</ul>
+</li>
+<li>‌<strong>交易确认延迟策略</strong>‌<br>商家建议等待6个区块确认（约1小时）再交付商品。未确认交易池（mempool）会检测冲突交易，仅传播首个有效交易，后续冲突交易自动失效 ‌。</li>
+</ol>
+<h4 id="二、交易合法性验证流程"><a href="#二、交易合法性验证流程" class="headerlink" title="二、交易合法性验证流程"></a>二、交易合法性验证流程</h4><ol>
+<li>‌<strong>密码学签名验证</strong>‌<br>每笔交易需提供发送者对‌<strong>前序UTXO的合法签名</strong>‌，通过椭圆曲线数字签名算法（ECDSA）验证所有权，防止伪造交易 ‌。</li>
+<li>‌<strong>双重校验规则</strong>‌<ul>
+<li>‌<strong>UTXO存在性</strong>‌：检查交易输入是否引用有效的未花费输出。</li>
+<li>‌<strong>无重复支出</strong>‌：确保同一UTXO未被其他已确认交易使用。</li>
+<li>‌<strong>脚本执行</strong>‌：解锁脚本（签名）需满足锁定脚本（接收方条件）要求，例如<code>OP_CHECKSIG</code>指令验证签名有效性 ‌。</li>
+</ul>
+</li>
+<li>‌<strong>区块级共识验证</strong>‌<br>矿工打包交易前需验证：<ul>
+<li>交易数据结构合规性（如输入&#x2F;输出数量）</li>
+<li>输入总额 ≥ 输出总额（防超额支出）</li>
+<li>时间戳符合网络规则。</li>
+</ul>
+</li>
+</ol>
+<h3 id="比特币的挖矿"><a href="#比特币的挖矿" class="headerlink" title="比特币的挖矿"></a>比特币的挖矿</h3><p>比特币挖矿是比特币网络运行的核心机制，本质上是矿工通过算力竞争验证交易、生成新区块并获取奖励的过程。以下是其关键原理与流程：</p>
+<h4 id="一、核心目的与作用"><a href="#一、核心目的与作用" class="headerlink" title="一、核心目的与作用"></a>一、核心目的与作用</h4><ol>
+<li>‌<strong>交易验证与防双花</strong>‌<br>矿工收集未确认交易，检查签名有效性、UTXO（未花费交易输出）状态，确保无重复支付，维护交易可信度。‌</li>
+<li>‌<strong>区块生成与链式存储</strong>‌<br>将合法交易打包成区块（约1MB，含4000条交易），链接到已有区块链上，形成不可篡改的分布式账本。‌</li>
+<li>‌<strong>激励维护网络安全</strong>‌<br>成功挖矿的矿工获得区块奖励（新发行比特币）及交易手续费，驱动算力投入保障系统稳定。‌</li>
+</ol>
+<h4 id="二、运作机制详解"><a href="#二、运作机制详解" class="headerlink" title="二、运作机制详解"></a>二、运作机制详解</h4><ol>
+<li>‌工作量证明（PoW）竞争<ul>
+<li>矿工需计算区块头的哈希值（通过SHA-256算法），使其满足网络设定的目标值（如以多个0开头）。</li>
+<li>通过不断调整‌<strong>随机数（Nonce）</strong>‌ 反复尝试，直到找到有效解，消耗巨大算力与电力。‌</li>
+</ul>
+</li>
+<li>‌<strong>最长链原则与共识达成</strong>‌<ul>
+<li>首个解出有效Nonce的矿工将新区块广播至全网，其他节点验证后加入本地链。</li>
+<li>若出现分叉（多个矿工同时解出），节点选择后续区块更长的链作为主链，确保全局一致。‌</li>
+</ul>
+</li>
+<li>‌<strong>难度动态调整</strong>‌<br>比特币网络每2016个区块（约两周）根据全网算力自动调整哈希目标值，维持平均10分钟出块速度。‌</li>
+</ol>
+<h4 id="三、矿工角色与收益"><a href="#三、矿工角色与收益" class="headerlink" title="三、矿工角色与收益"></a>三、矿工角色与收益</h4><table>
+<thead>
+<tr>
+<th>‌<strong>环节</strong>‌</th>
+<th>‌<strong>矿工行为</strong>‌</th>
+<th>‌<strong>奖励机制</strong>‌</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>交易收集</td>
+<td>筛选内存池（mempool）中未确认交易</td>
+<td>无直接收益</td>
+</tr>
+<tr>
+<td>区块打包与计算</td>
+<td>耗费算力求解Nonce</td>
+<td>成功者获区块奖励（2025年&#x3D;3.125 BTC）‌</td>
+</tr>
+<tr>
+<td>交易手续费</td>
+<td>优先打包高手续费交易</td>
+<td>区块内所有交易手续费归矿工所有‌</td>
+</tr>
+<tr>
+<td>‌<strong>总量控制</strong>‌</td>
+<td>区块奖励每4年减半</td>
+<td>2140年达2100万枚上限后仅靠手续费‌</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>初始区块奖励50 BTC，经历三次减半后2025年为3.125 BTC。</p>
+</blockquote>
+<h4 id="四、硬件演进与挑战"><a href="#四、硬件演进与挑战" class="headerlink" title="四、硬件演进与挑战"></a>四、硬件演进与挑战</h4><ol>
+<li>‌设备专业化<ul>
+<li>‌<strong>早期</strong>‌：普通CPU&#x2F;GPU即可参与（2009-2012年）‌。</li>
+<li>‌<strong>当前</strong>‌：ASIC矿机（专为哈希计算优化）主导，效率远超通用设备，个人矿工难竞争‌。</li>
+</ul>
+</li>
+<li>‌高成本壁垒<ul>
+<li>‌<strong>电力消耗</strong>‌：全球年耗电量超部分中小国家，引发环保争议‌。</li>
+<li>‌<strong>集中化风险</strong>‌：大型矿场与矿池（如Antpool、F2Pool）控制多数算力‌。</li>
+</ul>
+</li>
+</ol>
+<h4 id="五、关键意义总结"><a href="#五、关键意义总结" class="headerlink" title="五、关键意义总结"></a>五、关键意义总结</h4><ul>
+<li>‌<strong>安全性保障</strong>‌：PoW机制使篡改历史交易需掌控51%算力，成本远超收益‌。</li>
+<li>‌<strong>去中心化基石</strong>‌：全球节点共同验证，避免单一机构控制货币系统‌。</li>
+<li>‌<strong>经济模型闭环</strong>‌：通过发行机制与手续费平衡矿工激励与货币稀缺性‌。</li>
+</ul>
+<h3 id="挖矿的难度"><a href="#挖矿的难度" class="headerlink" title="挖矿的难度"></a>挖矿的难度</h3><p>比特币挖矿难度是比特币网络的核心调节机制，用于确保新区块平均每 ‌<strong>10 分钟</strong>‌ 稳定生成，其本质是控制矿工计算哈希值的“解题门槛”。以下是其关键原理及运行逻辑的综合说明。</p>
+<h4 id="一、挖矿难度的技术原理"><a href="#一、挖矿难度的技术原理" class="headerlink" title="一、挖矿难度的技术原理"></a>一、挖矿难度的技术原理</h4><ol>
+<li>‌<strong>目标阈值（Target）决定难度</strong>‌<ul>
+<li>矿工需寻找一个随机数（Nonce），使区块头的哈希值 ‌<strong>低于目标阈值</strong>‌（Target）。</li>
+<li>‌<strong>目标阈值越小</strong>‌，有效哈希值的范围越窄，矿工需尝试的计算次数越多，难度越高。</li>
+<li>挖矿难度（Difficulty）与目标阈值成反比：<br>$ \text{Difficulty} &#x3D; \frac{\text{difficulty_1_target}}{\text{target}} $<br>其中 <code>difficulty_1_target</code> 是难度为 1 时的最大目标值。</li>
+</ul>
+</li>
+<li>‌<strong>难度调整触发条件</strong>‌<ul>
+<li>比特币协议每产生 ‌<strong>2016 个区块</strong>‌（约 ‌<strong>14 天</strong>‌）自动调整一次难度。</li>
+<li>调整依据是过去 2016 个区块的实际生成时间与理论时间（20,160 分钟）的偏差：<br>新目标值 &#x3D; 旧目标值 × $\frac{\text{实际用时}}{20,160 \text{分钟}}$<br>若实际用时缩短（算力上升），目标值减小，难度升高；反之则难度降低。</li>
+</ul>
+</li>
+</ol>
+<h4 id="二、难度调整的核心目的"><a href="#二、难度调整的核心目的" class="headerlink" title="二、难度调整的核心目的"></a>二、难度调整的核心目的</h4><ol>
+<li>‌<strong>维持出块速率稳定</strong>‌<ul>
+<li>避免算力增长导致出块过快（如＜10分钟）：防止交易确认时间缩短、分叉风险增加。</li>
+<li>避免算力下降导致出块过慢（如＞10分钟）：确保交易处理效率及网络可用性。</li>
+</ul>
+</li>
+<li>‌<strong>保障网络安全与经济平衡</strong>‌<ul>
+<li>高难度要求攻击者需控制全网 ‌<strong>51% 以上算力</strong>‌才可能篡改交易，大幅提升攻击成本。</li>
+<li>通过调节难度匹配当前算力水平，避免矿工因收益过低大规模退出，维护去中心化。</li>
+</ul>
+</li>
+</ol>
+<h4 id="三、难度变化的影响因素与市场关联"><a href="#三、难度变化的影响因素与市场关联" class="headerlink" title="三、难度变化的影响因素与市场关联"></a>三、难度变化的影响因素与市场关联</h4><table>
+<thead>
+<tr>
+<th>‌<strong>因素</strong>‌</th>
+<th>‌<strong>对难度的影响</strong>‌</th>
+<th>‌<strong>实例（2024–2025年）</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‌<strong>全网算力变化</strong>‌</td>
+<td>正相关（算力↑→难度↑）</td>
+<td>2025年4月算力达884 EH&#x2F;s，难度升至123.23T历史峰值</td>
+</tr>
+<tr>
+<td>‌<strong>比特币价格波动</strong>‌</td>
+<td>间接影响（价格↓→矿工退出→算力↓）</td>
+<td>2025年1月价格暴跌致难度下调 ‌**2.12%**（110.45T→108.11T）</td>
+</tr>
+<tr>
+<td>‌<strong>极端事件冲击</strong>‌</td>
+<td>短期算力骤降引发难度下调</td>
+<td>2025年6月因高温停电事件，难度单次下调 ‌**7.48%**（创四年最大跌幅）</td>
+</tr>
+</tbody></table>
+<h4 id="四、挖矿难度演变趋势（2009–2025）"><a href="#四、挖矿难度演变趋势（2009–2025）" class="headerlink" title="四、挖矿难度演变趋势（2009–2025）"></a>四、挖矿难度演变趋势（2009–2025）</h4><ul>
+<li>‌<strong>指数级增长</strong>‌：2009年难度为 ‌<strong>1</strong>‌ → 2021年达 ‌<strong>24万亿</strong>‌ → 2024年突破 ‌<strong>100万亿</strong>‌（100T），2025年最高达 ‌<strong>123.23T</strong>‌。</li>
+<li>‌<strong>矿机技术迭代驱动</strong>‌：CPU挖矿（2009）→ GPU（2010）→ FPGA（2011）→ ASIC矿机（2013至今）。</li>
+</ul>
+<blockquote>
+<p>💡 ‌<strong>当前现状（2025年7月）</strong>‌：比特币挖矿已进入 ‌<strong>超高门槛阶段</strong>‌，个人电脑无法参与，需依赖专业矿场与低电价资源（如伊朗、美国德州）维持盈利性。若考虑入局，需谨慎评估设备折旧（ASIC矿机）、电力成本及政策风险（如中国禁止挖矿）。</p>
+</blockquote>
+<h3 id="比特币脚本"><a href="#比特币脚本" class="headerlink" title="比特币脚本"></a>比特币脚本</h3><p>比特币脚本（Bitcoin Script）是比特币交易的核心验证机制，通过基于堆栈的编程语言实现交易条件的设定与验证。以下是其技术原理、功能分类及实际应用的系统解析。</p>
+<h4 id="一、比特币脚本的技术原理"><a href="#一、比特币脚本的技术原理" class="headerlink" title="一、比特币脚本的技术原理"></a>一、比特币脚本的技术原理</h4><ol>
+<li>‌<strong>基于堆栈的执行模型</strong>‌<ul>
+<li>脚本通过后进先出（LIFO）的堆栈结构执行操作，仅支持确定性操作（如哈希运算、签名验证），禁止循环和递归以防止死循环攻击‌。</li>
+<li>执行流程分为两步：先运行解锁脚本（<code>ScriptSig</code>），再运行锁定脚本（<code>ScriptPubKey</code>），最终栈顶结果为 <code>TRUE</code> 则交易有效‌。</li>
+</ul>
+</li>
+<li>‌<strong>非图灵完备性</strong>‌<ul>
+<li>脚本语言设计为无状态、无跳转指令，无法实现复杂逻辑循环，但支持条件判断（如 <code>OP_IF</code>），平衡了安全性与功能性‌。</li>
+</ul>
+</li>
+<li>‌<strong>脚本与UTXO的绑定关系</strong>‌<ul>
+<li>每个未花费交易输出（UTXO）通过锁定脚本定义花费条件，而解锁脚本需提供满足条件的参数（如签名、公钥）才能解锁资金‌。</li>
+</ul>
+</li>
+</ol>
+<h4 id="二、脚本类型与功能实现"><a href="#二、脚本类型与功能实现" class="headerlink" title="二、脚本类型与功能实现"></a>二、脚本类型与功能实现</h4><h5 id="标准脚本类型"><a href="#标准脚本类型" class="headerlink" title="标准脚本类型"></a>标准脚本类型</h5><ul>
+<li>‌<strong>P2PKH（支付到公钥哈希）</strong><ul>
+<li>‌<strong>锁定脚本</strong>‌：<code>OP_DUP OP_HASH160 &lt;公钥哈希&gt; OP_EQUALVERIFY OP_CHECKSIG</code>（转帐给谁）</li>
+<li>‌<strong>解锁脚本</strong>‌：<code>&lt;签名&gt; &lt;公钥&gt;</code>（谁来转帐）</li>
+<li>验证流程：公钥需哈希后匹配锁定脚本中的地址，签名需验证有效性‌。</li>
+</ul>
+</li>
+<li>‌<strong>P2SH（支付到脚本哈希）</strong><ul>
+<li>将复杂脚本（如多重签名）哈希后嵌入锁定脚本，实际执行时再还原，降低交易数据量‌。</li>
+</ul>
+</li>
+<li>‌<strong>多重签名（Multisig）</strong><ul>
+<li>要求多个私钥中的指定数量（如2&#x2F;3）签名才能解锁，常用于企业资金管理‌。</li>
+</ul>
+</li>
+</ul>
+<h5 id="高级脚本应用"><a href="#高级脚本应用" class="headerlink" title="高级脚本应用"></a>高级脚本应用</h5><ul>
+<li><p>‌时间锁（Timelock）</p>
+<ul>
+<li>通过 <code>OP_CHECKLOCKTIMEVERIFY</code> 实现资金在特定时间后可用‌。</li>
+</ul>
+</li>
+<li><p>‌销毁证明（Proof of Burn）</p>
+<ul>
+<li>将比特币发送到不可花费的地址（如 <code>OP_RETURN</code> 输出），用于销毁代币或存储数据‌。</li>
+</ul>
+</li>
+</ul>
+<h4 id="三、脚本执行示例"><a href="#三、脚本执行示例" class="headerlink" title="三、脚本执行示例"></a>三、脚本执行示例</h4><h5 id="一、基础支付脚本：P2PKH（支付到公钥哈希）"><a href="#一、基础支付脚本：P2PKH（支付到公钥哈希）" class="headerlink" title="一、基础支付脚本：P2PKH（支付到公钥哈希）"></a>一、基础支付脚本：P2PKH（支付到公钥哈希）</h5><p>‌<strong>场景</strong>‌：Alice 向 Bob 转账 1 BTC</p>
+<ol>
+<li><p>‌<strong>锁定脚本（Bob的收款条件）</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OP_DUP OP_HASH160 &lt;Bob的公钥哈希&gt; OP_EQUALVERIFY OP_CHECKSIG</span><br></pre></td></tr></table></figure>
+
+<p><code>Bob的公钥哈希</code>：由 Bob 的公钥经 RIPEMD160(SHA256) 生成，如 <code>3a4b...c8d9</code>‌</p>
+</li>
+<li><p>‌<strong>解锁脚本（Bob花费时提供）</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Bob的签名&gt; &lt;Bob的原始公钥&gt;</span><br></pre></td></tr></table></figure>
+
+<p>签名：Bob 用私钥对交易数据生成的一次性密码‌</p>
+</li>
+<li><p>‌<strong>验证流程</strong>‌：</p>
+<ul>
+<li>步骤1：将 <code>Bob的原始公钥</code> 哈希化 → 对比锁定脚本中的公钥哈希（<code>OP_EQUALVERIFY</code>）</li>
+<li>步骤2：输入脚本中用公钥验证签名的有效性（<code>OP_CHECKSIG</code>）</li>
+<li>若两步均通过，资金解锁成功‌</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>                   <span class="comment">// 交易协议版本</span></span><br><span class="line">  <span class="attr">&quot;locktime&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span>                  <span class="comment">// 立即生效</span></span><br><span class="line">  <span class="attr">&quot;vin&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;txid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;a1b2...c3d4&quot;</span><span class="punctuation">,</span>        <span class="comment">// 输入引用的前序交易ID</span></span><br><span class="line">    <span class="attr">&quot;vout&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span>                    <span class="comment">// 引用前序交易的第0个输出</span></span><br><span class="line">    <span class="attr">&quot;scriptSig&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&lt;Alice签名&gt; &lt;Alice公钥&gt;&quot;</span><span class="punctuation">,</span>  <span class="comment">// 解锁脚本</span></span><br><span class="line">    <span class="attr">&quot;sequence&quot;</span><span class="punctuation">:</span> <span class="number">0xFFFFFFFF</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;vout&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span>                 <span class="comment">// 输出金额（BTC）</span></span><br><span class="line">    <span class="attr">&quot;scriptPubKey&quot;</span><span class="punctuation">:</span> <span class="string">&quot;OP_DUP OP_HASH160 &lt;Bob公钥哈希&gt; OP_EQUALVERIFY OP_CHECKSIG&quot;</span>  <span class="comment">// 锁定脚本</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="二、多签账户脚本：2-3-多重签名"><a href="#二、多签账户脚本：2-3-多重签名" class="headerlink" title="二、多签账户脚本：2&#x2F;3 多重签名"></a>二、多签账户脚本：2&#x2F;3 多重签名</h5><p>‌<strong>场景</strong>‌：公司资金需任意两名高管（A&#x2F;B&#x2F;C）共同签署生效</p>
+<ol>
+<li><p>‌<strong>锁定脚本（定义花费规则）</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2 &lt;A的公钥&gt; &lt;B的公钥&gt; &lt;C的公钥&gt; 3 OP_CHECKMULTISIG</span><br></pre></td></tr></table></figure>
+
+<p><code>2/3</code> 表示需提供至少 2 个有效签名‌</p>
+</li>
+<li><p>‌<strong>解锁脚本（实际花费时提供）</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OP_0 &lt;A的签名&gt; &lt;C的签名&gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>OP_0</code>：因历史遗留问题需前置无效占位符‌</p>
+</li>
+<li><p>‌<strong>验证流程</strong>‌：</p>
+<ul>
+<li>系统按公钥顺序匹配签名（A 和 C 的签名有效即通过）</li>
+<li>若只提供 1 个签名或签名无效则失败‌</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;vin&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;txid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;e5f6...g7h8&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;vout&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;scriptSig&quot;</span><span class="punctuation">:</span> <span class="string">&quot;OP_0 &lt;A签名&gt; &lt;C签名&gt; &lt;redeemScript&gt;&quot;</span><span class="punctuation">,</span>  <span class="comment">// 提供2个签名</span></span><br><span class="line">    <span class="attr">&quot;sequence&quot;</span><span class="punctuation">:</span> <span class="number">0xFFFFFFFE</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;vout&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;value&quot;</span><span class="punctuation">:</span> <span class="number">2.0</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;scriptPubKey&quot;</span><span class="punctuation">:</span> <span class="string">&quot;OP_HASH160 &lt;redeemScript哈希&gt; OP_EQUAL&quot;</span>  <span class="comment">// P2SH锁定脚本</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;witness&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span>                  <span class="comment">// SegWit扩展字段（可选）</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="三、进阶脚本实例"><a href="#三、进阶脚本实例" class="headerlink" title="三、进阶脚本实例"></a>三、进阶脚本实例</h5><ol>
+<li><p>时间锁支付（HTLC）</p>
+<p>‌<strong>场景</strong>‌：跨链原子交换，要求 Bob 在 48 小时内提供哈希原像</p>
+<ul>
+<li><p>‌<strong>锁定脚本</strong>‌：</p>
+ <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">OP_IF  </span><br><span class="line">   OP_SHA256 &lt;哈希值&gt; OP_EQUALVERIFY  </span><br><span class="line">OP_ELSE  </span><br><span class="line">   48&lt;小时后时间戳&gt; OP_CHECKLOCKTIMEVERIFY  </span><br><span class="line">OP_ENDIF</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>‌<strong>执行逻辑</strong>‌：</p>
+<ul>
+<li>若 Bob 在时限内提供正确原像（匹配哈希），立即解锁；</li>
+<li>超时后 Alice 可自行取回资金‌</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Taproot 优化脚本（P2TR）</p>
+<p>‌<strong>场景</strong>‌：隐私增强型交易</p>
+<ul>
+<li>‌<strong>锁定脚本</strong>‌：<br><code>OP_1 &lt;聚合公钥的默克尔根哈希&gt;</code></li>
+<li>‌<strong>解锁方式</strong>‌：<br>提供单一签名 ‌<strong>或</strong>‌ 满足默克尔树中的复杂条件（如多签&#x2F;时间锁）</li>
+<li>‌<strong>优势</strong>‌：<br>链上仅显示单签交易，隐藏真实逻辑‌</li>
+</ul>
+</li>
+</ol>
+<h3 id="比特币分叉"><a href="#比特币分叉" class="headerlink" title="比特币分叉"></a>比特币分叉</h3><p>比特币分叉是指比特币区块链因协议规则变更或社区分歧而分裂为两条独立链的现象，本质上是区块链技术升级或社区治理矛盾的体现。</p>
+<h4 id="硬分叉"><a href="#硬分叉" class="headerlink" title="硬分叉"></a>硬分叉</h4><h5 id="一、硬分叉的技术定义"><a href="#一、硬分叉的技术定义" class="headerlink" title="一、硬分叉的技术定义"></a>一、硬分叉的技术定义</h5><p>硬分叉是指区块链协议发生‌<strong>不兼容升级</strong>‌，导致未升级节点无法验证新区块，最终分裂为两条独立运行的链。其核心特征包括：</p>
+<ol>
+<li>‌<strong>协议不兼容</strong>‌：新旧节点遵循不同规则，<strong>旧节点会拒绝新节点产生的区块</strong>‌（新挖出的旧协议的节点不认可新协议的节点还是链到之前的链上）。</li>
+<li>‌<strong>永久性分裂</strong>‌：分叉后两条链完全独立，拥有各自的交易历史和代币‌。</li>
+<li>‌<strong>需全网升级</strong>‌：若部分节点拒绝升级，则必然产生分叉‌。</li>
+</ol>
+<h5 id="二、硬分叉触发条件与流程"><a href="#二、硬分叉触发条件与流程" class="headerlink" title="二、硬分叉触发条件与流程"></a>二、硬分叉触发条件与流程</h5><ol>
+<li><p>触发条件</p>
+<ul>
+<li>‌<strong>重大协议变更</strong>‌：如修改区块大小、共识算法等底层规则‌14。</li>
+<li>‌<strong>社区分歧</strong>‌：开发者或矿工对升级方案无法达成共识‌67。</li>
+</ul>
+</li>
+<li><p>执行流程</p>
+<ol>
+<li>‌<strong>代码分叉</strong>‌：复制原链代码并修改协议规则（如将区块从1MB扩容至8MB）。</li>
+<li>‌<strong>设定激活点</strong>‌：指定区块高度或时间点触发分叉（如BCH在区块高度478558分叉）。</li>
+<li>‌<strong>链分裂</strong>‌：<strong>升级节点与未升级节点分别延续自己认可的链</strong>‌。</li>
+</ol>
+</li>
+</ol>
+<h5 id="三、典型硬分叉案例"><a href="#三、典型硬分叉案例" class="headerlink" title="三、典型硬分叉案例"></a>三、典型硬分叉案例</h5><ol>
+<li><p>‌<strong>比特币现金（BCH）分叉（2017）</strong></p>
+<ul>
+<li><p>‌<strong>背景</strong>‌：比特币1MB区块限制导致交易拥堵，社区对扩容方案产生分歧‌。</p>
+</li>
+<li><p>‌分叉内容：</p>
+<ul>
+<li>BCH支持者将区块扩容至8MB，取消隔离见证（SegWit）‌。</li>
+<li>分叉后持有BTC的用户1:1获得BCH‌。</li>
+</ul>
+</li>
+<li><p>‌<strong>结果</strong>‌：BCH成为市值最高的比特币分叉币，但后续因内部矛盾再次分裂（如BCH ABC与BSV）。</p>
+</li>
+</ul>
+</li>
+<li><p>‌<strong>以太坊经典（ETC）分叉（2016）</strong></p>
+<ul>
+<li><p>‌<strong>背景</strong>‌：DAO黑客攻击后，以太坊社区投票决定回滚交易挽回损失‌。</p>
+</li>
+<li><p>‌分叉内容：</p>
+<ul>
+<li>主链（ETH）执行回滚，反对者坚持原链（ETC）以维护”代码即法律”原则‌。</li>
+</ul>
+</li>
+<li><p>‌<strong>结果</strong>‌：ETC成为少数派链，但保留了”不可篡改”的意识形态象征‌。</p>
+</li>
+</ul>
+</li>
+</ol>
+<h5 id="四、硬分叉的影响"><a href="#四、硬分叉的影响" class="headerlink" title="四、硬分叉的影响"></a>四、硬分叉的影响</h5><ol>
+<li><p>‌<strong>用户资产</strong>‌：分叉前持币者自动获得新链代币，但价值取决于市场认可（如BCH曾达BTC价格的20%）。</p>
+</li>
+<li><p>‌生态风险：</p>
+<ul>
+<li>算力分散可能导致安全性下降（如BCH曾遭51%攻击）。</li>
+<li>社区分裂削弱网络效应（如BTC与BCH长期竞争）。</li>
+</ul>
+</li>
+<li><p>‌<strong>技术演进</strong>‌：推动区块链扩容方案创新（如BCH后续升级至32MB区块）。</p>
+</li>
+</ol>
+<h5 id="五、与软分叉的关键区别"><a href="#五、与软分叉的关键区别" class="headerlink" title="五、与软分叉的关键区别"></a>五、与软分叉的关键区别</h5><table>
+<thead>
+<tr>
+<th>‌<strong>对比维度</strong>‌</th>
+<th>‌<strong>硬分叉</strong>‌</th>
+<th>‌<strong>软分叉</strong>‌</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>兼容性</td>
+<td>不兼容旧节点</td>
+<td>向下兼容旧节点</td>
+</tr>
+<tr>
+<td>链分裂</td>
+<td>必然分裂</td>
+<td>可能避免分裂</td>
+</tr>
+<tr>
+<td>升级要求</td>
+<td>强制全网升级</td>
+<td>多数算力支持即可</td>
+</tr>
+<tr>
+<td>典型案例</td>
+<td>BCH、ETC</td>
+<td>比特币SegWit升级</td>
+</tr>
+</tbody></table>
+<p>硬分叉本质是区块链去中心化治理的体现，既是技术升级手段，也是社区共识危机的产物‌。</p>
+<h4 id="软分叉"><a href="#软分叉" class="headerlink" title="软分叉"></a>软分叉</h4><p>软分叉是区块链协议升级的一种方式，其核心特点是‌<strong>向后兼容</strong>‌，即新规则设计的交易或区块仍能被旧节点接受，通常不会导致区块链永久分裂。</p>
+<h5 id="‌一、软分叉的核心机制"><a href="#‌一、软分叉的核心机制" class="headerlink" title="‌一、软分叉的核心机制"></a>‌一、软分叉的核心机制</h5><ol>
+<li>‌<strong>规则子集原则</strong>‌<br>新规则是旧规则的子集，意味着新版本认为合法的交易&#x2F;区块，旧版本也会认可（尽管可能不理解新规则的具体含义）。例如，比特币的隔离见证（SegWit）通过将签名数据移出主区块，旧节点仍能验证交易，但无法识别新功能。</li>
+<li>‌<strong>临时性分叉</strong>‌<br>若部分节点未升级，可能短暂出现分叉，但新节点算力占优时，旧节点产生的无效区块会被抛弃，最终回归单链。</li>
+</ol>
+<h5 id="二‌、典型软分叉示例"><a href="#二‌、典型软分叉示例" class="headerlink" title="二‌、典型软分叉示例"></a>二‌、典型软分叉示例</h5><ol>
+<li>‌<strong>比特币SegWit升级（2017）</strong><ul>
+<li>‌<strong>改动内容</strong>‌：将交易签名数据从区块主体移至扩展区域，间接扩容区块。</li>
+<li>‌<strong>兼容性</strong>‌：旧节点仍能验证交易，但无法识别 SegWit 格式的新功能。</li>
+</ul>
+</li>
+<li>‌<strong>BIP34升级（区块高度嵌入）</strong><ul>
+<li>‌<strong>改动内容</strong>‌：要求矿工在区块中必须包含高度信息。</li>
+<li>‌<strong>分叉处理</strong>‌：旧节点忽略该字段，新节点逐步强制校验，最终推动全网升级。</li>
+</ul>
+</li>
+</ol>
+<h5 id="‌三、与硬分叉的关键区别"><a href="#‌三、与硬分叉的关键区别" class="headerlink" title="‌三、与硬分叉的关键区别"></a>‌三、与硬分叉的关键区别</h5><ul>
+<li>‌<strong>兼容性</strong>‌：软分叉新旧节点可共存，硬分叉必然分裂。</li>
+<li>‌<strong>升级成本</strong>‌：软分叉无需强制全网升级，硬分叉需所有节点更新。</li>
+</ul>
+<p>软分叉通过温和升级平衡创新与稳定性，是区块链演化的重要工具。</p>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2025/04/08/Docker/">Docker</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2025/03/27/%E7%A4%BE%E5%8C%BA%E5%95%86%E5%9F%8E/">'社区商城'</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81"><span class="toc-text">比特币</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%AD-Hash-%E5%87%BD%E6%95%B0%E6%80%A7%E8%B4%A8"><span class="toc-text">密码学中 Hash 函数性质</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9C%AC%E8%B4%A8%E5%B1%9E%E6%80%A7%E2%80%8C"><span class="toc-text">本质属性‌</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%89%B9%E6%80%A7%E2%80%8C"><span class="toc-text">安全特性‌</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%86%E7%A0%81%E5%AD%A6%E4%B8%AD%E7%9A%84%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6%E8%A7%A3%E6%9E%90"><span class="toc-text">密码学中的数字签名机制解析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="toc-text">一、核心原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7"><span class="toc-text">二、关键特性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%B8%BB%E6%B5%81%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="toc-text">三、主流算法实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%9E%8B%E5%9B%BE%E8%A7%A3"><span class="toc-text">四、工作模型图解</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84-Hash-%E5%87%BD%E6%95%B0%E6%80%A7%E8%B4%A8"><span class="toc-text">比特币中使用到的 Hash 函数性质</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E5%AE%89%E5%85%A8%E6%80%A7%E8%B4%A8"><span class="toc-text">一、核心安全性质</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%BE%85%E5%8A%A9%E5%8A%9F%E8%83%BD%E6%80%A7%E8%B4%A8"><span class="toc-text">二、辅助功能性质</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0%E6%89%A9%E5%B1%95"><span class="toc-text">三、算法实现扩展</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81%E7%AD%BE%E5%90%8D%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3"><span class="toc-text">比特币签名机制详解</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-text">一、核心组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%8C%E6%95%B4%E7%AD%BE%E5%90%8D%E8%BF%87%E7%A8%8B"><span class="toc-text">二、完整签名过程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%89%E5%85%A8%E7%89%B9%E6%80%A7"><span class="toc-text">三、安全特性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%8A%80%E6%9C%AF%E4%BC%98%E5%8A%BF"><span class="toc-text">四、技术优势</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E4%BF%97%E7%89%88%E6%AF%94%E7%89%B9%E5%B8%81%E7%AD%BE%E5%90%8D%E6%B5%81%E7%A8%8B%EF%BC%88%E7%B1%BB%E6%AF%94%E5%AF%84%E4%BF%A1%EF%BC%89"><span class="toc-text">通俗版比特币签名流程（类比寄信）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%82%B9%E7%A7%92%E6%87%82"><span class="toc-text">关键点秒懂</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-text">比特币的数据结构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%BB%84%E4%BB%B6"><span class="toc-text">一、核心数据结构组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%85%A8%E5%B1%80%E9%93%BE%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="toc-text">二、全局链式结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="toc-text">三、关键特性与优化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8F%E5%85%B1%E8%AF%86"><span class="toc-text">比特币的分布式共识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%85%B1%E8%AF%86%E6%9C%BA%E5%88%B6%E6%A0%B8%E5%BF%83%E6%B5%81%E7%A8%8B"><span class="toc-text">一、共识机制核心流程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%85%B3%E9%94%AE%E6%94%AF%E6%92%91%E6%8A%80%E6%9C%AF"><span class="toc-text">二、关键支撑技术</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AF%B9%E6%AF%94%E5%85%B6%E4%BB%96%E5%85%B1%E8%AF%86%E6%9C%BA%E5%88%B6"><span class="toc-text">三、对比其他共识机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B1%E8%AF%86%E6%8C%91%E6%88%98%E4%B8%8E%E5%BA%94%E5%AF%B9"><span class="toc-text">四、共识挑战与应对</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%98%B2%E8%8C%83%E5%8F%8C%E8%8A%B1%E6%94%BB%E5%87%BB%E5%8F%8A%E9%AA%8C%E8%AF%81%E4%BA%A4%E6%98%93%E5%90%88%E6%B3%95%E6%80%A7"><span class="toc-text">防范双花攻击及验证交易合法性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%98%B2%E8%8C%83%E5%8F%8C%E8%8A%B1%E6%94%BB%E5%87%BB%E7%9A%84%E5%85%B3%E9%94%AE%E6%9C%BA%E5%88%B6"><span class="toc-text">一、防范双花攻击的关键机制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BA%A4%E6%98%93%E5%90%88%E6%B3%95%E6%80%A7%E9%AA%8C%E8%AF%81%E6%B5%81%E7%A8%8B"><span class="toc-text">二、交易合法性验证流程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81%E7%9A%84%E6%8C%96%E7%9F%BF"><span class="toc-text">比特币的挖矿</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E7%9B%AE%E7%9A%84%E4%B8%8E%E4%BD%9C%E7%94%A8"><span class="toc-text">一、核心目的与作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%BF%90%E4%BD%9C%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3"><span class="toc-text">二、运作机制详解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%9F%BF%E5%B7%A5%E8%A7%92%E8%89%B2%E4%B8%8E%E6%94%B6%E7%9B%8A"><span class="toc-text">三、矿工角色与收益</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%A1%AC%E4%BB%B6%E6%BC%94%E8%BF%9B%E4%B8%8E%E6%8C%91%E6%88%98"><span class="toc-text">四、硬件演进与挑战</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%85%B3%E9%94%AE%E6%84%8F%E4%B9%89%E6%80%BB%E7%BB%93"><span class="toc-text">五、关键意义总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%96%E7%9F%BF%E7%9A%84%E9%9A%BE%E5%BA%A6"><span class="toc-text">挖矿的难度</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%8C%96%E7%9F%BF%E9%9A%BE%E5%BA%A6%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86"><span class="toc-text">一、挖矿难度的技术原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%9A%BE%E5%BA%A6%E8%B0%83%E6%95%B4%E7%9A%84%E6%A0%B8%E5%BF%83%E7%9B%AE%E7%9A%84"><span class="toc-text">二、难度调整的核心目的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%9A%BE%E5%BA%A6%E5%8F%98%E5%8C%96%E7%9A%84%E5%BD%B1%E5%93%8D%E5%9B%A0%E7%B4%A0%E4%B8%8E%E5%B8%82%E5%9C%BA%E5%85%B3%E8%81%94"><span class="toc-text">三、难度变化的影响因素与市场关联</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%8C%96%E7%9F%BF%E9%9A%BE%E5%BA%A6%E6%BC%94%E5%8F%98%E8%B6%8B%E5%8A%BF%EF%BC%882009%E2%80%932025%EF%BC%89"><span class="toc-text">四、挖矿难度演变趋势（2009–2025）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81%E8%84%9A%E6%9C%AC"><span class="toc-text">比特币脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%AF%94%E7%89%B9%E5%B8%81%E8%84%9A%E6%9C%AC%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86"><span class="toc-text">一、比特币脚本的技术原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%84%9A%E6%9C%AC%E7%B1%BB%E5%9E%8B%E4%B8%8E%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0"><span class="toc-text">二、脚本类型与功能实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%87%E5%87%86%E8%84%9A%E6%9C%AC%E7%B1%BB%E5%9E%8B"><span class="toc-text">标准脚本类型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E8%84%9A%E6%9C%AC%E5%BA%94%E7%94%A8"><span class="toc-text">高级脚本应用</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%84%9A%E6%9C%AC%E6%89%A7%E8%A1%8C%E7%A4%BA%E4%BE%8B"><span class="toc-text">三、脚本执行示例</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E7%A1%80%E6%94%AF%E4%BB%98%E8%84%9A%E6%9C%AC%EF%BC%9AP2PKH%EF%BC%88%E6%94%AF%E4%BB%98%E5%88%B0%E5%85%AC%E9%92%A5%E5%93%88%E5%B8%8C%EF%BC%89"><span class="toc-text">一、基础支付脚本：P2PKH（支付到公钥哈希）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%A4%9A%E7%AD%BE%E8%B4%A6%E6%88%B7%E8%84%9A%E6%9C%AC%EF%BC%9A2-3-%E5%A4%9A%E9%87%8D%E7%AD%BE%E5%90%8D"><span class="toc-text">二、多签账户脚本：2&#x2F;3 多重签名</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%BF%9B%E9%98%B6%E8%84%9A%E6%9C%AC%E5%AE%9E%E4%BE%8B"><span class="toc-text">三、进阶脚本实例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81%E5%88%86%E5%8F%89"><span class="toc-text">比特币分叉</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A1%AC%E5%88%86%E5%8F%89"><span class="toc-text">硬分叉</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%A1%AC%E5%88%86%E5%8F%89%E7%9A%84%E6%8A%80%E6%9C%AF%E5%AE%9A%E4%B9%89"><span class="toc-text">一、硬分叉的技术定义</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%A1%AC%E5%88%86%E5%8F%89%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6%E4%B8%8E%E6%B5%81%E7%A8%8B"><span class="toc-text">二、硬分叉触发条件与流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%85%B8%E5%9E%8B%E7%A1%AC%E5%88%86%E5%8F%89%E6%A1%88%E4%BE%8B"><span class="toc-text">三、典型硬分叉案例</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%A1%AC%E5%88%86%E5%8F%89%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="toc-text">四、硬分叉的影响</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%B8%8E%E8%BD%AF%E5%88%86%E5%8F%89%E7%9A%84%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB"><span class="toc-text">五、与软分叉的关键区别</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BD%AF%E5%88%86%E5%8F%89"><span class="toc-text">软分叉</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%80%8C%E4%B8%80%E3%80%81%E8%BD%AF%E5%88%86%E5%8F%89%E7%9A%84%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6"><span class="toc-text">‌一、软分叉的核心机制</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%BA%8C%E2%80%8C%E3%80%81%E5%85%B8%E5%9E%8B%E8%BD%AF%E5%88%86%E5%8F%89%E7%A4%BA%E4%BE%8B"><span class="toc-text">二‌、典型软分叉示例</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E2%80%8C%E4%B8%89%E3%80%81%E4%B8%8E%E7%A1%AC%E5%88%86%E5%8F%89%E7%9A%84%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB"><span class="toc-text">‌三、与硬分叉的关键区别</span></a></li></ol></li></ol></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

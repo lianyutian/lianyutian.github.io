@@ -1,0 +1,1138 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Kubernetes：Kubernetes控制器 - Lianyutian</title>
+
+  
+    <meta name="description" content="🥧本文介绍了Kubernetes中控制器">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kubernetes控制器">
+<meta property="og:url" content="http://example.com/wiki/Kubernetes/%E6%8E%A7%E5%88%B6%E5%99%A8/">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="🥧本文介绍了Kubernetes中控制器">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2025-12-23T08:50:16.724Z">
+<meta property="article:modified_time" content="2025-12-23T08:50:16.724Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="Kubernetes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/wiki/Kubernetes/%E6%8E%A7%E5%88%B6%E5%99%A8/","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"name":"Kubernetes控制器","description":"🥧本文介绍了Kubernetes中控制器","url":"http://example.com/wiki/Kubernetes/%E6%8E%A7%E5%88%B6%E5%99%A8/"}</script>
+  
+</head>
+<body>
+
+
+
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="/assets/wiki/Kubernetes/Kubernetes.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B"><div class="main">Kubernetes</div><div class="sub cap">Kubernetes的安装及概念</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item active" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/wiki/Kubernetes/" placeholder="在 Kubernetes 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<widget class="widget-wrapper doc-tree post-list"><div class="widget-header dis-select"><span class="name">基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B/#start"><span class="toc-text">Kubernetes简介</span></a><a class="link" href="/wiki/Kubernetes/Kubernetes%E5%AE%89%E8%A3%85/"><span class="toc-text">Kubernetes安装</span></a><a class="link" href="/wiki/Kubernetes/%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95/"><span class="toc-text">Kubernetes资源清单</span></a><a class="link" href="/wiki/Kubernetes/Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"><span class="toc-text">Kubernetes Pod</span></a><a class="link active" href="/wiki/Kubernetes/%E6%8E%A7%E5%88%B6%E5%99%A8/"><span class="toc-text">Kubernetes控制器</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a><a class="link" href="/wiki/Kubernetes/Service/"><span class="toc-text">Kubernetes Service</span></a><a class="link" href="/wiki/Kubernetes/%E5%AD%98%E5%82%A8/"><span class="toc-text">Kubernetes存储</span></a><a class="link" href="/wiki/Kubernetes/%E8%B0%83%E5%BA%A6%E5%99%A8/"><span class="toc-text">Kubernetes调度器</span></a><a class="link" href="/wiki/Kubernetes/Helm/"><span class="toc-text">Helm</span></a><a class="link" href="/wiki/Kubernetes/Ingress/"><span class="toc-text">Ingress</span></a></div><div class="widget-header dis-select"><span class="name">高可用</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85/"><span class="toc-text">Kubernetes 二进制安装</span></a></div><div class="widget-header dis-select"><span class="name">CICD</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Habor%E5%AE%89%E8%A3%85/"><span class="toc-text">Habor安装</span></a><a class="link" href="/wiki/Kubernetes/Rancher%E5%AE%89%E8%A3%85/"><span class="toc-text">Rancher安装</span></a></div><div class="widget-header dis-select"><span class="name">...</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Gitlab%E5%AE%89%E8%A3%85/"><span class="toc-text">Gitlab安装</span></a><a class="link" href="/wiki/Kubernetes/Jenkins%E5%AE%89%E8%A3%85/"><span class="toc-text">Jenkins安装</span></a><a class="link" href="/wiki/Kubernetes/loki%E5%AE%89%E8%A3%85/"><span class="toc-text">Loki安装</span></a><a class="link" href="/wiki/Kubernetes/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><span class="toc-text">Kubernetes常用命令</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B/">Kubernetes</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2025-12-23T08:50:16.724Z">2025-12-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Kubernetes控制器</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="控制器"><a href="#控制器" class="headerlink" title="控制器"></a>控制器</h2><p>在 Kubernetes 中运行了一系列控制器来确保集群的当前状态与期望状态保持一致，它们就是 Kubernetes 集群内部的管理控制中心或者说是”中心大脑”。例如，ReplicaSet 控制器负责维护集群中运行的 Pod 数量；Node 控制器负责监控节点的状态，并在节点出现故障时，执行自动化修复流程，确保集群始终处于预期的工作状态。</p>
+<h3 id="Pod-控制器"><a href="#Pod-控制器" class="headerlink" title="Pod 控制器"></a>Pod 控制器</h3><p>ReplicationController（RC）用来确保容器应用的副本数始终保持在用户定义的副本数，即如果有容器异常退出，会自动创建新的 Pod 来替代；而如果异常多出来的容器也会自动回收；</p>
+<p>在新版本的 Kubernetes 中建议使用 ReplicaSet 来取代 ReplicationController。ReplicaSet 跟 ReplicationController 没有本质区别，只是名字不一样，并且 ReplicaSet 支持集合式的 selector。</p>
+<h4 id="RC-控制器"><a href="#RC-控制器" class="headerlink" title="RC 控制器"></a>RC 控制器</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicationController</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="comment"># 设置控制器的名称，在命名空间内唯一</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">rc-test</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="comment"># 通过标签选择器匹配要管理的Pod</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">rc-demo</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="comment"># 为创建的Pod设置标签，需与selector匹配</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">rc-demo</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">rc-demo-container</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GET_HOSTS_FROM</span></span><br><span class="line">          <span class="attr">value:</span> <span class="string">dns</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">zhangsan</span></span><br><span class="line">          <span class="attr">value:</span> <span class="string">&quot;123&quot;</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f 1-rc-demo.yaml</span><br><span class="line">kubectl get pod</span><br><span class="line">kubectl get rc</span><br></pre></td></tr></table></figure>
+
+<p>可以看到成功运行了三个 pod。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/88d845a6e5a35db6a35f1ca5f8ec61a0ac6c157d136266ff2adfbd8aa44cefdd.png" alt="图 68">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/13a8c9c4ee232ba23afba7448f5484d00955a99092dee56c494970f09d4682b9.png" alt="图 69"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl delete pod rc-test-dln5b</span><br></pre></td></tr></table></figure>
+
+<p>当我们删除其中一个 pod 不满足期望时，会自动创建新的 pod。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/f9d906c7a06381ffea8095b7397d9867aaac05aca0bc641f67e6912851429bef.png" alt="图 70">  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pod --show-labels</span><br><span class="line">kubectl label pod rc-test-4692h version=v1</span><br><span class="line">kubectl get pods -l app=rc-demo --show-labels</span><br></pre></td></tr></table></figure>
+
+<p>修改 pod 标签后，当还能通过 selector 选择器匹配到该 pod，则不会重新创建 pod。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/b7598d47244a644798c8aaa2e717950d7f27da8cfeacf9fc8a7e1095a936f670.png" alt="图 71">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/961a81f869e38d96df1c24aa4804cf476ab285ac1c0eabe312424d6a4339bb04.png" alt="图 72">  </p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/70869838a4fa61266377847e0e7fa59adda0a7ed451d79326d4342f37c121b20.png" alt="图 73">  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl label pod rc-test-lqtl8 app=hahaha --overwrite</span><br></pre></td></tr></table></figure>
+
+<p>当 selector 选择器匹配不到 pod 标签，则会重新创建 pod。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/bce78b6865e47aae70cc83338093341d0a7aeb523a779f492620290842dc4699.png" alt="图 74">  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl label pod rc-test-lqtl8 app=rc-demo --overwrite</span><br></pre></td></tr></table></figure>
+
+<p>将 pod 标签改回，可以发现最新创建的 pod 将被删除。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/5026a83c040c23c2c8528efbef97939d8e084a5c2927eefa80113c034e8ee254.png" alt="图 75">  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl scale rc rc-test --replicas=10</span><br></pre></td></tr></table></figure>
+
+<p>修改 pod 副本数。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/a276f6dfa4928c6a430c9c7b35a975c80202361e602c2611a322e7aad4fc7682.png" alt="图 76"></p>
+<h4 id="RS-控制器"><a href="#RS-控制器" class="headerlink" title="RS 控制器"></a>RS 控制器</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicaSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="comment"># 设置控制器的名称，在命名空间内唯一</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">rs-ml-test</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="comment"># 通过标签选择器匹配要管理的Pod</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">rs-ml-demo</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="comment"># 为创建的Pod设置标签，需与selector匹配</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">rs-ml-demo</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">rs-ml-demo-container</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GET_HOSTS_FROM</span></span><br><span class="line">          <span class="attr">value:</span> <span class="string">dns</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<p><code>matchLabels</code> 与 rc 功能类似。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/9c44ccd7f5a283a3794e3c5217d2b14e7ab2665278fd3641f18a8d73c99508e3.png" alt="图 77"></p>
+<p>selector.matchExpressions</p>
+<p>rs 在标签选择器上，除了可以定义键值对的选择形式，还支持 <code>matchExpressions</code> 字段，可以提供多种<br>选择。</p>
+<p>目前支持的操作包括：</p>
+<ul>
+<li>In：label 的值在某个列表中</li>
+<li>NotIn：label 的值不在某个列表中</li>
+<li>Exists：某个 label 存在</li>
+<li>DoesNotExist：某个 label 不存在</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicaSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="comment"># 设置控制器的名称，在命名空间内唯一</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">rs-me-exists-test</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchExpressions:</span></span><br><span class="line">      <span class="comment"># pod 存在 key 为 app 的标签就可以匹配上</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">app</span></span><br><span class="line">        <span class="attr">operator:</span> <span class="string">Exists</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">spring</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">rs-ml-exists-container</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<p>只需要 pod 中存在 key 为 app 的标签就能够匹配，修改 app 的值不影响。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/302d15815fa56d3ae8fe93524a913d729528fe620776fa0bed510b47dde381de.png" alt="图 78">  </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ReplicaSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="comment"># 设置控制器的名称，在命名空间内唯一</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">rs-me-in-test</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">replicas:</span> <span class="number">3</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchExpressions:</span></span><br><span class="line">      <span class="comment"># pod 存在 app 值为 values 中的标签就可以匹配上</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">app</span></span><br><span class="line">        <span class="attr">operator:</span> <span class="string">In</span></span><br><span class="line">        <span class="attr">values:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">spring</span></span><br><span class="line">        <span class="bullet">-</span> <span class="string">haha</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="comment"># key 为 app</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">spring2</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">rs-ml-exists-container</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">        <span class="attr">ports:</span></span><br><span class="line">        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></span><br></pre></td></tr></table></figure>
+
+<p>新版 k8s 创建 pod 时会检测容器标签是否符合规则，匹配失败会直接创建失败。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/19216857d4d6db07d91b78a3d07c9b317e905ffb6e9ae07853cef761b6b5cc61.png" alt="图 79">  </p>
+<p>把 spring2 改为 spring。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f 4-rs-in-demo.yaml </span><br><span class="line">kubectl label pod rs-me-in-test-bxprv app=haha --overwrite</span><br><span class="line">kubectl get pod --show-labels</span><br></pre></td></tr></table></figure>
+
+<p>修改 pod 标签存在列表中时，不会重新创建 pod。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/e6803ac060476ac7a2ccd133065a991453a5c09e36d0cbd8c1c2d9e7c0c06296.png" alt="图 80">  </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kubectl label pod rs-me-in-test-bxprv app=haha1 --overwrite</span><br><span class="line">kubectl get pod --show-labels</span><br></pre></td></tr></table></figure>
+
+<p>不存在列表中就会重新创建新的 pod。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/bdd3f41a4620956bb19173e19774327d872cd9cceda7ce92fe5bbb55ee0d66fe.png" alt="图 81">  </p>
+<h4 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h4><p>Deployment 为 Pod 和 ReplicaSet 提供了一个声明式定义 (declarative ) 方法，用来替代以前的 ReplicationController 来方便管理应用。典型的应用场景包括：</p>
+<ul>
+<li>定义 Deployment 来创建 Pod 和 ReplicaSet</li>
+<li>滚动升级和回滚应用</li>
+<li>扩容和缩容</li>
+<li>暂停和继续 Deployment</li>
+</ul>
+<h5 id="命令式和声明式"><a href="#命令式和声明式" class="headerlink" title="命令式和声明式"></a>命令式和声明式</h5><p>在Kubernetes中，<strong>声明式</strong>与<strong>命令式</strong>是两种不同的操作方式。</p>
+<p><strong>‌声明式</strong>‌是对最终结果的陈述，表明意图而非实现过程。例如，在 Kubernetes 中说“应该有一个包含三个 Pod 的 ReplicaSet”，这是一种声明式的表达，它描述了期望的状态，而不是如何达到这个状态。</p>
+<p><strong>‌命令式</strong>‌则是主动且直接的命令。比如“创建一个包含三个 Pod 的 ReplicaSet”，这是一个命令式的操作，它直接指示系统执行具体的动作。</p>
+<p>综上所述，声明式与命令式在 Kubernetes 中分别代表了描述期望状态和直接执行命令的两种方式。</p>
+<h5 id="kubectl-replace-和-kubectl-apply-区别"><a href="#kubectl-replace-和-kubectl-apply-区别" class="headerlink" title="kubectl replace 和 kubectl apply 区别"></a>kubectl replace 和 kubectl apply 区别</h5><p>在Kubernetes中，<code>kubectl replace</code>和<code>kubectl apply</code>是两个常用的命令，用于管理集群中的资源。以下是这两个命令在读取内容并进行操作时的详细区别：</p>
+<p><strong>‌一、命令功能‌</strong><br><code>kubectl replace‌</code></p>
+<ul>
+<li>功能：使用新的配置完全替换掉现有资源的配置。</li>
+<li>特点：新配置将覆盖现有资源的所有字段和属性，包括未指定的字段，导致整个资源的替换。这类似于删除现有资源并重新创建。</li>
+</ul>
+<p><code>‌kubectl apply</code>‌</p>
+<ul>
+<li>功能：使用新的配置部分地更新现有资源的配置。</li>
+<li>特点：根据提供的配置文件或参数，只更新与新配置中不同的部分，而不会覆盖整个资源的配置。这保留了未指定字段的原有值。</li>
+</ul>
+<p><strong>‌二、字段级别更新‌</strong><br>‌<code>kubectl replace‌</code>：完全替换所有字段和属性，无论是否在新配置中指定。</p>
+<p><code>‌kubectl apply‌</code>：只更新与新配置中不同的字段和属性，保留未指定的字段不受影响。</p>
+<p><strong>‌三、使用场景‌</strong><br><code>‌kubectl replace‌</code>：适用于需要彻底替换资源配置的场景，如资源配置发生重大变更时。使用前需谨慎，因为替换操作是不可逆的。</p>
+<p><code>‌kubectl apply</code>‌：适用于需要部分更新资源配置的场景，如仅修改部分配置参数时。它提供了更高的灵活性和并发处理能力，适合在多个用户或进程同时修改同一资源时使用。</p>
+<p><strong>四、部分更新</strong><br><code>‌kubectl replace</code>‌：不支持部分更新。当你使用这个命令时，它会替换整个资源的配置，这意味着资源的所有字段都会被新的配置文件中的值所覆盖。</p>
+<p><code>‌kubectl apply</code>‌：支持部分更新。这个命令只会更新新配置中发生变化的部分，而保留未指定的部分不受影响。这使得<code>kubectl apply</code>在进行配置更新时更加灵活和高效。</p>
+<p><strong>五‌、与其他配置的影响‌</strong><br><code>‌kubectl replace‌</code>：在替换资源时，不考虑其他资源配置的状态。这意味着即使其他资源依赖于被替换的资源，<code>kubectl replace</code>也不会考虑这些依赖关系，直接进行替换操作。</p>
+<p><code>‌kubectl apply</code>‌：能够结合使用 <code>-f</code> 或 <code>-k</code> 参数，从文件或目录中读取多个资源配置，并根据当前集群中的资源状态进行更新。这使得 <code>kubectl apply</code> 能够更智能地处理资源之间的依赖关系，确保更新的顺利进行。</p>
+<p><strong>‌总结‌：</strong><br>‌kubectl apply‌更适合进行部分更新和结合多个配置文件进行更新，它能够保留未指定的部分不受影响，并根据当前集群状态进行智能更新。</p>
+<p>‌kubectl replace‌则更加直接和彻底，它会替换整个资源的配置，不考虑其他资源配置的状态。在使用时需要谨慎，以避免对集群造成不必要的影响。</p>
+<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Deployment</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp-deploy</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">myapp-deploy</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">app:</span> <span class="string">myapp-deploy</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">app:</span> <span class="string">myapp-deploy</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">myapp</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行</span></span><br><span class="line">kubectl apply -f 5-deployment-demo1.yaml</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/49a3dd4c4c1f8d4e24040267c1e06486d41495b888af357756676780c90ef31e.png" alt="图 82">  </p>
+<p>可以看到 pod 正常创建。这个时候 pod 个数为 1。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">修改副本数</span></span><br><span class="line">kubectl scale deploy myapp-deploy --replicas=3</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/5282446bbfb49da2155f9bb2bd1e5a17031a401cc294dba03bb208b8a33282be.png" alt="图 83">  </p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改 pod 版本为 2.0</span></span><br><span class="line">    <span class="string">...</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v2.0</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">myapp</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f 5-deployment-demo1.yaml</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/888fd45365a95b3f7a602b5ce1c09e599476b5887a0d78cf4c916bad930493da.png" alt="图 84">  </p>
+<p>可以看到 pod 数未改变，且版本修改为2.0。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl replace -f 5-deployment-demo1.yaml </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/b2ee6b4ebb555c06cf6ec7707226497c382ad250eb2887192cdb7b8e1bc4dcd2.png" alt="图 85">  </p>
+<p>使用 <code>kubectl replace</code> 运行时，按照最新的 deployment 文件描述全部重新创建。</p>
+<h5 id="Deployment‌-常用命令"><a href="#Deployment‌-常用命令" class="headerlink" title="Deployment‌ 常用命令"></a>Deployment‌ 常用命令</h5><ul>
+<li><p><strong>‌创建 Deployment‌：</strong></p>
+<ul>
+<li>命令：kubectl create -f deployment.yaml –record</li>
+<li>解释：此命令用于根据 deployment.yaml 文件创建 Deployment。‌<code>--record</code> 参数会记录每次变更，便于后续查看每次修订的变化‌。</li>
+</ul>
+</li>
+<li><p><strong>缩放 Deployment‌：</strong></p>
+<ul>
+<li>命令：kubectl scale deployment nginx-deployment –replicas 10</li>
+<li>解释：此命令用于调整 nginx-deployment 的副本数为 10。‌通过增加或减少 Pod 数量，确保 Deployment 达到指定的副本规模‌。</li>
+</ul>
+</li>
+<li><p><strong>‌设置自动缩放‌：</strong></p>
+<ul>
+<li>命令：kubectl autoscale deployment nginx-deployment –min&#x3D;10 –max&#x3D;15 –cpu-percent&#x3D;80</li>
+<li>解释：此命令为 nginx-deployment 设置自动缩放规则。‌当 CPU 使用率超过 80% 时，系统会自动增加副本数，最多增加到 15 个；当负载降低时，副本数会自动减少，但不少于 10 个‌。</li>
+</ul>
+</li>
+<li><p><strong>更新 Deployment 镜像‌：</strong></p>
+<ul>
+<li>命令：kubectl set image deployment&#x2F;nginx-deployment nginx-deployment-container&#x3D;wangyanglinux&#x2F;myapp:v2.0</li>
+<li>解释：此命令用于更新 nginx-deployment 中的镜像。‌将指定容器的镜像替换为 wangyanglinux&#x2F;myapp:v2.0，实现应用的版本升级‌。注意，这里的 nginx-deployment-container 应为容器名。</li>
+</ul>
+</li>
+<li><p><strong>‌回滚 Deployment‌：</strong></p>
+<ul>
+<li>命令：kubectl rollout undo deployment&#x2F;nginx-deployment</li>
+<li>解释：此命令用于回滚 nginx-deployment 到之前的版本。‌当新版本出现问题时，可以使用此命令快速恢复到之前的稳定版本‌。</li>
+</ul>
+</li>
+<li><p><strong>删除 Deployment‌:</strong></p>
+<ul>
+<li>命令：kubectl delete -f deploymentName</li>
+<li>解释：通过 deployment.yaml 文件去删除对应Deployment‌。</li>
+</ul>
+</li>
+<li><p><strong>查询 Deployment 资源文件：</strong></p>
+<ul>
+<li>命令：kubectl get deploy deployName -o yaml</li>
+<li>解释：kubectl get deploy myapp-deploy -o yaml 查看myapp-deploy资源文件</li>
+</ul>
+</li>
+<li><p>‌<strong>检查滚动更新状态</strong>‌：</p>
+<ul>
+<li>命令：<code>kubectl rollout status deployments nginx-deployment</code></li>
+<li>‌功能：此命令用于检查 <code>nginx-deployment</code> 的滚动更新是否完成，以及当前的状态。</li>
+</ul>
+</li>
+<li><p>‌<strong>查看历史记录</strong>‌：</p>
+<ul>
+<li>命令：<code>kubectl rollout history deployment/nginx-deployment</code></li>
+<li>‌功能：列出 <code>nginx-deployment</code> 的所有历史版本，包括每个版本的详细信息，如创建时间和哈希值。</li>
+</ul>
+</li>
+<li><p>‌<strong>回滚到特定版本</strong>‌：</p>
+<ul>
+<li>命令：<code>kubectl rollout undo deployment/nginx-deployment --to-revision=2</code></li>
+<li>‌功能：将 <code>nginx-deployment</code> 回滚到第 2 个版本。这对于修复错误或恢复到稳定状态非常有用。</li>
+</ul>
+</li>
+<li><p>‌<strong>暂停滚动更新</strong>‌：</p>
+<ul>
+<li>命令：<code>kubectl rollout pause deployment/nginx-deployment</code></li>
+<li>‌功能：暂停 <code>nginx-deployment</code> 的当前滚动更新。这可以在需要暂停更新以进行其他操作时使用。</li>
+</ul>
+</li>
+</ul>
+<h5 id="更新策略"><a href="#更新策略" class="headerlink" title="更新策略"></a>更新策略</h5><p>在升级时，<code>Deployment</code>能确保只有一定数量的<code>Pod</code>处于<code>down</code>状态。默认情况下，它会保证至少有比期望<code>Pod</code>数量少一个的<code>Pod</code>处于<code>up</code>状态（即‌最多一个<code>Pod</code>不可用‌）。</p>
+<p>同时，<code>Deployment</code>也能确保只创建出超过期望数量的一定数量的<code>Pod</code>。默认情况下，它会确保最多比期望<code>Pod</code>数量多一个的<code>Pod</code>处于<code>up</code>状态（即‌最多一个<code>surge</code>‌）。</p>
+<p>在（<code>apiVersion: apps/v1</code>）版本的<code>Kubernetes</code>中，关于<code>Pod</code>数量控制的策略将从当前的<code>1-1</code>（即一个<code>down</code>，一个<code>surge</code>）变成<code>25%-25%</code>（即<code>25%</code>的<code>Pod</code>可能处于<code>down</code>状态，同时允许<code>25%</code>的额外<code>Pod</code>处于<code>up</code>状态）。</p>
+<h5 id="策略类型"><a href="#策略类型" class="headerlink" title="策略类型"></a>策略类型</h5><p>使用<code>kubectl explain</code>命令读取<code>Kubernetes</code>部署（<code>Deployment</code>）的<code>spec.strategy.type</code>字段内容时，可以了解到部署策略的相关信息，具体如下：</p>
+<ul>
+<li>‌Recreate‌：重新创建方式，即先停止所有旧版本Pod，再创建新版本Pod。</li>
+<li>‌rollingUpdate‌：滚动更新方式，逐步替换旧版本Pod为新版本，以减少服务中断。<ul>
+<li>‌maxSurge‌：指定滚动更新过程中允许超出期望副本数的数量，有两种指定方式：<ul>
+<li>指定数量‌：直接给出具体的超出副本数。</li>
+<li>‌百分比‌：以期望副本数的百分比形式给出。</li>
+</ul>
+</li>
+<li>‌maxUnavailable‌：指定在滚动更新过程中允许的最大不可用Pod数量，确保服务的高可用性。</li>
+</ul>
+</li>
+</ul>
+<p>这些参数共同控制了 Kubernetes 部署的更新策略，使得管理员可以根据实际需求灵活配置更新方式，以减少对业务的影响。</p>
+<h5 id="清理策略"><a href="#清理策略" class="headerlink" title="清理策略"></a>清理策略</h5><p>可以通过设置 <code>.spec.revisionHistoryLimit</code> 项来控制 deployment 的 <code>revision</code> 历史记录数量。<br>‌默认情况下‌，系统会保留所有的 <code>revision</code> 历史记录。<br>如果将 <code>.spec.revisionHistoryLimit</code> 设置为 ‌0‌，则 Deployment 将不允许进行回退操作，即不会保留任何历史版本。</p>
+<h5 id="金丝雀部署"><a href="#金丝雀部署" class="headerlink" title="金丝雀部署"></a>金丝雀部署</h5><p>金丝雀部署的名字来源于17世纪英国矿井的一个传统方法：</p>
+<p>‌一、命名由来‌<br>工人们使用金丝雀作为瓦斯检测指标，因为金丝雀对瓦斯气体十分敏感，微量瓦斯就能让其停止歌唱，高浓度时则会毒发身亡，从而提醒工人紧急撤离。</p>
+<p>‌二、核心思想‌<br>在实际运行环境中，金丝雀部署仅针对一小部分用户或流量测试新版本软件，而大部分用户或流量继续使用旧版本。这种方法可以及早发现新版本中的潜在问题，减少对整个系统的冲击。</p>
+<p>‌三、实施效果‌<br>通过对新版本进行有限范围的实时测试和监控，确保新版本在全面推广前已经过充分验证，提高了软件部署的安全性和稳定性。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">kubectl patch deployment deployment-demo -p &#x27;&#123;&quot;spec&quot;:&#123;&quot;strategy&quot;:&#123;&quot;rollingUpdate&quot;:&#123;&quot;maxSurge&quot;:1,&quot;maxUnavailable&quot;:0&#125;&#125;&#125;&#125;&#x27;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">‌更新滚动更新策略‌：</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">使用 kubectl patch 命令更新 deployment-demo Deployment 的滚动更新策略。</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-maxSurge: 1 表示在更新过程中，允许最多比期望副本数多一个的副本存在。</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">-maxUnavailable: 0 表示在更新过程中，不允许有任何副本处于不可用状态。</span></span><br><span class="line"></span><br><span class="line">kubectl patch deployment deployment-demo --patch &#x27;&#123;&quot;spec&quot;:&#123;&quot;template&quot;:&#123;&quot;spec&quot;:&#123;&quot;containers&quot;:[&#123;&quot;name&quot;:&quot;deployment-demo-container&quot;,&quot;image&quot;:&quot;wangyanglinux/myapp:v2.0&quot;&#125;]&#125;&#125;&#125;&#125;&#x27; &amp;&amp; kubectl rollout pause deploy deployment-demo</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">更新容器镜像‌：</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">再次使用 kubectl patch 命令，这次是为了更新 deployment-demo Deployment 中容器的镜像。</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将容器 deployment-demo-container 的镜像更新为 wangyanglinux/myapp:v2.0。</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">使用 &amp;&amp; 连接了 kubectl rollout pause deploy deployment-demo 命令，用于在镜像更新后立即暂停 Deployment 的滚动更新，确保更新过程的安全性。</span></span><br><span class="line">‌</span><br><span class="line">kubectl rollout resume deploy deployment-demo</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">恢复滚动更新‌：</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">使用 kubectl rollout resume deploy deployment-demo 命令恢复 Deployment 的滚动更新。</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">这允许 Kubernetes 根据新的配置和镜像启动新的副本，完成整个更新过程。</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="DaemonSet"><a href="#DaemonSet" class="headerlink" title="DaemonSet"></a>DaemonSet</h4><p>DaemonSet 确保在全部或部分 Node 上运行一个 Pod 的副本。具体特性如下：</p>
+<ul>
+<li>‌<strong>动态调整</strong>‌：当有新 Node 加入集群时，会自动为其新增一个 Pod；若 Node 从集群移除，相应的 Pod 也会被回收。</li>
+<li>‌<strong>删除机制</strong>‌：删除 DaemonSet 会导致其创建的所有 Pod 被删除。</li>
+</ul>
+<p>‌<strong>典型用法</strong>‌：</p>
+<ul>
+<li>‌<strong>集群存储</strong>‌：在每个 Node 上运行如 <code>glusterd</code>、<code>ceph</code> 等存储 daemon。</li>
+<li>‌<strong>日志收集</strong>‌：利用 <code>fluentd</code>、<code>logstash</code> 等工具在每个 Node 上收集日志。</li>
+<li>‌<strong>系统监控</strong>‌：在每个 Node 部署 Prometheus Node Exporter、<code>collectd</code>、Datadog 代理、New Relic 代理或 Ganglia <code>gmond</code> 进行监控。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">DaemonSet</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">daemonset-demo</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">daemonset-demo</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">selector:</span></span><br><span class="line">    <span class="attr">matchLabels:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">daemonset-demo</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">labels:</span></span><br><span class="line">        <span class="attr">name:</span> <span class="string">daemonset-demo</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">daemonset-demo-container</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f 6-daemonset-demo.yaml </span><br></pre></td></tr></table></figure>
+
+<p>可以看到 pod 运行在了 node2, node3节点。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/07b7c7c48840a8c61867f51f519b10e64192512d2df9d7a5693a120f280c81ce.png" alt="图 86"></p>
+<blockquote>
+<p>注意： master 节点默认是污点节点不参与调度</p>
+</blockquote>
+<h3 id="Job控制器"><a href="#Job控制器" class="headerlink" title="Job控制器"></a>Job控制器</h3><p>Job负责批处理任务，确保任务的一次性成功执行，可管理一个或多个Pod。</p>
+<p>‌<strong>关键参数</strong>‌：</p>
+<ul>
+<li>‌<code>spec.template</code>：格式与Pod相同，定义了Job中Pod的模板。</li>
+<li>‌<code>RestartPolicy</code>：仅支持Never（从不重启）或OnFailure（失败时重启），控制Pod的重启策略。</li>
+<li>‌<strong>Pod结束条件</strong>‌：单个Pod成功运行后，默认Job结束（默认返回码为 0 时才是成功）。</li>
+<li><code>.spec.completions</code>：‌<strong>标志Job完成所需成功运行的Pod数量</strong>‌，默认为1。</li>
+<li><code>.spec.parallelism</code>：‌<strong>标志并行运行的Pod数量</strong>‌，默认为1。</li>
+<li><code>.spec.activeDeadlineSeconds</code>：‌<strong>设置失败Pod的重试最大时长</strong>‌，超过则不再重试。</li>
+</ul>
+<h4 id="计算-P-的值"><a href="#计算-P-的值" class="headerlink" title="计算 P 的值"></a>计算 P 的值</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br><span class="line"><span class="comment"># 导入时间模块</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="comment"># 计算当前时间</span></span><br><span class="line">time1=time.time()</span><br><span class="line"><span class="comment"># 算法根据马青公式计算圆周率 #</span></span><br><span class="line">number = <span class="number">1000</span></span><br><span class="line"><span class="comment"># 多计算10位，防止尾数取舍的影响</span></span><br><span class="line">number1 = number+<span class="number">10</span></span><br><span class="line"><span class="comment"># 算到小数点后number1位</span></span><br><span class="line">b = <span class="number">10</span>**number1</span><br><span class="line"><span class="comment"># 求含4/5的首项</span></span><br><span class="line">x1 = b*<span class="number">4</span>//<span class="number">5</span></span><br><span class="line"><span class="comment"># 求含1/239的首项</span></span><br><span class="line">x2 = b // -<span class="number">239</span></span><br><span class="line"><span class="comment"># 求第一大项</span></span><br><span class="line">he = x1+x2</span><br><span class="line"><span class="comment">#设置下面循环的终点，即共计算n项</span></span><br><span class="line">number *= <span class="number">2</span></span><br><span class="line"><span class="comment">#循环初值=3，末值2n,步长=2</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">3</span>,number,<span class="number">2</span>):</span><br><span class="line"><span class="comment"># 求每个含1/5的项及符号</span></span><br><span class="line">x1 //= -<span class="number">25</span></span><br><span class="line"><span class="comment"># 求每个含1/239的项及符号</span></span><br><span class="line">x2 //= -<span class="number">57121</span></span><br><span class="line"><span class="comment"># 求两项之和</span></span><br><span class="line">x = (x1+x2) // i</span><br><span class="line"><span class="comment"># 求总和</span></span><br><span class="line">he += x</span><br><span class="line"><span class="comment"># 求出π</span></span><br><span class="line">pai = he*<span class="number">4</span></span><br><span class="line"><span class="comment">#舍掉后十位</span></span><br><span class="line">pai //= <span class="number">10</span>**<span class="number">10</span></span><br><span class="line"><span class="comment"># 输出圆周率π的值</span></span><br><span class="line">paistring=<span class="built_in">str</span>(pai)</span><br><span class="line">result=paistring[<span class="number">0</span>]+<span class="built_in">str</span>(<span class="string">&#x27;.&#x27;</span>)+paistring[<span class="number">1</span>:<span class="built_in">len</span>(paistring)]</span><br><span class="line"><span class="built_in">print</span> result</span><br><span class="line">time2=time.time()</span><br><span class="line"><span class="built_in">print</span> <span class="string">u&#x27;Total time:&#x27;</span> + <span class="built_in">str</span>(time2 - time1) + <span class="string">&#x27;s&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">batch/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Job</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">job-demo</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">job-demo-pod</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">job-demo-container</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wangyanglinux/tools:maqingpythonv1</span></span><br><span class="line">      <span class="attr">restartPolicy:</span> <span class="string">Never</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f 6-daemonset-demo.yaml </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/032fc07710db287b9bce736dd5d0c669bf457899e240661b25a87b0be3f34011.png" alt="图 87">  </p>
+<h4 id="控制错误码返回为-1"><a href="#控制错误码返回为-1" class="headerlink" title="控制错误码返回为 1"></a>控制错误码返回为 1</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">batch/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Job</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">rand</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">rand</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">rand</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wangyanglinux/tools:randexitv1</span></span><br><span class="line">        <span class="attr">args:</span> [<span class="string">&quot;--exitcode=1&quot;</span>]</span><br><span class="line">      <span class="attr">restartPolicy:</span> <span class="string">Never</span></span><br></pre></td></tr></table></figure>
+
+<p>任务最终执行失败</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/08c37b4cec3cbcee19547eab0f46396d74e21486c04ca6d8ff82c5d528508884.png" alt="图 89">  </p>
+<h4 id="随机生成返回码"><a href="#随机生成返回码" class="headerlink" title="随机生成返回码"></a>随机生成返回码</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">batch/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Job</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">rand</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">completions:</span> <span class="number">10</span></span><br><span class="line">  <span class="attr">parallelism:</span> <span class="number">5</span></span><br><span class="line">  <span class="attr">template:</span></span><br><span class="line">    <span class="attr">metadata:</span></span><br><span class="line">      <span class="attr">name:</span> <span class="string">rand</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="attr">containers:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">rand</span></span><br><span class="line">        <span class="attr">image:</span> <span class="string">wangyanglinux/tools:randexitv1</span></span><br><span class="line">      <span class="attr">restartPolicy:</span> <span class="string">Never</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/b299da008c4164a7ec33751be283048d0c781b18abc80cc7706dd7161b91f0ba.png" alt="图 91">  </p>
+<h4 id="Cron-Job"><a href="#Cron-Job" class="headerlink" title="Cron Job"></a>Cron Job</h4><p>Cron Job主要用于管理基于时间的任务，具体功能包括：</p>
+<ul>
+<li>‌<strong>在特定时间点运行一次</strong>‌：适用于需要在某个具体时间点执行的任务。</li>
+<li>‌<strong>周期性运行</strong>‌：可设定在固定的时间点周期性地执行任务，如每天、每周等。</li>
+</ul>
+<p>‌<strong>典型用法：</strong></p>
+<ul>
+<li>‌<strong>调度任务</strong>‌：根据设定的时间点自动调度任务运行。</li>
+<li>‌<strong>周期性任务</strong>‌：如‌<strong>数据库备份</strong>‌、‌<strong>发送邮件</strong>‌等，可大大简化运维工作。</li>
+</ul>
+<p>‌<strong>使用条件</strong>‌：需确保Kubernetes集群版本‌<strong>大于等于1.8</strong>‌，以支持CronJob功能。</p>
+<blockquote>
+<p>注意：创建 Job 的操作应该是幂等的。</p>
+</blockquote>
+<p><strong>常用参数：</strong></p>
+<ul>
+<li><p>‌<code>.spec.schedule</code>：调度，必需字段，用于指定任务的运行周期，格式与Cron相同。</p>
+</li>
+<li><p>‌<code>.spec.jobTemplate</code>：Job模板，必需字段，用于指定需要运行的任务，格式与Job相同。</p>
+</li>
+<li><p>‌<code>.spec.startingDeadlineSeconds</code>：启动Job的期限（以秒为单位），该字段可选。若因任何原因错过调度时间，则错过执行时间的Job将被视为失败。若未指定，则无期限限制。</p>
+</li>
+<li><p>‌<code>.spec.concurrencyPolicy</code>：并发策略，该字段可选。用于指定如何处理由CronJob创建的Job的并发执行，策略包括：</p>
+<ul>
+<li><code>Allow</code>（默认）：允许并发运行Job。</li>
+<li><code>Forbid</code>：禁止并发运行，若前一个Job未完成，则跳过下一个。</li>
+<li><code>Replace</code>：取消当前正在运行的Job，用新的Job替换。</li>
+<li><strong>注意</strong>‌：并发策略仅适用于由同一个 CronJob 创建的 Job。若存在多个 CronJob，它们创建的 Job 之间允许并发运行。</li>
+</ul>
+</li>
+<li><p>‌<code>.spec.suspend</code>‌：此字段用于挂起Job的执行，是可选的。若设置为<code>true</code>，则后续所有计划中的Job执行都会被挂起。但请注意，它对已经开始执行的Job没有影响。默认情况下，该字段的值为<code>false</code>。</p>
+</li>
+<li><p>‌<code>spec.successfulJobsHistoryLimit</code>‌ 和 ‌<code>.spec.failedJobsHistoryLimit</code>‌：这两个字段用于设置成功和失败Job的历史记录保留数量，同样是可选的。默认情况下，成功Job的历史记录保留数量为<code>3</code>，失败Job的保留数量为<code>1</code>。如果将这两个字段的值设置为<code>0</code>，则相关类型的Job完成后将不会被保留。</p>
+</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">batch/v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">CronJob</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">cronjob-demo</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="comment"># 每隔一分钟调一次</span></span><br><span class="line">  <span class="attr">schedule:</span> <span class="string">&quot;*/1 * * * *&quot;</span></span><br><span class="line">  <span class="attr">jobTemplate:</span></span><br><span class="line">    <span class="attr">spec:</span></span><br><span class="line">      <span class="comment"># 成功 3 个 pod 任务才算成功</span></span><br><span class="line">      <span class="attr">completions:</span> <span class="number">3</span></span><br><span class="line">      <span class="attr">template:</span></span><br><span class="line">        <span class="attr">spec:</span></span><br><span class="line">          <span class="attr">containers:</span></span><br><span class="line">          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">cronjob-demo-container</span></span><br><span class="line">            <span class="attr">image:</span> <span class="string">busybox</span></span><br><span class="line">            <span class="attr">args:</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">/bin/sh</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">-c</span></span><br><span class="line">            <span class="bullet">-</span> <span class="string">date;</span> <span class="string">echo</span> <span class="string">Hello</span> <span class="string">from</span> <span class="string">the</span> <span class="string">Kubernetes</span> <span class="string">cluster</span></span><br><span class="line">          <span class="attr">restartPolicy:</span> <span class="string">OnFailure</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/33b48964624c926975b65122bbefab2bbbca6cdb029e595775c6e0990b268f50.png" alt="图 92">  </p>
+</article>
+<div class="article-footer">
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/wiki/Kubernetes/Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">Kubernetes Pod</a></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/wiki/Kubernetes/Service/">Kubernetes Service</a></div></section></div>
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text">控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pod-%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text">Pod 控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RC-%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text">RC 控制器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#RS-%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text">RS 控制器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Deployment"><span class="toc-text">Deployment</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E5%BC%8F%E5%92%8C%E5%A3%B0%E6%98%8E%E5%BC%8F"><span class="toc-text">命令式和声明式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#kubectl-replace-%E5%92%8C-kubectl-apply-%E5%8C%BA%E5%88%AB"><span class="toc-text">kubectl replace 和 kubectl apply 区别</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Deployment%E2%80%8C-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">Deployment‌ 常用命令</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="toc-text">更新策略</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%AD%96%E7%95%A5%E7%B1%BB%E5%9E%8B"><span class="toc-text">策略类型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B8%85%E7%90%86%E7%AD%96%E7%95%A5"><span class="toc-text">清理策略</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%87%91%E4%B8%9D%E9%9B%80%E9%83%A8%E7%BD%B2"><span class="toc-text">金丝雀部署</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#DaemonSet"><span class="toc-text">DaemonSet</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Job%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text">Job控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97-P-%E7%9A%84%E5%80%BC"><span class="toc-text">计算 P 的值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A7%E5%88%B6%E9%94%99%E8%AF%AF%E7%A0%81%E8%BF%94%E5%9B%9E%E4%B8%BA-1"><span class="toc-text">控制错误码返回为 1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E7%94%9F%E6%88%90%E8%BF%94%E5%9B%9E%E7%A0%81"><span class="toc-text">随机生成返回码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cron-Job"><span class="toc-text">Cron Job</span></a></li></ol></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

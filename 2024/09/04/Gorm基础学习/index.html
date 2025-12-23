@@ -1,0 +1,1149 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Gorm基础学习 - Lianyutian</title>
+
+  
+    <meta name="description" content="1. 简介1.1 概述GORM 是一个 Go 语言编写的对象关系映射（ORM）库，用于简化与数据库的交互。它允许开发者使用 Go 语言中的结构体来表示数据 库中的表，从而通过结构体和方法来执行数据库操作，比如查询、插入、更新和删除记录。 1.2 安装12go get -u gorm.io&#x2F;gormgo get -u gorm.io&#x2F;driver&#x2F;mysql  1.3 快速入门12345678910">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gorm基础学习">
+<meta property="og:url" content="http://example.com/2024/09/04/Gorm%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="1. 简介1.1 概述GORM 是一个 Go 语言编写的对象关系映射（ORM）库，用于简化与数据库的交互。它允许开发者使用 Go 语言中的结构体来表示数据 库中的表，从而通过结构体和方法来执行数据库操作，比如查询、插入、更新和删除记录。 1.2 安装12go get -u gorm.io&#x2F;gormgo get -u gorm.io&#x2F;driver&#x2F;mysql  1.3 快速入门12345678910">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2024-09-04T14:57:09.000Z">
+<meta property="article:modified_time" content="2025-12-23T08:50:16.674Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="Go、Gorm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="Go、Gorm">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"dateCreated":"2024-09-04T14:57:09+00:00","dateModified":"2025-12-23T08:50:16+00:00","datePublished":"2024-09-04T14:57:09+00:00","description":"","headline":"Gorm基础学习","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/09/04/Gorm%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"},"publisher":{"@type":"Organization","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png","logo":{"@type":"ImageObject","url":"/assets/20240507174529.png"}},"url":"http://example.com/2024/09/04/Gorm%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/","keywords":"Go、Gorm","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/assets/20240507174529.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Lianyutian</div><div class="sub cap">学无止境</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item active" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2025/03/27/%E7%A4%BE%E5%8C%BA%E5%95%86%E5%9F%8E/"><span class="title">'社区商城'</span></a><a class="item title" href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/"><span class="title">rpc基础</span></a><a class="item title" href="/2025/03/25/xxl-job/"><span class="title">xxl-job基础</span></a><a class="item title" href="/2025/03/27/%E4%BA%91%E7%8E%AF%E5%A2%83/"><span class="title">云环境</span></a><a class="item title" href="/2025/03/28/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="title">区块链</span></a><a class="item title" href="/2024/12/13/circle-shop/"><span class="title">circle-shop</span></a><a class="item title" href="/2024/11/26/cloud-mall-vue/"><span class="title">cloud-mall-vue</span></a><a class="item title" href="/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/"><span class="title">protobuf基础</span></a><a class="item title" href="/2024/09/26/React%E5%9F%BA%E7%A1%80/"><span class="title">React基础</span></a><a class="item title" href="/2024/05/29/ReentrantLock%E8%AF%A6%E8%A7%A3/"><span class="title">ReentrantLock详解</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-09-04T14:57:09.000Z">2024-09-04</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-12-23T08:50:16.674Z">2025-12-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Gorm基础学习</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h3><h4 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h4><p>GORM 是一个 Go 语言编写的对象关系映射（ORM）库，用于简化与数据库的交互。它允许开发者使用 Go 语言中的结构体来表示数据</p>
+<p>库中的表，从而通过结构体和方法来执行数据库操作，比如查询、插入、更新和删除记录。</p>
+<h4 id="1-2-安装"><a href="#1-2-安装" class="headerlink" title="1.2 安装"></a>1.2 安装</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get -u gorm.io/gorm</span><br><span class="line"><span class="keyword">go</span> get -u gorm.io/driver/mysql</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-快速入门"><a href="#1-3-快速入门" class="headerlink" title="1.3 快速入门"></a>1.3 快速入门</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">  <span class="string">&quot;gorm.io/driver/sqlite&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Product <span class="keyword">struct</span> &#123;</span><br><span class="line">  gorm.Model</span><br><span class="line">  Code  <span class="type">string</span></span><br><span class="line">  Price <span class="type">uint</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  db, err := gorm.Open(sqlite.Open(<span class="string">&quot;test.db&quot;</span>), &amp;gorm.Config&#123;&#125;)</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="built_in">panic</span>(<span class="string">&quot;failed to connect database&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果表不存在，它会创建一个新表；如果表已经存在，它会对表进行必要的更新，以匹配结构体中的字段和标签。</span></span><br><span class="line">  db.AutoMigrate(&amp;Product&#123;&#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Create</span></span><br><span class="line">  db.Create(&amp;Product&#123;Code: <span class="string">&quot;D42&quot;</span>, Price: <span class="number">100</span>&#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Read</span></span><br><span class="line">  <span class="keyword">var</span> product Product</span><br><span class="line">  db.First(&amp;product, <span class="number">1</span>) <span class="comment">// 根据整型主键查找</span></span><br><span class="line">  db.First(&amp;product, <span class="string">&quot;code = ?&quot;</span>, <span class="string">&quot;D42&quot;</span>) <span class="comment">// 查找 code 字段值为 D42 的记录</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Update - 将 product 的 price 更新为 200</span></span><br><span class="line">  db.Model(&amp;product).Update(<span class="string">&quot;Price&quot;</span>, <span class="number">200</span>)</span><br><span class="line">  <span class="comment">// Update - 更新多个字段</span></span><br><span class="line">  db.Model(&amp;product).Updates(Product&#123;Price: <span class="number">200</span>, Code: <span class="string">&quot;F42&quot;</span>&#125;) <span class="comment">// 仅更新非零值字段</span></span><br><span class="line">  db.Model(&amp;product).Updates(<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">&quot;Price&quot;</span>: <span class="number">200</span>, <span class="string">&quot;Code&quot;</span>: <span class="string">&quot;F42&quot;</span>&#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Delete - 删除 product</span></span><br><span class="line">  db.Delete(&amp;product, <span class="number">1</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240904161432.png"></p>
+<h4 id="1-4-特性"><a href="#1-4-特性" class="headerlink" title="1.4 特性"></a>1.4 特性</h4><ul>
+<li>全功能 ORM</li>
+<li>关联 (Has One，Has Many，Belongs To，Many To Many，多态，单表继承)</li>
+<li>Create，Save，Update，Delete，Find 中钩子方法</li>
+<li>支持 <code>Preload</code>、<code>Joins</code> 的预加载</li>
+<li>事务，嵌套事务，Save Point，Rollback To Saved Point</li>
+<li>Context、预编译模式、DryRun 模式</li>
+<li>批量插入，FindInBatches，Find&#x2F;Create with Map，使用 SQL 表达式、Context Valuer 进行 CRUD</li>
+<li>SQL 构建器，Upsert，数据库锁，Optimizer&#x2F;Index&#x2F;Comment Hint，命名参数，子查询</li>
+<li>复合主键，索引，约束</li>
+<li>Auto Migration</li>
+<li>自定义 Logger</li>
+<li>灵活的可扩展插件 API：Database Resolver（多数据库，读写分离）、Prometheus…</li>
+<li>每个特性都经过了测试的重重考验</li>
+<li>开发者友好</li>
+</ul>
+<h3 id="2-模型"><a href="#2-模型" class="headerlink" title="2. 模型"></a>2. 模型</h3><p>GORM 通过将 Go 结构体（Go structs） 映射到数据库表来简化数据库交互。 了解如何在GORM中定义模型，是充分利用GORM全部功</p>
+<p>能的基础。</p>
+<h4 id="2-1-模型定义"><a href="#2-1-模型定义" class="headerlink" title="2.1 模型定义"></a>2.1 模型定义</h4><p>模型是使用普通结构体定义的。 这些结构体可以包含具有基本Go类型、指针或这些类型的别名，甚至是自定义类型（只需要实现 <code>database/sql</code> 包中的<a target="_blank" rel="noopener" href="https://pkg.go.dev/database/sql/?tab=doc#Scanner">Scanner</a>和<a target="_blank" rel="noopener" href="https://pkg.go.dev/database/sql/driver#Valuer">Valuer</a>接口）。</p>
+<p>考虑以下 <code>user</code> 模型的示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">type User struct &#123;</span><br><span class="line">  ID           uint           // Standard field for the primary key</span><br><span class="line">  Name         string         // 一个常规字符串字段</span><br><span class="line">  Email        *string        // 一个指向字符串的指针, allowing for null values</span><br><span class="line">  Age          uint8          // 一个未签名的8位整数</span><br><span class="line">  Birthday     *time.Time     // A pointer to time.Time, can be null</span><br><span class="line">  MemberNumber sql.NullString // Uses sql.NullString to handle nullable strings</span><br><span class="line">  ActivatedAt  sql.NullTime   // Uses sql.NullTime for nullable time fields</span><br><span class="line">  CreatedAt    time.Time      // 创建时间（由GORM自动管理）</span><br><span class="line">  UpdatedAt    time.Time      // 最后一次更新时间（由GORM自动管理）</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在此模型中：</p>
+<ul>
+<li>具体数字类型如 <code>uint</code>、<code>string</code>和 <code>uint8</code> 直接使用。</li>
+<li>指向 <code>*string</code> 和 <code>*time.Time</code> 类型的指针表示可空字段。</li>
+<li>来自 <code>database/sql</code> 包的 <code>sql.NullString</code> 和 <code>sql.NullTime</code> 用于具有更多控制的可空字段。</li>
+<li><code>CreatedAt</code> 和 <code>UpdatedAt</code> 是特殊字段，当记录被创建或更新时，GORM 会自动向内填充当前时间。</li>
+</ul>
+<h4 id="2-2-约定"><a href="#2-2-约定" class="headerlink" title="2.2 约定"></a>2.2 约定</h4><ol>
+<li><strong>主键</strong>：GORM 使用一个名为<code>ID</code> 的字段作为每个模型的默认主键。</li>
+<li><strong>表名</strong>：默认情况下，GORM 将结构体名称转换为 <code>snake_case</code> 并为表名加上复数形式。 例如，一个 <code>User</code> 结构体在数据库中的表名变为 <code>users</code> 。</li>
+<li><strong>列名</strong>：GORM 自动将结构体字段名称转换为 <code>snake_case</code> 作为数据库中的列名。</li>
+<li><strong>时间戳字段</strong>：GORM使用字段 <code>CreatedAt</code> 和 <code>UpdatedAt</code> 来自动跟踪记录的创建和更新时间。</li>
+</ol>
+<p>遵循这些约定可以大大减少需要编写的配置或代码量。 但是，GORM也具有灵活性，允许根据自己的需求自定义这些设置。 可以在GORM的<a target="_blank" rel="noopener" href="https://gorm.io/zh_CN/docs/conventions.html">约定</a>文档中了解更多关于自定义这些约定的信息。</p>
+<h4 id="2-3-gorm-Model"><a href="#2-3-gorm-Model" class="headerlink" title="2.3 gorm.Model"></a>2.3 gorm.Model</h4><p>GORM提供了一个预定义的结构体，名为<code>gorm.Model</code>，其中包含常用字段：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// gorm.Model 的定义</span><br><span class="line">type Model struct &#123;</span><br><span class="line">  ID        uint           `gorm:&quot;primaryKey&quot;`</span><br><span class="line">  CreatedAt time.Time</span><br><span class="line">  UpdatedAt time.Time</span><br><span class="line">  DeletedAt gorm.DeletedAt `gorm:&quot;index&quot;`</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>将其嵌入在您的结构体中</strong>: 您可以直接在您的结构体中嵌入 <code>gorm.Model</code> ，以便自动包含这些字段。 这对于在不同模型之间保持一致性并利用GORM内置的约定非常有用，请参考<a target="_blank" rel="noopener" href="https://gorm.io/zh_CN/docs/models.html#embedded_struct">嵌入结构</a>。</li>
+<li><strong>包含的字段</strong>：<ul>
+<li><code>ID</code> ：每个记录的唯一标识符（主键）。</li>
+<li><code>CreatedAt</code> ：在创建记录时自动设置为当前时间。</li>
+<li><code>UpdatedAt</code>：每当记录更新时，自动更新为当前时间。</li>
+<li><code>DeletedAt</code>：用于软删除（将记录标记为已删除，而实际上并未从数据库中删除）。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-4-高级选项"><a href="#2-4-高级选项" class="headerlink" title="2.4 高级选项"></a>2.4 高级选项</h4><h5 id="2-4-1-嵌入结构体"><a href="#2-4-1-嵌入结构体" class="headerlink" title="2.4.1 嵌入结构体"></a>2.4.1 嵌入结构体</h5><p>对于匿名字段，GORM 会将其字段包含在父结构体中，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">type User struct &#123;</span><br><span class="line">  gorm.Model</span><br><span class="line">  Name string</span><br><span class="line">&#125;</span><br><span class="line">// 等效于</span><br><span class="line">type User struct &#123;</span><br><span class="line">  ID        uint           `gorm:&quot;primaryKey&quot;`</span><br><span class="line">  CreatedAt time.Time</span><br><span class="line">  UpdatedAt time.Time</span><br><span class="line">  DeletedAt gorm.DeletedAt `gorm:&quot;index&quot;`</span><br><span class="line">  Name string</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于正常的结构体字段，你也可以通过标签 <code>embedded</code> 将其嵌入，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">type Author struct &#123;</span><br><span class="line">    Name  string</span><br><span class="line">    Email string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type Blog struct &#123;</span><br><span class="line">  ID      int</span><br><span class="line">  Author  Author `gorm:&quot;embedded&quot;`</span><br><span class="line">  Upvotes int32</span><br><span class="line">&#125;</span><br><span class="line">// 等效于</span><br><span class="line">type Blog struct &#123;</span><br><span class="line">  ID    int64</span><br><span class="line">  Name  string</span><br><span class="line">  Email string</span><br><span class="line">  Upvotes  int32</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>并且，您可以使用标签 <code>embeddedPrefix</code> 来为 db 中的字段名添加前缀，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">type Blog struct &#123;</span><br><span class="line">  ID      int</span><br><span class="line">  Author  Author `gorm:&quot;embedded;embeddedPrefix:author_&quot;`</span><br><span class="line">  Upvotes int32</span><br><span class="line">&#125;</span><br><span class="line">// 等效于</span><br><span class="line">type Blog struct &#123;</span><br><span class="line">  ID          int64</span><br><span class="line">  AuthorName string</span><br><span class="line">  AuthorEmail string</span><br><span class="line">  Upvotes     int32</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-4-2-字段标签"><a href="#2-4-2-字段标签" class="headerlink" title="2.4.2 字段标签"></a>2.4.2 字段标签</h5><table>
+<thead>
+<tr>
+<th align="left">标签名</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">column</td>
+<td align="left">指定 db 列名</td>
+</tr>
+<tr>
+<td align="left">type</td>
+<td align="left">列数据类型，推荐使用兼容性好的通用类型，例如：所有数据库都支持 bool、int、uint、float、string、time、bytes 并且可以和其他标签一起使用，例如：<code>not null</code>、<code>size</code>, <code>autoIncrement</code>… 像 <code>varbinary(8)</code> 这样指定数据库数据类型也是支持的。在使用指定数据库数据类型时，它需要是完整的数据库数据类型，如：<code>MEDIUMINT UNSIGNED not NULL AUTO_INCREMENT</code></td>
+</tr>
+<tr>
+<td align="left">serializer</td>
+<td align="left">指定将数据序列化或反序列化到数据库中的序列化器, 例如: <code>serializer:json/gob/unixtime</code></td>
+</tr>
+<tr>
+<td align="left">size</td>
+<td align="left">定义列数据类型的大小或长度，例如 <code>size: 256</code></td>
+</tr>
+<tr>
+<td align="left">primaryKey</td>
+<td align="left">将列定义为主键</td>
+</tr>
+<tr>
+<td align="left">unique</td>
+<td align="left">将列定义为唯一键</td>
+</tr>
+<tr>
+<td align="left">default</td>
+<td align="left">定义列的默认值</td>
+</tr>
+<tr>
+<td align="left">precision</td>
+<td align="left">指定列的精度</td>
+</tr>
+<tr>
+<td align="left">scale</td>
+<td align="left">指定列大小</td>
+</tr>
+<tr>
+<td align="left">not null</td>
+<td align="left">指定列为 NOT NULL</td>
+</tr>
+<tr>
+<td align="left">autoIncrement</td>
+<td align="left">指定列为自动增长</td>
+</tr>
+<tr>
+<td align="left">autoIncrementIncrement</td>
+<td align="left">自动步长，控制连续记录之间的间隔</td>
+</tr>
+<tr>
+<td align="left">embedded</td>
+<td align="left">嵌套字段</td>
+</tr>
+<tr>
+<td align="left">embeddedPrefix</td>
+<td align="left">嵌入字段的列名前缀</td>
+</tr>
+<tr>
+<td align="left">autoCreateTime</td>
+<td align="left">创建时追踪当前时间，对于 <code>int</code> 字段，它会追踪时间戳秒数，您可以使用 <code>nano</code>&#x2F;<code>milli</code> 来追踪纳秒、毫秒时间戳，例如：<code>autoCreateTime:nano</code></td>
+</tr>
+<tr>
+<td align="left">autoUpdateTime</td>
+<td align="left">创建&#x2F;更新时追踪当前时间，对于 <code>int</code> 字段，它会追踪时间戳秒数，您可以使用 <code>nano</code>&#x2F;<code>milli</code> 来追踪纳秒、毫秒时间戳，例如：<code>autoUpdateTime:milli</code></td>
+</tr>
+<tr>
+<td align="left">index</td>
+<td align="left">根据参数创建索引，多个字段使用相同的名称则创建复合索引，查看 <a target="_blank" rel="noopener" href="https://gorm.io/zh_CN/docs/indexes.html">索引</a> 获取详情</td>
+</tr>
+<tr>
+<td align="left">uniqueIndex</td>
+<td align="left">与 <code>index</code> 相同，但创建的是唯一索引</td>
+</tr>
+<tr>
+<td align="left">check</td>
+<td align="left">创建检查约束，例如 <code>check:age &gt; 13</code>，查看 <a target="_blank" rel="noopener" href="https://gorm.io/zh_CN/docs/constraints.html">约束</a> 获取详情</td>
+</tr>
+<tr>
+<td align="left">&lt;-</td>
+<td align="left">设置字段写入的权限， <code>&lt;-:create</code> 只创建、<code>&lt;-:update</code> 只更新、<code>&lt;-:false</code> 无写入权限、<code>&lt;-</code> 创建和更新权限</td>
+</tr>
+<tr>
+<td align="left">-&gt;</td>
+<td align="left">设置字段读的权限，<code>-&gt;:false</code> 无读权限</td>
+</tr>
+<tr>
+<td align="left">-</td>
+<td align="left">忽略该字段，<code>-</code> 表示无读写，<code>-:migration</code> 表示无迁移权限，<code>-:all</code> 表示无读写迁移权限</td>
+</tr>
+<tr>
+<td align="left">comment</td>
+<td align="left">迁移时为字段添加注释</td>
+</tr>
+</tbody></table>
+<p>GORM 允许通过标签为关联配置外键、约束、many2many 表，详情请参考 <a target="_blank" rel="noopener" href="https://gorm.io/zh_CN/docs/associations.html#tags">关联部分</a></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Order <span class="keyword">struct</span> &#123;</span><br><span class="line">    ID          <span class="type">uint</span>      <span class="string">`gorm:&quot;primaryKey;autoIncrement&quot;`</span></span><br><span class="line">    OrderNumber <span class="type">string</span>    <span class="string">`gorm:&quot;type:varchar(50);uniqueIndex;not null&quot;`</span> <span class="comment">// 订单号，唯一，不能为空</span></span><br><span class="line">    Amount      <span class="type">float64</span>   <span class="string">`gorm:&quot;type:decimal(12,2);not null&quot;`</span> <span class="comment">// 金额，最多 12 位，2 位小数，不能为空</span></span><br><span class="line">    Status      <span class="type">string</span>    <span class="string">`gorm:&quot;type:varchar(20);default:&#x27;pending&#x27;&quot;`</span> <span class="comment">// 状态，默认值 &#x27;pending&#x27;</span></span><br><span class="line">    UserID      <span class="type">uint</span>      <span class="string">`gorm:&quot;index&quot;`</span> <span class="comment">// 外键索引</span></span><br><span class="line">    User        User      <span class="string">`gorm:&quot;foreignKey:UserID&quot;`</span> <span class="comment">// 关联 User 表</span></span><br><span class="line">    CreatedAt   time.Time</span><br><span class="line">    UpdatedAt   time.Time</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-CRUD"><a href="#3-CRUD" class="headerlink" title="3. CRUD"></a>3. CRUD</h3><h4 id="3-1-创建"><a href="#3-1-创建" class="headerlink" title="3.1 创建"></a>3.1 创建</h4><h5 id="3-1-1-创建记录"><a href="#3-1-1-创建记录" class="headerlink" title="3.1.1 创建记录"></a>3.1.1 创建记录</h5><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;gorm.io/driver/mysql&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID        <span class="type">uint</span>   <span class="string">`gorm:&quot;primaryKey&quot;`</span>        <span class="comment">// 主键</span></span><br><span class="line">	Name      <span class="type">string</span> <span class="string">`gorm:&quot;size:100;not null&quot;`</span> <span class="comment">// 字符串字段，最大长度 100，不能为空</span></span><br><span class="line">	Age       <span class="type">int</span>    <span class="string">`gorm:&quot;default:18&quot;`</span>        <span class="comment">// 默认值 18</span></span><br><span class="line">	Birthday  time.Time</span><br><span class="line">	CreatedAt time.Time</span><br><span class="line">	UpdatedAt time.Time</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	dsn := <span class="string">&quot;root:strong_root_password@tcp(www.devlop.com:3306)/test?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&quot;</span></span><br><span class="line">	db, err := gorm.Open(mysql.Open(dsn), &amp;gorm.Config&#123;&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;failed to connect database&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	user := User&#123;Name: <span class="string">&quot;张三&quot;</span>, Age: <span class="number">18</span>, Birthday: time.Now()&#125;</span><br><span class="line"></span><br><span class="line">	db.AutoMigrate(&amp;User&#123;&#125;)</span><br><span class="line">    res := db.Create(&amp;user)</span><br><span class="line">    </span><br><span class="line">   	fmt.Println(user.ID)          <span class="comment">// 返回插入数据的主键</span></span><br><span class="line">	fmt.Println(res.Error) 		  <span class="comment">// 返回 error</span></span><br><span class="line">	fmt.Println(res.RowsAffected) <span class="comment">// 返回插入记录的条数</span></span><br><span class="line">    </span><br><span class="line">   </span><br><span class="line">	users := []User&#123;</span><br><span class="line">		&#123;Name: <span class="string">&quot;里斯&quot;</span>, Age: <span class="number">19</span>, Birthday: time.Now()&#125;,</span><br><span class="line">		&#123;Name: <span class="string">&quot;里斯2&quot;</span>, Age: <span class="number">191</span>, Birthday: time.Now()&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">// 创建多条记录</span></span><br><span class="line">	res := db.Create(&amp;users)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意：传递过去的是结构体指针</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240904173023.png"></p>
+<h5 id="3-1-2-用指定字段创建记录"><a href="#3-1-2-用指定字段创建记录" class="headerlink" title="3.1.2 用指定字段创建记录"></a>3.1.2 用指定字段创建记录</h5><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;gorm.io/driver/mysql&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID        <span class="type">uint</span>   <span class="string">`gorm:&quot;primaryKey&quot;`</span>        <span class="comment">// 主键</span></span><br><span class="line">	Name      <span class="type">string</span> <span class="string">`gorm:&quot;size:100;not null&quot;`</span> <span class="comment">// 字符串字段，最大长度 100，不能为空</span></span><br><span class="line">	Age       <span class="type">int</span>    <span class="string">`gorm:&quot;default:18&quot;`</span>        <span class="comment">// 默认值 18</span></span><br><span class="line">	Birthday  time.Time</span><br><span class="line">	CreatedAt time.Time</span><br><span class="line">	UpdatedAt time.Time</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	dsn := <span class="string">&quot;root:strong_root_password@tcp(www.devlop.com:3306)/test?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&quot;</span></span><br><span class="line">	db, err := gorm.Open(mysql.Open(dsn), &amp;gorm.Config&#123;&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;failed to connect database&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	user := User&#123;Name: <span class="string">&quot;Jinzhu&quot;</span>, Age: <span class="number">18</span>, Birthday: time.Now()&#125;</span><br><span class="line">    <span class="comment">// 创建记录并为指定字段赋值</span></span><br><span class="line">    <span class="comment">// INSERT INTO `users` (`name`,`age`,`created_at`) VALUES (&quot;jinzhu&quot;, 18, &quot;2024-09-04 17:31:05.456&quot;)</span></span><br><span class="line">	db.Select(<span class="string">&quot;Name&quot;</span>, <span class="string">&quot;Age&quot;</span>, <span class="string">&quot;CreatedAt&quot;</span>).Create(&amp;user)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建记录并忽略传递给 ‘Omit’ 的字段值</span></span><br><span class="line">    <span class="comment">// INSERT INTO `users` (`birthday`,`updated_at`) VALUES (&quot;2024-09-04 17:31:05.456&quot;, &quot;2024-09-04 17:31:05.456&quot;)</span></span><br><span class="line">    db.Omit(<span class="string">&quot;Name&quot;</span>, <span class="string">&quot;Age&quot;</span>, <span class="string">&quot;CreatedAt&quot;</span>).Create(&amp;user)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240904173212.png"></p>
+<h5 id="3-1-3-使用Map创建"><a href="#3-1-3-使用Map创建" class="headerlink" title="3.1.3 使用Map创建"></a>3.1.3 使用Map创建</h5><p>GORM支持通过 <code>map[string]interface&#123;&#125;</code> 与 <code>[]map[string]interface&#123;&#125;&#123;&#125;</code>来创建记录。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">db.Model(&amp;User&#123;&#125;).Create(<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">  <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;jinzhu&quot;</span>, <span class="string">&quot;Age&quot;</span>: <span class="number">18</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// batch insert from `[]map[string]interface&#123;&#125;&#123;&#125;`</span></span><br><span class="line">db.Model(&amp;User&#123;&#125;).Create([]<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">  &#123;<span class="string">&quot;Name&quot;</span>: <span class="string">&quot;jinzhu_1&quot;</span>, <span class="string">&quot;Age&quot;</span>: <span class="number">18</span>&#125;,</span><br><span class="line">  &#123;<span class="string">&quot;Name&quot;</span>: <span class="string">&quot;jinzhu_2&quot;</span>, <span class="string">&quot;Age&quot;</span>: <span class="number">20</span>&#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意</strong>当使用map来创建时，钩子方法不会执行，关联不会被保存且不会回写主键。</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240904175554.png"></p>
+<h5 id="3-1-4-批量插入"><a href="#3-1-4-批量插入" class="headerlink" title="3.1.4 批量插入"></a>3.1.4 批量插入</h5><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;gorm.io/driver/mysql&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID        <span class="type">uint</span>   <span class="string">`gorm:&quot;primaryKey&quot;`</span>        <span class="comment">// 主键</span></span><br><span class="line">	Name      <span class="type">string</span> <span class="string">`gorm:&quot;size:100;not null&quot;`</span> <span class="comment">// 字符串字段，最大长度 100，不能为空</span></span><br><span class="line">	Age       <span class="type">int</span>    <span class="string">`gorm:&quot;default:18&quot;`</span>        <span class="comment">// 默认值 18</span></span><br><span class="line">	CreatedAt time.Time</span><br><span class="line">	UpdatedAt time.Time</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	dsn := <span class="string">&quot;root:strong_root_password@tcp(www.devlop.com:3306)/test?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&quot;</span></span><br><span class="line">	db, err := gorm.Open(mysql.Open(dsn), &amp;gorm.Config&#123;&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;failed to connect database&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> users = []User&#123;&#123;Name: <span class="string">&quot;jinzhu1&quot;</span>&#125;, &#123;Name: <span class="string">&quot;jinzhu2&quot;</span>&#125;, &#123;Name: <span class="string">&quot;jinzhu3&quot;</span>&#125;&#125;</span><br><span class="line">	db.Create(&amp;users)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _, user := <span class="keyword">range</span> users &#123;</span><br><span class="line">		fmt.Println(user.ID) <span class="comment">// 1,2,3</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过<code>db.CreateInBatches</code>方法来指定批量插入的批次大小。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> users = []User&#123;&#123;Name: <span class="string">&quot;jinzhu1&quot;</span>&#125;, &#123;Name: <span class="string">&quot;jinzhu2&quot;</span>&#125;, &#123;Name: <span class="string">&quot;jinzhu3&quot;</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// batch size 2</span></span><br><span class="line"><span class="comment">// 这里可以用users或&amp;users</span></span><br><span class="line">db.CreateInBatches(users, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>注意</strong> 使用<code>CreateBatchSize</code> 选项初始化GORM实例后，此后进行创建&amp; 关联操作时所有的<code>INSERT</code>行为都会遵循初始化时的配置。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">db, err := gorm.Open(sqlite.Open(<span class="string">&quot;gorm.db&quot;</span>), &amp;gorm.Config&#123;</span><br><span class="line">  CreateBatchSize: <span class="number">1000</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">db := db.Session(&amp;gorm.Session&#123;CreateBatchSize: <span class="number">1000</span>&#125;)</span><br><span class="line"></span><br><span class="line">users = [<span class="number">5000</span>]User&#123;&#123;Name: <span class="string">&quot;jinzhu&quot;</span>, Pets: []Pet&#123;pet1, pet2, pet3&#125;&#125;...&#125;</span><br><span class="line"></span><br><span class="line">db.Create(&amp;users)</span><br><span class="line"><span class="comment">// INSERT INTO users xxx (5 batches)</span></span><br><span class="line"><span class="comment">// INSERT INTO pets xxx (15 batches)</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="3-1-5-创建钩子"><a href="#3-1-5-创建钩子" class="headerlink" title="3.1.5 创建钩子"></a>3.1.5 创建钩子</h5><p>GROM允许用户通过实现这些接口 <code>BeforeSave</code>, <code>BeforeCreate</code>, <code>AfterSave</code>, <code>AfterCreate</code>来自定义钩子。 这些钩子方法会在创建一条记录时被调用，关于钩子的生命周期请参阅<a target="_blank" rel="noopener" href="https://gorm.io/zh_CN/docs/hooks.html">Hooks</a>。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(u *User)</span></span> BeforeCreate(tx *gorm.DB) (err <span class="type">error</span>) &#123;</span><br><span class="line">    u.UUID = uuid.New()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> u.Role == <span class="string">&quot;admin&quot;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> errors.New(<span class="string">&quot;invalid role&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果你想跳过<code>Hooks</code>方法，可以使用<code>SkipHooks</code>会话模式，例子如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DB.Session(&amp;gorm.Session&#123;SkipHooks: true&#125;).Create(&amp;user)</span><br><span class="line"></span><br><span class="line">DB.Session(&amp;gorm.Session&#123;SkipHooks: true&#125;).Create(&amp;users)</span><br><span class="line"></span><br><span class="line">DB.Session(&amp;gorm.Session&#123;SkipHooks: true&#125;).CreateInBatches(users, 100)</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-查询"><a href="#3-2-查询" class="headerlink" title="3.2 查询"></a>3.2 查询</h4><h5 id="3-2-1-查询单个对象"><a href="#3-2-1-查询单个对象" class="headerlink" title="3.2.1 查询单个对象"></a>3.2.1 查询单个对象</h5><p>GORM 提供了 <code>First</code>、<code>Take</code>、<code>Last</code> 方法，以便从数据库中检索单个对象。当查询数据库时它添加了 <code>LIMIT 1</code> 条件，且没有找到记录时，它会返回 <code>ErrRecordNotFound</code> 错误。</p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240905100411.png"></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;gorm.io/driver/mysql&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID        <span class="type">uint</span>   <span class="string">`gorm:&quot;primaryKey&quot;`</span>        <span class="comment">// 主键</span></span><br><span class="line">	Name      <span class="type">string</span> <span class="string">`gorm:&quot;size:100;not null&quot;`</span> <span class="comment">// 字符串字段，最大长度 100，不能为空</span></span><br><span class="line">	Age       <span class="type">int</span>    <span class="string">`gorm:&quot;default:18&quot;`</span>        <span class="comment">// 默认值 18</span></span><br><span class="line">	CreatedAt time.Time</span><br><span class="line">	UpdatedAt time.Time</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	dsn := <span class="string">&quot;root:strong_root_password@tcp(www.devlop.com:3306)/test?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&quot;</span></span><br><span class="line">	db, err := gorm.Open(mysql.Open(dsn), &amp;gorm.Config&#123;&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;failed to connect database&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> user User</span><br><span class="line">    </span><br><span class="line">	<span class="comment">// 获取第一条记录（主键升序）</span></span><br><span class="line">    db.First(&amp;user)</span><br><span class="line">    <span class="comment">// SELECT * FROM users ORDER BY id LIMIT 1;</span></span><br><span class="line">    fmt.Println(user)</span><br><span class="line">    <span class="comment">// &#123;21 jinzhu 19 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取一条记录，没有指定排序字段</span></span><br><span class="line">    db.Take(&amp;user)</span><br><span class="line">    <span class="comment">// SELECT * FROM users LIMIT 1;</span></span><br><span class="line">    fmt.Println(user)</span><br><span class="line">    <span class="comment">// &#123;21 jinzhu 19 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取最后一条记录（主键降序）</span></span><br><span class="line">    db.Last(&amp;user)</span><br><span class="line">    <span class="comment">// SELECT * FROM users ORDER BY id DESC LIMIT 1;</span></span><br><span class="line"></span><br><span class="line">    result := db.First(&amp;user)</span><br><span class="line">    result.RowsAffected <span class="comment">// 返回找到的记录数</span></span><br><span class="line">    result.Error        <span class="comment">// returns error or nil</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查 ErrRecordNotFound 错误</span></span><br><span class="line">    errors.Is(result.Error, gorm.ErrRecordNotFound)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果你想避免<code>ErrRecordNotFound</code>错误，你可以使用<code>Find</code>，比如<code>db.Limit(1).Find(&amp;user)</code>，<code>Find</code>方法可以接受struct和slice的数据。</p>
+</blockquote>
+<blockquote>
+<p>对单个对象使用<code>Find</code>而不带limit，<code>db.Find(&amp;user)</code>将会查询整个表并且只返回第一个对象，只是性能不高并且不确定的。</p>
+</blockquote>
+<p><code>First</code> and <code>Last</code> 方法会按主键排序找到第一条记录和最后一条记录 (分别)。 只有在目标 struct 是指针或者通过 <code>db.Model()</code> 指定的</p>
+<p>model 时，该方法才有效。 此外，如果相关 model 没有定义主键，那么将按 model 的第一个字段进行排序。 例如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> user User</span><br><span class="line"><span class="keyword">var</span> users []User</span><br><span class="line"></span><br><span class="line"><span class="comment">// works because destination struct is passed in</span></span><br><span class="line"><span class="comment">// 这里使用了user模型，能够正常执行</span></span><br><span class="line">db.First(&amp;user)</span><br><span class="line"><span class="comment">// SELECT * FROM `users` ORDER BY `users`.`id` LIMIT 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// works because model is specified using `db.Model()`</span></span><br><span class="line">result := <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;&#125;</span><br><span class="line"><span class="comment">// 这里使用了db.Model()能够正常执行</span></span><br><span class="line">db.Model(&amp;User&#123;&#125;).First(&amp;result)</span><br><span class="line"><span class="comment">// SELECT * FROM `users` ORDER BY `users`.`id` LIMIT 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// doesn&#x27;t work</span></span><br><span class="line"><span class="comment">// 两者都没用使用First查询不会正常执行</span></span><br><span class="line">result := <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;&#125;</span><br><span class="line">db.Table(<span class="string">&quot;users&quot;</span>).First(&amp;result)</span><br><span class="line"></span><br><span class="line"><span class="comment">// works with Take</span></span><br><span class="line">result := <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;&#125;</span><br><span class="line"><span class="comment">// 使用take方法正常执行</span></span><br><span class="line"><span class="comment">// map[age:19 birthday:&lt;nil&gt; created_at:&lt;nil&gt; id:21 name:jinzhu updated_at:&lt;nil&gt;]</span></span><br><span class="line">db.Table(<span class="string">&quot;users&quot;</span>).Take(&amp;result)</span><br><span class="line"></span><br><span class="line"><span class="comment">// no primary key defined, results will be ordered by first field (i.e., `Code`)</span></span><br><span class="line"><span class="keyword">type</span> Language <span class="keyword">struct</span> &#123;</span><br><span class="line">  Code <span class="type">string</span></span><br><span class="line">  Name <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line">db.First(&amp;Language&#123;&#125;)</span><br><span class="line"><span class="comment">// SELECT * FROM `languages` ORDER BY `languages`.`code` LIMIT 1</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="3-2-2-根据主键查询"><a href="#3-2-2-根据主键查询" class="headerlink" title="3.2.2 根据主键查询"></a>3.2.2 根据主键查询</h5><p>如果主键是数字类型，可以使用 <a target="_blank" rel="noopener" href="https://gorm.io/zh_CN/docs/query.html#inline_conditions">内联条件</a> 来检索对象。 当使用字符串时，需要额外的注意来避免SQL注入；查看 <a target="_blank" rel="noopener" href="https://gorm.io/zh_CN/docs/security.html">Security</a> 部分来了解详情。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">db.First(&amp;user, <span class="number">10</span>)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE id = 10;</span></span><br><span class="line"></span><br><span class="line">db.First(&amp;user, <span class="string">&quot;10&quot;</span>)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE id = 10;</span></span><br><span class="line"></span><br><span class="line">db.Find(&amp;users, []<span class="type">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE id IN (1,2,3);</span></span><br></pre></td></tr></table></figure>
+
+<p>如果主键是字符串(例如像uuid)，查询将被写成如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.First(&amp;user, <span class="string">&quot;id = ?&quot;</span>, <span class="string">&quot;1b74413f-f3b8-409f-ac47-e8c062e3472a&quot;</span>)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE id = &quot;1b74413f-f3b8-409f-ac47-e8c062e3472a&quot;;</span></span><br></pre></td></tr></table></figure>
+
+<p>当目标对象有一个主键值时，将使用主键构建查询条件，例如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> user = User&#123;ID: <span class="number">10</span>&#125;</span><br><span class="line">db.First(&amp;user)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE id = 10;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result User</span><br><span class="line">db.Model(User&#123;ID: <span class="number">10</span>&#125;).First(&amp;result)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE id = 10;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>NOTE:</strong> 如果使用 gorm 的特定字段类型（例如 <code>gorm.DeletedAt</code>），它将运行不同的查询来检索对象。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">  ID           <span class="type">string</span> <span class="string">`gorm:&quot;primarykey;size:16&quot;`</span></span><br><span class="line">  Name         <span class="type">string</span> <span class="string">`gorm:&quot;size:24&quot;`</span></span><br><span class="line">  DeletedAt    gorm.DeletedAt <span class="string">`gorm:&quot;index&quot;`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> user = User&#123;ID: <span class="number">15</span>&#125;</span><br><span class="line">db.First(&amp;user)</span><br><span class="line"><span class="comment">//  SELECT * FROM `users` WHERE `users`.`id` = &#x27;15&#x27; AND `users`.`deleted_at` IS NUL</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="3-2-3-查询全部对象"><a href="#3-2-3-查询全部对象" class="headerlink" title="3.2.3 查询全部对象"></a>3.2.3 查询全部对象</h5><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;gorm.io/driver/mysql&quot;</span></span><br><span class="line">	<span class="string">&quot;gorm.io/gorm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID        <span class="type">uint</span>   <span class="string">`gorm:&quot;primaryKey&quot;`</span>        <span class="comment">// 主键</span></span><br><span class="line">	Name      <span class="type">string</span> <span class="string">`gorm:&quot;size:100;not null&quot;`</span> <span class="comment">// 字符串字段，最大长度 100，不能为空</span></span><br><span class="line">	Age       <span class="type">int</span>    <span class="string">`gorm:&quot;default:18&quot;`</span>        <span class="comment">// 默认值 18</span></span><br><span class="line">	CreatedAt time.Time</span><br><span class="line">	UpdatedAt time.Time</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	dsn := <span class="string">&quot;root:strong_root_password@tcp(www.devlop.com:3306)/test?charset=utf8mb4&amp;parseTime=True&amp;loc=Local&quot;</span></span><br><span class="line">	db, err := gorm.Open(mysql.Open(dsn), &amp;gorm.Config&#123;&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;failed to connect database&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> users []User</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// SELECT * FROM users;</span></span><br><span class="line">    result := db.Find(&amp;users)</span><br><span class="line">	fmt.Println(users)</span><br><span class="line">    </span><br><span class="line">    result.RowsAffected <span class="comment">// returns found records count, equals `len(users)`</span></span><br><span class="line">	result.Error        <span class="comment">// returns error</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-2-4-条件查询"><a href="#3-2-4-条件查询" class="headerlink" title="3.2.4 条件查询"></a>3.2.4 条件查询</h5><h6 id="3-2-4-1-string"><a href="#3-2-4-1-string" class="headerlink" title="3.2.4.1 string"></a>3.2.4.1 string</h6><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Get first matched record</span></span><br><span class="line">db.Where(<span class="string">&quot;name = ?&quot;</span>, <span class="string">&quot;jinzhu&quot;</span>).First(&amp;user)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name = &#x27;jinzhu&#x27; ORDER BY id LIMIT 1;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Get all matched records</span></span><br><span class="line">db.Where(<span class="string">&quot;name &lt;&gt; ?&quot;</span>, <span class="string">&quot;jinzhu&quot;</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name &lt;&gt; &#x27;jinzhu&#x27;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// IN</span></span><br><span class="line">db.Where(<span class="string">&quot;name IN ?&quot;</span>, []<span class="type">string</span>&#123;<span class="string">&quot;jinzhu&quot;</span>, <span class="string">&quot;jinzhu 2&quot;</span>&#125;).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name IN (&#x27;jinzhu&#x27;,&#x27;jinzhu 2&#x27;);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// LIKE</span></span><br><span class="line">db.Where(<span class="string">&quot;name LIKE ?&quot;</span>, <span class="string">&quot;%jin%&quot;</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name LIKE &#x27;%jin%&#x27;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// AND</span></span><br><span class="line">db.Where(<span class="string">&quot;name = ? AND age &gt;= ?&quot;</span>, <span class="string">&quot;jinzhu&quot;</span>, <span class="string">&quot;22&quot;</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name = &#x27;jinzhu&#x27; AND age &gt;= 22;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Time</span></span><br><span class="line">db.Where(<span class="string">&quot;updated_at &gt; ?&quot;</span>, lastWeek).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE updated_at &gt; &#x27;2000-01-01 00:00:00&#x27;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// BETWEEN</span></span><br><span class="line">db.Where(<span class="string">&quot;created_at BETWEEN ? AND ?&quot;</span>, lastWeek, today).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE created_at BETWEEN &#x27;2000-01-01 00:00:00&#x27; AND &#x27;2000-01-08 00:00:00&#x27;;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>如果对象设置了主键，条件查询将不会覆盖主键的值，而是用 And 连接条件。 例如：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> user = User&#123;ID: <span class="number">10</span>&#125;</span><br><span class="line">db.Where(<span class="string">&quot;id = ?&quot;</span>, <span class="number">20</span>).First(&amp;user)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE id = 10 and id = 20 ORDER BY id ASC LIMIT 1</span></span><br></pre></td></tr></table></figure>
+
+<p>这个查询将会给出<code>record not found</code>错误 所以，在你想要使用例如 <code>user</code> 这样的变量从数据库中获取新值前，需要将例如 <code>id</code> 这样的主键设置为nil。</p>
+</blockquote>
+<h6 id="3-2-4-2-sturc-map"><a href="#3-2-4-2-sturc-map" class="headerlink" title="3.2.4.2 sturc&amp;map"></a>3.2.4.2 sturc&amp;map</h6><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Struct</span></span><br><span class="line">db.Where(&amp;User&#123;Name: <span class="string">&quot;jinzhu&quot;</span>, Age: <span class="number">20</span>&#125;).First(&amp;user)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name = &quot;jinzhu&quot; AND age = 20 ORDER BY id LIMIT 1;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Map</span></span><br><span class="line">db.Where(<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;jinzhu&quot;</span>, <span class="string">&quot;age&quot;</span>: <span class="number">20</span>&#125;).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name = &quot;jinzhu&quot; AND age = 20;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Slice of primary keys</span></span><br><span class="line">db.Where([]<span class="type">int64</span>&#123;<span class="number">20</span>, <span class="number">21</span>, <span class="number">22</span>&#125;).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE id IN (20, 21, 22);</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>NOTE</strong> When querying with struct, GORM will only query with non-zero fields, that means if your field’s value is <code>0</code>, <code>&#39;&#39;</code>, <code>false</code> or other <a target="_blank" rel="noopener" href="https://tour.golang.org/basics/12">zero values</a>, it won’t be used to build query conditions, for example:</p>
+<p>当使用 struct 模式查询且字段为0值时，这个字段不会出现再构建的 sql 语句中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.Where(&amp;User&#123;Name: <span class="string">&quot;jinzhu&quot;</span>, Age: <span class="number">0</span>&#125;).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name = &quot;jinzhu&quot;;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>To include zero values in the query conditions, you can use a map, which will include all key-values as query conditions, for example:</p>
+<p>如果要包含零值字段作为查询条件，可以使用 map：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">db.Where(<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">&quot;Name&quot;</span>: <span class="string">&quot;jinzhu&quot;</span>, <span class="string">&quot;Age&quot;</span>: <span class="number">0</span>&#125;).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name = &quot;jinzhu&quot; AND age = 0;</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以在 struct 中指定字段：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">db.Where(&amp;User&#123;Name: <span class="string">&quot;jinzhu&quot;</span>&#125;, <span class="string">&quot;name&quot;</span>, <span class="string">&quot;Age&quot;</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name = &quot;jinzhu&quot; AND age = 0;</span></span><br><span class="line"></span><br><span class="line">db.Where(&amp;User&#123;Name: <span class="string">&quot;jinzhu&quot;</span>&#125;, <span class="string">&quot;Age&quot;</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE age = 0;</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="3-2-4-3-内联查询"><a href="#3-2-4-3-内联查询" class="headerlink" title="3.2.4.3 内联查询"></a>3.2.4.3 内联查询</h6><p>查询条件可以以类似于 Where 的方式内联到 First 和 Find 等方法中。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Get by primary key if it were a non-integer type</span></span><br><span class="line">db.First(&amp;user, <span class="string">&quot;id = ?&quot;</span>, <span class="string">&quot;string_primary_key&quot;</span>)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE id = &#x27;string_primary_key&#x27;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Plain SQL</span></span><br><span class="line">db.Find(&amp;user, <span class="string">&quot;name = ?&quot;</span>, <span class="string">&quot;jinzhu&quot;</span>)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name = &quot;jinzhu&quot;;</span></span><br><span class="line"></span><br><span class="line">db.Find(&amp;users, <span class="string">&quot;name &lt;&gt; ? AND age &gt; ?&quot;</span>, <span class="string">&quot;jinzhu&quot;</span>, <span class="number">20</span>)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name &lt;&gt; &quot;jinzhu&quot; AND age &gt; 20;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Struct</span></span><br><span class="line">db.Find(&amp;users, User&#123;Age: <span class="number">20</span>&#125;)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE age = 20;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Map</span></span><br><span class="line">db.Find(&amp;users, <span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">&quot;age&quot;</span>: <span class="number">20</span>&#125;)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE age = 20;</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="3-2-4-4-Not"><a href="#3-2-4-4-Not" class="headerlink" title="3.2.4.4 Not"></a>3.2.4.4 Not</h6><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">db.Not(<span class="string">&quot;name = ?&quot;</span>, <span class="string">&quot;jinzhu&quot;</span>).First(&amp;user)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE NOT name = &quot;jinzhu&quot; ORDER BY id LIMIT 1;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Not In</span></span><br><span class="line">db.Not(<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">&quot;name&quot;</span>: []<span class="type">string</span>&#123;<span class="string">&quot;jinzhu&quot;</span>, <span class="string">&quot;jinzhu 2&quot;</span>&#125;&#125;).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name NOT IN (&quot;jinzhu&quot;, &quot;jinzhu 2&quot;);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Struct</span></span><br><span class="line">db.Not(User&#123;Name: <span class="string">&quot;jinzhu&quot;</span>, Age: <span class="number">18</span>&#125;).First(&amp;user)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name &lt;&gt; &quot;jinzhu&quot; AND age &lt;&gt; 18 ORDER BY id LIMIT 1;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Not In slice of primary keys</span></span><br><span class="line">db.Not([]<span class="type">int64</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;).First(&amp;user)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE id NOT IN (1,2,3) ORDER BY id LIMIT 1;</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="3-2-4-5-Or"><a href="#3-2-4-5-Or" class="headerlink" title="3.2.4.5 Or"></a>3.2.4.5 Or</h6><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">db.Where(<span class="string">&quot;role = ?&quot;</span>, <span class="string">&quot;admin&quot;</span>).Or(<span class="string">&quot;role = ?&quot;</span>, <span class="string">&quot;super_admin&quot;</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE role = &#x27;admin&#x27; OR role = &#x27;super_admin&#x27;;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Struct</span></span><br><span class="line">db.Where(<span class="string">&quot;name = &#x27;jinzhu&#x27;&quot;</span>).Or(User&#123;Name: <span class="string">&quot;jinzhu 2&quot;</span>, Age: <span class="number">18</span>&#125;).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name = &#x27;jinzhu&#x27; OR (name = &#x27;jinzhu 2&#x27; AND age = 18);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Map</span></span><br><span class="line">db.Where(<span class="string">&quot;name = &#x27;jinzhu&#x27;&quot;</span>).Or(<span class="keyword">map</span>[<span class="type">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;jinzhu 2&quot;</span>, <span class="string">&quot;age&quot;</span>: <span class="number">18</span>&#125;).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users WHERE name = &#x27;jinzhu&#x27; OR (name = &#x27;jinzhu 2&#x27; AND age = 18);</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="3-2-4-5-选择特定字段"><a href="#3-2-4-5-选择特定字段" class="headerlink" title="3.2.4.5 选择特定字段"></a>3.2.4.5 选择特定字段</h6><p>Gorm 可以选择指定要从数据库检索的字段。否则，将默认选择所有字段。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">db.Select(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;age&quot;</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT name, age FROM users;</span></span><br><span class="line"></span><br><span class="line">db.Select([]<span class="type">string</span>&#123;<span class="string">&quot;name&quot;</span>, <span class="string">&quot;age&quot;</span>&#125;).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT name, age FROM users;</span></span><br><span class="line"></span><br><span class="line">db.Table(<span class="string">&quot;users&quot;</span>).Select(<span class="string">&quot;COALESCE(age,?)&quot;</span>, <span class="number">42</span>).Rows()</span><br><span class="line"><span class="comment">// SELECT COALESCE(age,&#x27;42&#x27;) FROM users;</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="3-2-4-6-排序"><a href="#3-2-4-6-排序" class="headerlink" title="3.2.4.6 排序"></a>3.2.4.6 排序</h6><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">db.Order(<span class="string">&quot;age desc, name&quot;</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users ORDER BY age desc, name;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Multiple orders</span></span><br><span class="line">db.Order(<span class="string">&quot;age desc&quot;</span>).Order(<span class="string">&quot;name&quot;</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users ORDER BY age desc, name;</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="3-2-4-7-Limit-Offset"><a href="#3-2-4-7-Limit-Offset" class="headerlink" title="3.2.4.7 Limit &amp; Offset"></a>3.2.4.7 Limit &amp; Offset</h6><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">db.Limit(<span class="number">3</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users LIMIT 3;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Cancel limit condition with -1</span></span><br><span class="line">db.Limit(<span class="number">10</span>).Find(&amp;users1)</span><br><span class="line"><span class="comment">// SELECT * FROM users LIMIT 10; (users1)</span></span><br><span class="line">db.Limit(<span class="number">-1</span>).Find(&amp;users2)</span><br><span class="line"><span class="comment">// SELECT * FROM users; (users2)</span></span><br><span class="line"></span><br><span class="line">db.Offset(<span class="number">3</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users OFFSET 3;</span></span><br><span class="line"></span><br><span class="line">db.Limit(<span class="number">10</span>).Offset(<span class="number">5</span>).Find(&amp;users)</span><br><span class="line"><span class="comment">// SELECT * FROM users OFFSET 5 LIMIT 10;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Cancel offset condition with -1</span></span><br><span class="line">db.Offset(<span class="number">10</span>).Find(&amp;users1).Offset(<span class="number">-1</span>).Find(&amp;users2)</span><br><span class="line"><span class="comment">// SELECT * FROM users OFFSET 10; (users1)</span></span><br><span class="line"><span class="comment">// SELECT * FROM users; (users2)</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="3-2-4-8-Group-By-Having"><a href="#3-2-4-8-Group-By-Having" class="headerlink" title="3.2.4.8 Group By &amp; Having"></a>3.2.4.8 Group By &amp; Having</h6><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> result <span class="keyword">struct</span> &#123;</span><br><span class="line">  Date  time.Time</span><br><span class="line">  Total <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">db.Model(&amp;User&#123;&#125;).Select(<span class="string">&quot;name, sum(age) as total&quot;</span>).Where(<span class="string">&quot;name LIKE ?&quot;</span>, <span class="string">&quot;group%&quot;</span>).Group(<span class="string">&quot;name&quot;</span>).First(&amp;result)</span><br><span class="line"><span class="comment">// SELECT name, sum(age) as total FROM `users` WHERE name LIKE &quot;group%&quot; GROUP BY `name` LIMIT 1</span></span><br><span class="line"></span><br><span class="line">db.Model(&amp;User&#123;&#125;).Select(<span class="string">&quot;name, sum(age) as total&quot;</span>).Group(<span class="string">&quot;name&quot;</span>).Having(<span class="string">&quot;name = ?&quot;</span>, <span class="string">&quot;group&quot;</span>).Find(&amp;result)</span><br><span class="line"><span class="comment">// SELECT name, sum(age) as total FROM `users` GROUP BY `name` HAVING name = &quot;group&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="3-2-4-9-Distinct"><a href="#3-2-4-9-Distinct" class="headerlink" title="3.2.4.9 Distinct"></a>3.2.4.9 Distinct</h6><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.Distinct(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;age&quot;</span>).Order(<span class="string">&quot;name, age desc&quot;</span>).Find(&amp;results)</span><br></pre></td></tr></table></figure>
+
+<h6 id="3-2-4-9-Scan"><a href="#3-2-4-9-Scan" class="headerlink" title="3.2.4.9 Scan"></a>3.2.4.9 Scan</h6><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Result <span class="keyword">struct</span> &#123;</span><br><span class="line">  Name <span class="type">string</span></span><br><span class="line">  Age  <span class="type">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> result Result</span><br><span class="line">db.Table(<span class="string">&quot;users&quot;</span>).Select(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;age&quot;</span>).Where(<span class="string">&quot;name = ?&quot;</span>, <span class="string">&quot;Antonio&quot;</span>).Scan(&amp;result)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Raw SQL</span></span><br><span class="line">db.Raw(<span class="string">&quot;SELECT name, age FROM users WHERE name = ?&quot;</span>, <span class="string">&quot;Antonio&quot;</span>).Scan(&amp;result)</span><br></pre></td></tr></table></figure>
+
+<h6 id="3-2-4-10-Joins"><a href="#3-2-4-10-Joins" class="headerlink" title="3.2.4.10 Joins"></a>3.2.4.10 Joins</h6><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> result <span class="keyword">struct</span> &#123;</span><br><span class="line">  Name  <span class="type">string</span></span><br><span class="line">  Email <span class="type">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">db.Model(&amp;User&#123;&#125;).Select(<span class="string">&quot;users.name, emails.email&quot;</span>).Joins(<span class="string">&quot;left join emails on emails.user_id = users.id&quot;</span>).Scan(&amp;result&#123;&#125;)</span><br><span class="line"><span class="comment">// SELECT users.name, emails.email FROM `users` left join emails on emails.user_id = users.id</span></span><br><span class="line"></span><br><span class="line">rows, err := db.Table(<span class="string">&quot;users&quot;</span>).Select(<span class="string">&quot;users.name, emails.email&quot;</span>).Joins(<span class="string">&quot;left join emails on emails.user_id = users.id&quot;</span>).Rows()</span><br><span class="line"><span class="keyword">for</span> rows.Next() &#123;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">db.Table(<span class="string">&quot;users&quot;</span>).Select(<span class="string">&quot;users.name, emails.email&quot;</span>).Joins(<span class="string">&quot;left join emails on emails.user_id = users.id&quot;</span>).Scan(&amp;results)</span><br><span class="line"></span><br><span class="line"><span class="comment">// multiple joins with parameter</span></span><br><span class="line">db.Joins(<span class="string">&quot;JOIN emails ON emails.user_id = users.id AND emails.email = ?&quot;</span>, <span class="string">&quot;jinzhu@example.org&quot;</span>).Joins(<span class="string">&quot;JOIN credit_cards ON credit_cards.user_id = users.id&quot;</span>).Where(<span class="string">&quot;credit_cards.number = ?&quot;</span>, <span class="string">&quot;411111111111&quot;</span>).Find(&amp;user)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-高级查询"><a href="#4-高级查询" class="headerlink" title="4. 高级查询"></a>4. 高级查询</h3><h4 id="4-1-Scope"><a href="#4-1-Scope" class="headerlink" title="4.1 Scope"></a>4.1 Scope</h4><p>GORM中的 <code>Scopes</code> 是一个强大的特性，允许将常用的查询条件定义为可重用的方法，使代码更加模块化和可读。</p>
+<h5 id="4-1-1-查询"><a href="#4-1-1-查询" class="headerlink" title="4.1.1 查询"></a>4.1.1 查询</h5><p>Scope 查询示例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">AmountGreaterThan1000</span><span class="params">(db *gorm.DB)</span></span> *gorm.DB &#123;</span><br><span class="line">  <span class="keyword">return</span> db.Where(<span class="string">&quot;amount &gt; ?&quot;</span>, <span class="number">1000</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PaidWithCreditCard</span><span class="params">(db *gorm.DB)</span></span> *gorm.DB &#123;</span><br><span class="line">  <span class="keyword">return</span> db.Where(<span class="string">&quot;pay_mode_sign = ?&quot;</span>, <span class="string">&quot;C&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PaidWithCod</span><span class="params">(db *gorm.DB)</span></span> *gorm.DB &#123;</span><br><span class="line">  <span class="keyword">return</span> db.Where(<span class="string">&quot;pay_mode_sign = ?&quot;</span>, <span class="string">&quot;C&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">OrderStatus</span><span class="params">(status []<span class="type">string</span>)</span></span> <span class="function"><span class="keyword">func</span> <span class="params">(db *gorm.DB)</span></span> *gorm.DB &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">func</span> <span class="params">(db *gorm.DB)</span></span> *gorm.DB &#123;</span><br><span class="line">    <span class="keyword">return</span> db.Where(<span class="string">&quot;status IN (?)&quot;</span>, status)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">db.Scopes(AmountGreaterThan1000, PaidWithCreditCard).Find(&amp;orders)</span><br><span class="line"><span class="comment">// 查找所有金额大于 1000 的信用卡订单</span></span><br><span class="line"></span><br><span class="line">db.Scopes(AmountGreaterThan1000, PaidWithCod).Find(&amp;orders)</span><br><span class="line"><span class="comment">// 查找所有金额大于 1000 的 COD 订单</span></span><br><span class="line"></span><br><span class="line">db.Scopes(AmountGreaterThan1000, OrderStatus([]<span class="type">string</span>&#123;<span class="string">&quot;paid&quot;</span>, <span class="string">&quot;shipped&quot;</span>&#125;)).Find(&amp;orders)</span><br><span class="line"><span class="comment">// 查找所有金额大于1000 的已付款或已发货订单</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="4-1-2-分页"><a href="#4-1-2-分页" class="headerlink" title="4.1.2 分页"></a>4.1.2 分页</h5><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Paginate</span><span class="params">(r *http.Request)</span></span> <span class="function"><span class="keyword">func</span><span class="params">(db *gorm.DB)</span></span> *gorm.DB &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">func</span> <span class="params">(db *gorm.DB)</span></span> *gorm.DB &#123;</span><br><span class="line">    q := r.URL.Query()</span><br><span class="line">    page, _ := strconv.Atoi(q.Get(<span class="string">&quot;page&quot;</span>))</span><br><span class="line">    <span class="keyword">if</span> page &lt;= <span class="number">0</span> &#123;</span><br><span class="line">      page = <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    pageSize, _ := strconv.Atoi(q.Get(<span class="string">&quot;page_size&quot;</span>))</span><br><span class="line">    <span class="keyword">switch</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> pageSize &gt; <span class="number">100</span>:</span><br><span class="line">      pageSize = <span class="number">100</span></span><br><span class="line">    <span class="keyword">case</span> pageSize &lt;= <span class="number">0</span>:</span><br><span class="line">      pageSize = <span class="number">10</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    offset := (page - <span class="number">1</span>) * pageSize</span><br><span class="line">    <span class="keyword">return</span> db.Offset(offset).Limit(pageSize)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">db.Scopes(Paginate(r)).Find(&amp;users)</span><br><span class="line">db.Scopes(Paginate(r)).Find(&amp;articles)</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-2-Count"><a href="#4-2-Count" class="headerlink" title="4.2 Count"></a>4.2 Count</h4><p>GORM中的 <code>Count</code> 方法用于检索匹配给定查询的记录数。 这是了解数据集大小的一个有用的功能，特别是在涉及有条件查询或数据分析的情况下。</p>
+<h5 id="4-2-1-得到匹配记录的-Count"><a href="#4-2-1-得到匹配记录的-Count" class="headerlink" title="4.2.1 得到匹配记录的 Count"></a>4.2.1 <strong>得到匹配记录的 Count</strong></h5><p>可以使用 <code>Count</code> 来确定符合您的查询中符合特定标准的记录的数量。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> count <span class="type">int64</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 计数 有着特定名字的 users</span></span><br><span class="line">db.Model(&amp;User&#123;&#125;).Where(<span class="string">&quot;name = ?&quot;</span>, <span class="string">&quot;jinzhu&quot;</span>).Or(<span class="string">&quot;name = ?&quot;</span>, <span class="string">&quot;jinzhu 2&quot;</span>).Count(&amp;count)</span><br><span class="line"><span class="comment">// SQL: SELECT count(1) FROM users WHERE name = &#x27;jinzhu&#x27; OR name = &#x27;jinzhu 2&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 计数 有着单一名字条件（single name condition）的 users</span></span><br><span class="line">db.Model(&amp;User&#123;&#125;).Where(<span class="string">&quot;name = ?&quot;</span>, <span class="string">&quot;jinzhu&quot;</span>).Count(&amp;count)</span><br><span class="line"><span class="comment">// SQL: SELECT count(1) FROM users WHERE name = &#x27;jinzhu&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 在不同的表中对记录计数</span></span><br><span class="line">db.Table(<span class="string">&quot;deleted_users&quot;</span>).Count(&amp;count)</span><br><span class="line"><span class="comment">// SQL: SELECT count(1) FROM deleted_users</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="4-2-2-配合-Distinct-和-Group"><a href="#4-2-2-配合-Distinct-和-Group" class="headerlink" title="4.2.2 **配合 Distinct 和 Group **"></a>4.2.2 **配合 Distinct 和 Group **</h5><p>GORM还允许对不同的值进行计数并对结果进行分组。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 为不同 name 计数</span></span><br><span class="line">db.Model(&amp;User&#123;&#125;).Distinct(<span class="string">&quot;name&quot;</span>).Count(&amp;count)</span><br><span class="line"><span class="comment">// SQL: SELECT COUNT(DISTINCT(`name`)) FROM `users`</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用自定义选择（custom select）计数不同的值</span></span><br><span class="line">db.Table(<span class="string">&quot;deleted_users&quot;</span>).Select(<span class="string">&quot;count(distinct(name))&quot;</span>).Count(&amp;count)</span><br><span class="line"><span class="comment">// SQL: SELECT count(distinct(name)) FROM deleted_users</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 分组记录计数</span></span><br><span class="line">users := []User&#123;</span><br><span class="line">  &#123;Name: <span class="string">&quot;name1&quot;</span>&#125;,</span><br><span class="line">  &#123;Name: <span class="string">&quot;name2&quot;</span>&#125;,</span><br><span class="line">  &#123;Name: <span class="string">&quot;name3&quot;</span>&#125;,</span><br><span class="line">  &#123;Name: <span class="string">&quot;name3&quot;</span>&#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">db.Model(&amp;User&#123;&#125;).Group(<span class="string">&quot;name&quot;</span>).Count(&amp;count)</span><br><span class="line"><span class="comment">// 按名称分组后计数</span></span><br><span class="line"><span class="comment">// count =&gt; 3</span></span><br></pre></td></tr></table></figure>
+
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/">protobuf基础</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2024/09/03/Gin%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">Gin基础学习</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-text">1. 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-%E6%A6%82%E8%BF%B0"><span class="toc-text">1.1 概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-%E5%AE%89%E8%A3%85"><span class="toc-text">1.2 安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-text">1.3 快速入门</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-%E7%89%B9%E6%80%A7"><span class="toc-text">1.4 特性</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%A8%A1%E5%9E%8B"><span class="toc-text">2. 模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89"><span class="toc-text">2.1 模型定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-%E7%BA%A6%E5%AE%9A"><span class="toc-text">2.2 约定</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-gorm-Model"><span class="toc-text">2.3 gorm.Model</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-%E9%AB%98%E7%BA%A7%E9%80%89%E9%A1%B9"><span class="toc-text">2.4 高级选项</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-4-1-%E5%B5%8C%E5%85%A5%E7%BB%93%E6%9E%84%E4%BD%93"><span class="toc-text">2.4.1 嵌入结构体</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-4-2-%E5%AD%97%E6%AE%B5%E6%A0%87%E7%AD%BE"><span class="toc-text">2.4.2 字段标签</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-CRUD"><span class="toc-text">3. CRUD</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-%E5%88%9B%E5%BB%BA"><span class="toc-text">3.1 创建</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-1-%E5%88%9B%E5%BB%BA%E8%AE%B0%E5%BD%95"><span class="toc-text">3.1.1 创建记录</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-2-%E7%94%A8%E6%8C%87%E5%AE%9A%E5%AD%97%E6%AE%B5%E5%88%9B%E5%BB%BA%E8%AE%B0%E5%BD%95"><span class="toc-text">3.1.2 用指定字段创建记录</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-3-%E4%BD%BF%E7%94%A8Map%E5%88%9B%E5%BB%BA"><span class="toc-text">3.1.3 使用Map创建</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-4-%E6%89%B9%E9%87%8F%E6%8F%92%E5%85%A5"><span class="toc-text">3.1.4 批量插入</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-1-5-%E5%88%9B%E5%BB%BA%E9%92%A9%E5%AD%90"><span class="toc-text">3.1.5 创建钩子</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-%E6%9F%A5%E8%AF%A2"><span class="toc-text">3.2 查询</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-1-%E6%9F%A5%E8%AF%A2%E5%8D%95%E4%B8%AA%E5%AF%B9%E8%B1%A1"><span class="toc-text">3.2.1 查询单个对象</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-2-%E6%A0%B9%E6%8D%AE%E4%B8%BB%E9%94%AE%E6%9F%A5%E8%AF%A2"><span class="toc-text">3.2.2 根据主键查询</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-3-%E6%9F%A5%E8%AF%A2%E5%85%A8%E9%83%A8%E5%AF%B9%E8%B1%A1"><span class="toc-text">3.2.3 查询全部对象</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-2-4-%E6%9D%A1%E4%BB%B6%E6%9F%A5%E8%AF%A2"><span class="toc-text">3.2.4 条件查询</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-1-string"><span class="toc-text">3.2.4.1 string</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-2-sturc-map"><span class="toc-text">3.2.4.2 sturc&amp;map</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-3-%E5%86%85%E8%81%94%E6%9F%A5%E8%AF%A2"><span class="toc-text">3.2.4.3 内联查询</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-4-Not"><span class="toc-text">3.2.4.4 Not</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-5-Or"><span class="toc-text">3.2.4.5 Or</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-5-%E9%80%89%E6%8B%A9%E7%89%B9%E5%AE%9A%E5%AD%97%E6%AE%B5"><span class="toc-text">3.2.4.5 选择特定字段</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-6-%E6%8E%92%E5%BA%8F"><span class="toc-text">3.2.4.6 排序</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-7-Limit-Offset"><span class="toc-text">3.2.4.7 Limit &amp; Offset</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-8-Group-By-Having"><span class="toc-text">3.2.4.8 Group By &amp; Having</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-9-Distinct"><span class="toc-text">3.2.4.9 Distinct</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-9-Scan"><span class="toc-text">3.2.4.9 Scan</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#3-2-4-10-Joins"><span class="toc-text">3.2.4.10 Joins</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2"><span class="toc-text">4. 高级查询</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-Scope"><span class="toc-text">4.1 Scope</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#4-1-1-%E6%9F%A5%E8%AF%A2"><span class="toc-text">4.1.1 查询</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-1-2-%E5%88%86%E9%A1%B5"><span class="toc-text">4.1.2 分页</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-Count"><span class="toc-text">4.2 Count</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#4-2-1-%E5%BE%97%E5%88%B0%E5%8C%B9%E9%85%8D%E8%AE%B0%E5%BD%95%E7%9A%84-Count"><span class="toc-text">4.2.1 得到匹配记录的 Count</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-2-2-%E9%85%8D%E5%90%88-Distinct-%E5%92%8C-Group"><span class="toc-text">4.2.2 **配合 Distinct 和 Group **</span></a></li></ol></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

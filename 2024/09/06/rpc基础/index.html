@@ -1,0 +1,1015 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>rpc基础 - Lianyutian</title>
+
+  
+    <meta name="description" content="1. 简介1.1 概述RPC（Remote Procedure Call，远程过程调用）是一种用于实现不同计算机或进程之间通信的协议或机制，使得程序可以像调用本地函数一样调用远程计算机上的函数。RPC 的核心目的是使得分布式系统的组件之间的交互变得简洁和透明。 核心概念  客户端: 发起 RPC 调用的程序或应用。它构造一个请求，调用一个远程服务的函数。 服务器端: 提供远程服务的程序或应用。它接">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rpc基础">
+<meta property="og:url" content="http://example.com/2024/09/06/rpc%E5%9F%BA%E7%A1%80/">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="1. 简介1.1 概述RPC（Remote Procedure Call，远程过程调用）是一种用于实现不同计算机或进程之间通信的协议或机制，使得程序可以像调用本地函数一样调用远程计算机上的函数。RPC 的核心目的是使得分布式系统的组件之间的交互变得简洁和透明。 核心概念  客户端: 发起 RPC 调用的程序或应用。它构造一个请求，调用一个远程服务的函数。 服务器端: 提供远程服务的程序或应用。它接">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2024-09-06T15:10:00.000Z">
+<meta property="article:modified_time" content="2025-12-23T08:50:16.678Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="rpc、grpc">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="rpc、grpc">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"dateCreated":"2024-09-06T15:10:00+00:00","dateModified":"2025-12-23T08:50:16+00:00","datePublished":"2024-09-06T15:10:00+00:00","description":"","headline":"rpc基础","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/09/06/rpc%E5%9F%BA%E7%A1%80/"},"publisher":{"@type":"Organization","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png","logo":{"@type":"ImageObject","url":"/assets/20240507174529.png"}},"url":"http://example.com/2024/09/06/rpc%E5%9F%BA%E7%A1%80/","keywords":"rpc、grpc","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/assets/20240507174529.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Lianyutian</div><div class="sub cap">学无止境</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item active" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2025/03/27/%E7%A4%BE%E5%8C%BA%E5%95%86%E5%9F%8E/"><span class="title">'社区商城'</span></a><a class="item title" href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/"><span class="title">rpc基础</span></a><a class="item title" href="/2025/03/25/xxl-job/"><span class="title">xxl-job基础</span></a><a class="item title" href="/2025/03/27/%E4%BA%91%E7%8E%AF%E5%A2%83/"><span class="title">云环境</span></a><a class="item title" href="/2025/03/28/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="title">区块链</span></a><a class="item title" href="/2024/12/13/circle-shop/"><span class="title">circle-shop</span></a><a class="item title" href="/2024/11/26/cloud-mall-vue/"><span class="title">cloud-mall-vue</span></a><a class="item title" href="/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/"><span class="title">protobuf基础</span></a><a class="item title" href="/2024/09/26/React%E5%9F%BA%E7%A1%80/"><span class="title">React基础</span></a><a class="item title" href="/2024/05/29/ReentrantLock%E8%AF%A6%E8%A7%A3/"><span class="title">ReentrantLock详解</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/Go/">Go</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2024-09-06T15:10:00.000Z">2024-09-06</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2025-12-23T08:50:16.678Z">2025-12-23</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>rpc基础</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h2><h3 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h3><p>RPC（Remote Procedure Call，远程过程调用）是一种用于实现不同计算机或进程之间通信的协议或机制，使得程序可以像调用本地函数一样调用远程计算机上的函数。RPC 的核心目的是使得分布式系统的组件之间的交互变得简洁和透明。</p>
+<p><strong>核心概念</strong></p>
+<ol>
+<li><strong>客户端</strong>: 发起 RPC 调用的程序或应用。它构造一个请求，调用一个远程服务的函数。</li>
+<li><strong>服务器端</strong>: 提供远程服务的程序或应用。它接收来自客户端的请求，执行相应的函数，并返回结果。</li>
+<li><strong>代理（Stub）</strong>: 客户端代理（或称为客户端存根）和服务器端代理（或称为服务器端存根）是分别在客户端和服务器端生成的代码，用于处理调用的序列化和反序列化、数据传输等任务。客户端代理将调用请求转换为网络消息，服务器端代理则将网络消息转换为实际的函数调用。</li>
+<li><strong>通信协议</strong>: 定义客户端和服务器端之间的消息传递格式和方式。常见的通信协议包括 HTTP、gRPC、JSON-RPC 等。</li>
+</ol>
+<p>在远程调用时，我们需要执行的函数体是在远程的机器上的，也就是说，add是在另一个进程中执行的。这就带来了几个新问题：</p>
+<ol>
+<li><strong>Call ID映射</strong>。我们怎么告诉远程机器我们要调用add，而不是sub或者Foo呢？在本地调用中，函数体是直接通过函数指针来指定的，我们调用add，编译器就自动帮我们调用它相应的函数指针。但是在远程调用中，函数指针是不行的，因为两个进程的地址空间是完全不一样的。所以，在RPC中，所有的函数都必须有自己的一个ID。这个ID在所有进程中都是唯一确定的。客户端在做远程过程调用时，必须附上这个ID。然后我们还需要在客户端和服务端分别维护一个 {函数 &lt;–&gt; Call ID} 的对应表。两者的表不一定需要完全相同，但相同的函数对应的Call ID必须相同。当客户端需要进行远程调用时，它就查一下这个表，找出相应的Call ID，然后把它传给服务端，服务端也通过查表，来确定客户端需要调用的函数，然后执行相应函数的代码。</li>
+<li><strong>序列化和反序列化</strong>。客户端怎么把参数值传给远程的函数呢？在本地调用中，我们只需要把参数压到栈里，然后让函数自己去栈里读就行。但是在远程过程调用时，客户端跟服务端是不同的进程，不能通过内存来传递参数。甚至有时候客户端和服务端使用的都不是同一种语言（比如服务端用C++，客户端用Java或者Python）。这时候就需要客户端把参数先转成一个字节流，传给服务端后，再把字节流转成自己能读取的格式。这个过程叫序列化和反序列化。同理，从服务端返回的值也需要序列化反序列化的过程。</li>
+<li><strong>网络传输</strong>。远程调用往往用在网络上，客户端和服务端是通过网络连接的。所有的数据都需要通过网络传输，因此就需要有一个网络传输层。网络传输层需要把Call ID和序列化后的参数字节流传给服务端，然后再把序列化后的调用结果传回客户端。只要能完成这两者的，都可以作为传输层使用。因此，它所使用的协议其实是不限的，能完成传输就行。尽管大部分RPC框架都使用TCP协议，但其实UDP也可以，而gRPC干脆就用了HTTP2。Java的Netty也属于这层的东西。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906151519.png"></p>
+<p>解决了上面三个机制，就能实现RPC了，具体过程如下：</p>
+<p>client端解决的问题：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. 将这个调用映射为Call ID。这里假设用最简单的字符串当Call ID的方法</span><br><span class="line">2. 将Call ID，a和b序列化。可以直接将它们的值以二进制形式打包</span><br><span class="line">3. 把2中得到的数据包发送给ServerAddr，这需要使用网络传输层</span><br><span class="line">4. 等待服务器返回结果</span><br><span class="line">4. 如果服务器调用成功，那么就将结果反序列化，并赋给total</span><br></pre></td></tr></table></figure>
+
+<p>server端解决的问题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1. 在本地维护一个Call ID到函数指针的映射call_id_map，可以用dict完成</span><br><span class="line">2. 等待请求，包括多线程的并发处理能力</span><br><span class="line">3. 得到一个请求后，将其数据包反序列化，得到Call ID</span><br><span class="line">4. 通过在call_id_map中查找，得到相应的函数指针</span><br><span class="line">5. 将a和rb反序列化后，在本地调用add函数，得到结果</span><br><span class="line">6. 将结果序列化后通过网络返回给Client</span><br></pre></td></tr></table></figure>
+
+<p>所以要实现一个RPC框架，其实只需要按以上流程实现就基本完成了。</p>
+<p>其中：</p>
+<ul>
+<li>Call ID映射可以直接使用函数字符串，也可以使用整数ID。映射表一般就是一个哈希表。</li>
+<li>序列化反序列化可以自己写，也可以使用Protobuf或者FlatBuffers之类的。</li>
+<li>网络传输库可以自己写socket，或者用asio，ZeroMQ，Netty之类。</li>
+</ul>
+<p>实际上真正的开发过程中，除了上面的基本功能以外还需要更多的细节：网络错误、流量控制、超时和重试等。</p>
+<h3 id="1-2-rpc开发要素分析"><a href="#1-2-rpc开发要素分析" class="headerlink" title="1.2 rpc开发要素分析"></a>1.2 rpc开发要素分析</h3><h4 id="1-2-1-rpc开发的四大要素"><a href="#1-2-1-rpc开发的四大要素" class="headerlink" title="1.2.1 rpc开发的四大要素"></a>1.2.1 rpc开发的四大要素</h4><p>RPC技术在架构设计上有四部分组成，分别是：<strong>客户端、客户端存根、服务端、服务端存根。</strong></p>
+<ul>
+<li><strong>客户端(Client)：</strong>服务调用发起方，也称为服务消费者。</li>
+<li><strong>客户端存根(Client  Stub)：</strong>该程序运行在客户端所在的计算机机器上，主要用来存储要调用的服务器的地址，另外，该程序还负责将客户端请求远端服务器程序的数据信息打包成数据包，通过网络发送给服务端Stub程序；其次，还要接收服务端Stub程序发送的调用结果数据包，并解析返回给客户端。</li>
+<li><strong>服务端(Server)：</strong>远端的计算机机器上运行的程序，其中有客户端要调用的方法。</li>
+<li><strong>服务端存根(Server Stub)：</strong>接收客户Stub程序通过网络发送的请求消息数据包，并调用服务端中真正的程序功能方法，完成功能调用；其次，将服务端执行调用的结果进行数据处理打包发送给客户端Stub程序。</li>
+</ul>
+<p>了解完了RPC技术的组成结构我们来看一下具体是如何实现客户端到服务端的调用的。实际上，如果我们想要在网络中的任意两台计算机上实现远程调用过程，要解决很多问题，比如：</p>
+<ul>
+<li>两台物理机器在网络中要建立稳定可靠的通信连接。</li>
+<li>两台服务器的通信协议的定义问题，即两台服务器上的程序如何识别对方的请求和返回结果。也就是说两台计算机必须都能够识别对方发来的信息，并且能够识别出其中的请求含义和返回含义，然后才能进行处理。这其实就是通信协议所要完成的工作。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906151929.png"></p>
+<p>在上述图中，通过1-10的步骤图解的形式，说明了RPC每一步的调用过程。具体描述为：</p>
+<ul>
+<li>1、客户端想要发起一个远程过程调用，首先通过调用本地客户端Stub程序的方式调用想要使用的功能方法名；</li>
+<li>2、客户端Stub程序接收到了客户端的功能调用请求，<strong>将客户端请求调用的方法名，携带的参数等信息做序列化操作，并打包成数据包。</strong></li>
+<li>3、客户端Stub查找到远程服务器程序的IP地址，调用Socket通信协议，通过网络发送给服务端。</li>
+<li>4、服务端Stub程序接收到客户端发送的数据包信息，并<strong>通过约定好的协议将数据进行反序列化，得到请求的方法名和请求参数等信息。</strong></li>
+<li>5、服务端Stub程序准备相关数据，<strong>调用本地Server对应的功能方法进行，并传入相应的参数，进行业务处理。</strong></li>
+<li>6、服务端程序根据已有业务逻辑执行调用过程，待业务执行结束，将执行结果返回给服务端Stub程序。</li>
+<li>7、服务端Stub程序<strong>将程序调用结果按照约定的协议进行序列化，</strong>并通过网络发送回客户端Stub程序。</li>
+<li>8、客户端Stub程序接收到服务端Stub发送的返回数据，<strong>对数据进行反序列化操作，</strong>并将调用返回的数据传递给客户端请求发起者。</li>
+<li>9、客户端请求发起者得到调用结果，整个RPC调用过程结束。</li>
+</ul>
+<h4 id="1-2-2-rpc需要使用到的术语"><a href="#1-2-2-rpc需要使用到的术语" class="headerlink" title="1.2.2 rpc需要使用到的术语"></a>1.2.2 rpc需要使用到的术语</h4><p>通过上文一系列的文字描述和讲解，我们已经了解了RPC的由来和RPC整个调用过程。我们可以看到RPC是一系列操作的集合，其中涉及到很多对数据的操作，以及网络通信。因此，我们对RPC中涉及到的技术做一个总结和分析：</p>
+<ul>
+<li><strong>1、动态代理技术：</strong> 上文中我们提到的Client Stub和Sever Stub程序，在具体的编码和开发实践过程中，都是使用动态代理技术自动生成的一段程序。</li>
+<li><strong>2、序列化和反序列化：</strong>  在RPC调用的过程中，我们可以看到数据需要在一台机器上传输到另外一台机器上。在互联网上，所有的数据都是以字节的形式进行传输的。而我们在编程的过程中，往往都是使用数据对象，因此想要在网络上将数据对象和相关变量进行传输，就需要对数据对象做序列化和反序列化的操作。<ul>
+<li><strong>序列化：</strong>把对象转换为字节序列的过程称为对象的序列化，也就是编码的过程。</li>
+<li><strong>反序列化：</strong>把字节序列恢复为对象的过程称为对象的反序列化，也就是解码的过程。</li>
+</ul>
+</li>
+</ul>
+<p>我们常见的Json,XML等相关框架都可以对数据做序列化和反序列化编解码操作。后面我们要学习的Protobuf协议，这也是一种数据编解码的协议，在RPC框架中使用的更广泛。</p>
+<h2 id="2-go-rpc-开发"><a href="#2-go-rpc-开发" class="headerlink" title="2. go rpc 开发"></a>2. go rpc 开发</h2><p>Go语言的RPC包的路径为net&#x2F;rpc，也就是放在了net包目录下面。</p>
+<h3 id="2-1-hello-world"><a href="#2-1-hello-world" class="headerlink" title="2.1 hello world"></a>2.1 hello world</h3><h4 id="2-1-1-服务端"><a href="#2-1-1-服务端" class="headerlink" title="2.1.1 服务端"></a>2.1.1 服务端</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;net&quot;</span></span><br><span class="line"> <span class="string">&quot;net/rpc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> HelloService <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *HelloService)</span></span> Hello(request <span class="type">string</span>, reply *<span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line"> *reply = <span class="string">&quot;hello &quot;</span>+ request</span><br><span class="line"> <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"> _ = rpc.RegisterName(<span class="string">&quot;HelloService&quot;</span>, &amp;HelloService&#123;&#125;)</span><br><span class="line"> listener, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:1234&quot;</span>)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;监听端口失败&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> conn, err := listener.Accept()</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;建立链接失败&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> rpc.ServeConn(conn)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中Hello方法<code>必须满足Go语言的RPC规则</code>：方法<code>只能有两个可序列化的参数，其中第二个参数是指针类型，并且返回一个error类型，同时必须是公开的方法</code>。</p>
+<p>然后就可以将HelloService类型的对象注册为一个RPC服务：(TCP RPC服务)。</p>
+<p>其中<code>rpc.Register</code>函数调用会将对象类型中所有满足RPC规则的对象方法注册为RPC函数，所有注册的方法会放在“HelloService”服务空间之下。然后我们建立一个唯一的TCP链接，并且通过rpc.ServeConn函数在该TCP链接上为对方提供RPC服务。</p>
+<h4 id="2-1-2-客户端"><a href="#2-1-2-客户端" class="headerlink" title="2.1.2 客户端"></a>2.1.2 客户端</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    client, err := rpc.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;localhost:1234&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatal(<span class="string">&quot;dialing:&quot;</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> reply <span class="type">string</span></span><br><span class="line">    err = client.Call(<span class="string">&quot;HelloService.Hello&quot;</span>, <span class="string">&quot;world&quot;</span>, &amp;reply)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    fmt.Println(reply)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先是通过<code>rpc.Dial</code>拨号RPC服务，然后通过<code>client.Call</code>调用具体的RPC方法。在调用<code>client.Call</code>时，<code>第一个参数是用点号链接的RPC服务名字和方法名字，第二和第三个参数分别我们定义RPC方法的两个参数</code>。</p>
+<h3 id="2-2-rpc-支持-json"><a href="#2-2-rpc-支持-json" class="headerlink" title="2.2 rpc 支持 json"></a>2.2 rpc 支持 json</h3><p>标准库的RPC默认采用Go语言特有的gob编码，因此从其它语言调用Go语言实现的RPC服务将比较困难。在互联网的微服务时代，每个RPC以及服务的使用者都可能采用不同的编程语言，因此跨语言是互联网时代RPC的一个首要条件。得益于RPC的框架设计，Go语言的RPC其实也是很容易实现跨语言支持的。</p>
+<p>Go语言的RPC框架有两个比较有特色的设计：一个是RPC数据打包时可以通过插件实现自定义的编码和解码；另   一个是RPC建立在抽象的<code>io.ReadWriteCloser</code>接口之上的，我们可以将RPC架设在不同的通讯协议之上。这里我们将尝试通过官方自带的<code>net/rpc/jsonrpc</code>扩展实现一个跨语言的PPC。</p>
+<h4 id="2-2-1-服务端"><a href="#2-2-1-服务端" class="headerlink" title="2.2.1 服务端"></a>2.2.1 服务端</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;net&quot;</span></span><br><span class="line"> <span class="string">&quot;net/rpc&quot;</span></span><br><span class="line"> <span class="string">&quot;net/rpc/jsonrpc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> HelloService <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *HelloService)</span></span> Hello(request <span class="type">string</span>, reply *<span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line"> *reply = <span class="string">&quot;hello &quot;</span>+ request</span><br><span class="line"> <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"> rpc.RegisterName(<span class="string">&quot;HelloService&quot;</span>, <span class="built_in">new</span>(HelloService))</span><br><span class="line"> listener, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:1234&quot;</span>)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;启动错误&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">for</span> &#123;</span><br><span class="line">  conn, err := listener.Accept()</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">   <span class="built_in">panic</span>(<span class="string">&quot;接收&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">go</span> rpc.ServeCodec(jsonrpc.NewServerCodec(conn))</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代码中最大的变化是用<code>rpc.ServeCodec</code>函数替代了<code>rpc.ServeConn</code>函数，传入的参数是针对服务端的<code>json</code>编解码器。</p>
+<h4 id="2-2-2-客户端"><a href="#2-2-2-客户端" class="headerlink" title="2.2.2 客户端"></a>2.2.2 客户端</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"> <span class="string">&quot;net&quot;</span></span><br><span class="line"> <span class="string">&quot;net/rpc&quot;</span></span><br><span class="line"> <span class="string">&quot;net/rpc/jsonrpc&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"> conn, err := net.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;localhost:1234&quot;</span>)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;连接错误&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> client := rpc.NewClientWithCodec(jsonrpc.NewClientCodec(conn))</span><br><span class="line"> <span class="keyword">var</span> reply <span class="type">string</span></span><br><span class="line"> err = client.Call(<span class="string">&quot;HelloService.Hello&quot;</span>, <span class="string">&quot;imooc&quot;</span>, &amp;reply)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;调用错误&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> fmt.Println(reply)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-改进-rpc-调用"><a href="#2-3-改进-rpc-调用" class="headerlink" title="2.3 改进 rpc 调用"></a>2.3 改进 rpc 调用</h3><p>前面的rpc调用虽然简单，但是和普通的http的调用差异不大，这次我们解决下面的问题：</p>
+<h4 id="2-3-1-serviceName统一和名称冲突的问题"><a href="#2-3-1-serviceName统一和名称冲突的问题" class="headerlink" title="2.3.1 serviceName统一和名称冲突的问题"></a>2.3.1 serviceName统一和名称冲突的问题</h4><ol>
+<li>server端和client端如何统一<code>serviceName</code></li>
+<li>多个server的包中<code>serviceName</code>同名的问题</li>
+</ol>
+<p>新建handler&#x2F;handler.go文件内容如下： 为什么要新建一个文件？ - 解耦</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> handler</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> HelloServiceName = <span class="string">&quot;handler/HelloService&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>服务端</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;net&quot;</span></span><br><span class="line"> <span class="string">&quot;net/rpc&quot;</span></span><br><span class="line"> <span class="string">&quot;start/rpc_ch01/handler&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> HelloService <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *HelloService)</span></span> Hello(request <span class="type">string</span>, reply *<span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line"> *reply = <span class="string">&quot;hello &quot;</span>+ request</span><br><span class="line"> <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"> _ = rpc.RegisterName(handler.HelloServiceName, &amp;HelloService&#123;&#125;)</span><br><span class="line"> listener, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:1234&quot;</span>)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;监听端口失败&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> conn, err := listener.Accept()</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;建立链接失败&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> rpc.ServeConn(conn)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>客户端</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"> <span class="string">&quot;net/rpc&quot;</span></span><br><span class="line"> <span class="string">&quot;start/rpc_ch01/handler&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"> client, err := rpc.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;localhost:1234&quot;</span>)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;连接到服务器失败&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">var</span> reply <span class="type">string</span></span><br><span class="line"> err = client.Call(handler.HelloServiceName+<span class="string">&quot;.Hello&quot;</span>, <span class="string">&quot;imooc&quot;</span>, &amp;reply)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;服务调用失败&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> fmt.Println(reply)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-3-2-屏蔽HelloServiceName和Hello函数名称"><a href="#2-3-2-屏蔽HelloServiceName和Hello函数名称" class="headerlink" title="2.3.2 屏蔽HelloServiceName和Hello函数名称"></a>2.3.2 屏蔽HelloServiceName和Hello函数名称</h4><p><strong>1.新建Handler</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> handler</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> HelloService <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *HelloService)</span></span> Hello(request <span class="type">string</span>, reply *<span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line"> *reply = <span class="string">&quot;hello &quot;</span> + request</span><br><span class="line"> <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>handler里封装处理逻辑。</p>
+<p><strong>2.服务端代理</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> server_proxy</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;net/rpc&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> HelloServiceName = <span class="string">&quot;handler/HelloService&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> HelloServiceInterface <span class="keyword">interface</span> &#123;</span><br><span class="line"> Hello(request <span class="type">string</span>, reply *<span class="type">string</span>) <span class="type">error</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RegisterHelloService</span><span class="params">(srv HelloServiceInterface)</span></span> <span class="type">error</span> &#123;</span><br><span class="line"> <span class="keyword">return</span> rpc.RegisterName(HelloServiceName, srv)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将注册 <code>rpc</code> 服务逻辑交给代理。</p>
+<p><strong>3.服务端</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;net&quot;</span></span><br><span class="line"> <span class="string">&quot;net/rpc&quot;</span></span><br><span class="line"> <span class="string">&quot;start/rpc_ch01/handler&quot;</span></span><br><span class="line"> <span class="string">&quot;start/rpc_ch01/server_proxy&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"> hellohandler := &amp;handler.HelloService&#123;&#125;</span><br><span class="line">    <span class="comment">// 直接使用代理注册 rpc 服务</span></span><br><span class="line"> _ = server_proxy.RegisterHelloService(hellohandler)</span><br><span class="line"> listener, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;:1234&quot;</span>)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;监听端口失败&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> conn, err := listener.Accept()</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;建立链接失败&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> rpc.ServeConn(conn)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>4.客户端代理</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> client_proxy</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;net/rpc&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> HelloServiceName = <span class="string">&quot;handler/HelloService&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> HelloServiceClient <span class="keyword">struct</span>&#123;</span><br><span class="line"> *rpc.Client</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewClient</span><span class="params">(address <span class="type">string</span>)</span></span> HelloServiceClient &#123;</span><br><span class="line"> conn, err := rpc.Dial(<span class="string">&quot;tcp&quot;</span>, address)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;连接服务器错误&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">return</span> HelloServiceClient&#123;conn&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *HelloServiceClient)</span></span> Hello(request <span class="type">string</span>, reply *<span class="type">string</span>) <span class="type">error</span> &#123;</span><br><span class="line"> err := c.Call(HelloServiceName+<span class="string">&quot;.Hello&quot;</span>, request, reply)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> err</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端代理封装调用逻辑。</p>
+<p><strong>5.客户端</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"> <span class="string">&quot;start/rpc_ch01/client_proxy&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"> client := client_proxy.NewClient(<span class="string">&quot;localhost:1234&quot;</span>)</span><br><span class="line"> <span class="keyword">var</span> reply <span class="type">string</span></span><br><span class="line">    <span class="comment">// 通过代理直接传参调用</span></span><br><span class="line"> err := client.Hello(<span class="string">&quot;bobby&quot;</span>,&amp;reply)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  <span class="built_in">panic</span>(<span class="string">&quot;调用失败&quot;</span>)</span><br><span class="line"> &#125;</span><br><span class="line"> fmt.Println(reply)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-grpc入门"><a href="#3-grpc入门" class="headerlink" title="3. grpc入门"></a>3. grpc入门</h2><h3 id="3-1-grpc和protobuf"><a href="#3-1-grpc和protobuf" class="headerlink" title="3.1 grpc和protobuf"></a>3.1 grpc和protobuf</h3><h4 id="3-1-1-grpc"><a href="#3-1-1-grpc" class="headerlink" title="3.1.1 grpc"></a>3.1.1 grpc</h4><p>gRPC 是一个高性能、开源和通用的 RPC 框架，面向移动和 HTTP&#x2F;2 设计。目前提供 C、Java 和 Go 语言版本，分别是：<a target="_blank" rel="noopener" href="https://github.com/grpc/grpc">grpc</a>, <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc-java">grpc-java</a>, <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc-go">grpc-go</a>. 其中 C 版本支持 <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc">C</a>, <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc/tree/master/src/cpp">C++</a>, <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc/tree/master/src/node">Node.js</a>, <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc/tree/master/src/python">Python</a>, <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc/tree/master/src/ruby">Ruby</a>, <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc/tree/master/src/objective-c">Objective-C</a>, <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc/tree/master/src/php">PHP</a> 和 <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc/tree/master/src/csharp">C#</a> 支持.</p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906162550.png"></p>
+<h4 id="3-1-2-protobuf"><a href="#3-1-2-protobuf" class="headerlink" title="3.1.2 protobuf"></a>3.1.2 protobuf</h4><p>protobuf 即 Protocol Buffers，是一种轻便高效的结构化数据存储格式，与语言、平台无关，可扩展可序列化。protobuf 性能和效率大幅度优于 JSON、XML 等其他的结构化数据格式。protobuf 是以二进制方式存储的，占用空间小，但也带来了可读性差的缺点。protobuf 在通信协议和数据存储等领域应用广泛。例如著名的分布式缓存工具 <a target="_blank" rel="noopener" href="https://memcached.org/">Memcached</a> 的 Go 语言版本<a target="_blank" rel="noopener" href="https://github.com/golang/groupcache">groupcache</a> 就使用了 protobuf 作为其 RPC 数据格式。</p>
+<p>Protobuf 在 .proto 定义需要处理的结构化数据，可以通过 protoc 工具，将 .proto 文件转换为 C、C++、Golang、Java、Python 等多种语言的代码，兼容性好，易于使用。</p>
+<p>java中的dubbo dubbo&#x2F;rmi&#x2F;hessian messagepack 如果你懂了协议完全有能力自己去实现一个协议</p>
+<ul>
+<li><code>Protocol Buffer</code> 其实 是 <code>Google</code>出品的一种轻量 &amp; 高效的结构化数据存储格式，性能比 <code>Json、XML</code> 真的强！太！多！</li>
+<li>protobuf经历了protobuf2和protobuf3，pb3比pb2简化了很多，目前主流的版本是pb3</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906162746.png"></p>
+<h3 id="3-2-go使用protobuf"><a href="#3-2-go使用protobuf" class="headerlink" title="3.2 go使用protobuf"></a>3.2 go使用protobuf</h3><h4 id="3-2-1-安装protoc"><a href="#3-2-1-安装protoc" class="headerlink" title="3.2.1 安装protoc"></a>3.2.1 安装protoc</h4><p><strong>下载 protoc</strong></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/releases">https://github.com/protocolbuffers/protobuf/releases</a></p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906102707.png"></p>
+<p><strong>添加 protoc 环境变量</strong></p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906103032.png"></p>
+<p><strong>检查</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc --version</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906103200.png"></p>
+<p><strong>安装 vscode 插件</strong></p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/mysql20240906104638.png"></p>
+<h4 id="3-2-2-使用"><a href="#3-2-2-使用" class="headerlink" title="3.2.2 使用"></a>3.2.2 使用</h4><p><strong>1.编写proto文件</strong></p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"><span class="keyword">option</span> go_package = <span class="string">&quot;.;proto&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// this is a comment</span></span><br><span class="line"><span class="keyword">message </span><span class="title class_">Student</span> &#123;</span><br><span class="line">  <span class="type">string</span> name = <span class="number">1</span>;</span><br><span class="line">  <span class="type">bool</span> male = <span class="number">2</span>;</span><br><span class="line">  <span class="keyword">repeated</span> <span class="type">int32</span> scores = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.生成源码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative Student.proto</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.调用代码</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line"> <span class="string">&quot;encoding/json&quot;</span></span><br><span class="line"> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"> <span class="string">&quot;log&quot;</span></span><br><span class="line"> pb <span class="string">&quot;protobuf/proto&quot;</span></span><br><span class="line"></span><br><span class="line"> <span class="string">&quot;google.golang.org/protobuf/proto&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line"> student := &amp;pb.Student&#123;</span><br><span class="line">  Name:   <span class="string">&quot;geektutu&quot;</span>,</span><br><span class="line">  Male:   <span class="literal">true</span>,</span><br><span class="line">  Scores: []<span class="type">int32</span>&#123;<span class="number">98</span>, <span class="number">85</span>, <span class="number">88</span>&#125;,</span><br><span class="line"> &#125;</span><br><span class="line"> data, err := proto.Marshal(student)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  log.Fatal(<span class="string">&quot;marshaling error: &quot;</span>, err)</span><br><span class="line"> &#125;</span><br><span class="line"> data2, err := json.Marshal(student)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  log.Fatal(<span class="string">&quot;marshaling error: &quot;</span>, err)</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">// protobuf data is: geektutubUX, len is: 17</span></span><br><span class="line"> fmt.Printf(<span class="string">&quot;protobuf data is: %s, len is: %d\n&quot;</span>, <span class="type">string</span>(data), <span class="built_in">len</span>(data))</span><br><span class="line"> <span class="comment">// json data is: &#123;&quot;name&quot;:&quot;geektutu&quot;,&quot;male&quot;:true,&quot;scores&quot;:[98,85,88]&#125;, len is: 51</span></span><br><span class="line"> fmt.Printf(<span class="string">&quot;json data is: %s, len is: %d\n&quot;</span>, <span class="type">string</span>(data2), <span class="built_in">len</span>(data2))</span><br><span class="line"></span><br><span class="line"> newStudent := &amp;pb.Student&#123;&#125;</span><br><span class="line"> err = proto.Unmarshal(data, newStudent)</span><br><span class="line"> <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">  log.Fatal(<span class="string">&quot;unmarshaling error: &quot;</span>, err)</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">// Now student and newStudent contain the same data.</span></span><br><span class="line"> <span class="keyword">if</span> student.GetName() != newStudent.GetName() &#123;</span><br><span class="line">  log.Fatalf(<span class="string">&quot;data mismatch %q != %q&quot;</span>, student.GetName(), student.GetName())</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-go-使用-grpc"><a href="#3-3-go-使用-grpc" class="headerlink" title="3.3 go 使用 grpc"></a>3.3 go 使用 grpc</h3><p><strong>1.下载依赖</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go get github.com/golang/protobuf/protoc-gen-go</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.proto文件</strong></p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"><span class="keyword">option</span> go_package = <span class="string">&quot;.;proto&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">service </span><span class="title class_">Greeter</span> &#123;</span><br><span class="line">  <span class="function"><span class="keyword">rpc</span> SayHello (HelloRequest) <span class="keyword">returns</span> (HelloReply)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">HelloRequest</span> &#123;</span><br><span class="line">  <span class="type">string</span> name = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">message </span><span class="title class_">HelloReply</span> &#123;</span><br><span class="line">  <span class="type">string</span> message = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>3.生成go代码</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative Hello.proto</span><br></pre></td></tr></table></figure>
+
+<p><strong>4.服务端</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line">    <span class="string">&quot;grpc_demo/hello&quot;</span></span><br><span class="line">    <span class="string">&quot;net&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Server <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *Server)</span></span> SayHello(ctx context.Context,request *hello.HelloRequest)(*hello.HelloReply,<span class="type">error</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> &amp;hello.HelloReply&#123;Message:<span class="string">&quot;Hello &quot;</span>+request.Name&#125;,<span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">    g := grpc.NewServer()</span><br><span class="line">    s := Server&#123;&#125;</span><br><span class="line">    hello.RegisterGreeterServer(g,&amp;s)</span><br><span class="line">    lis, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, fmt.Sprintf(<span class="string">&quot;:8080&quot;</span>))</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(<span class="string">&quot;failed to listen: &quot;</span>+err.Error())</span><br><span class="line">    &#125;</span><br><span class="line">    g.Serve(lis)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>5.客户端</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line">    <span class="string">&quot;grpc_demo/proto&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">    conn,err := grpc.Dial(<span class="string">&quot;127.0.0.1:8080&quot;</span>,grpc.WithInsecure())</span><br><span class="line">    <span class="keyword">if</span> err!=<span class="literal">nil</span>&#123;</span><br><span class="line">        <span class="built_in">panic</span>(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> conn.Close()</span><br><span class="line">    c := hello.NewGreeterClient(conn)</span><br><span class="line">    r,err := c.SayHello(context.Background(),&amp;hello.HelloRequest&#123;Name:<span class="string">&quot;bobby&quot;</span>&#125;)</span><br><span class="line">    <span class="keyword">if</span> err!=<span class="literal">nil</span>&#123;</span><br><span class="line">        <span class="built_in">panic</span>(err)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(r.Message)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2024/09/26/React%E5%9F%BA%E7%A1%80/">React基础</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/">protobuf基础</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="toc-text">1. 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%A6%82%E8%BF%B0"><span class="toc-text">1.1 概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-rpc%E5%BC%80%E5%8F%91%E8%A6%81%E7%B4%A0%E5%88%86%E6%9E%90"><span class="toc-text">1.2 rpc开发要素分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-rpc%E5%BC%80%E5%8F%91%E7%9A%84%E5%9B%9B%E5%A4%A7%E8%A6%81%E7%B4%A0"><span class="toc-text">1.2.1 rpc开发的四大要素</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-rpc%E9%9C%80%E8%A6%81%E4%BD%BF%E7%94%A8%E5%88%B0%E7%9A%84%E6%9C%AF%E8%AF%AD"><span class="toc-text">1.2.2 rpc需要使用到的术语</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-go-rpc-%E5%BC%80%E5%8F%91"><span class="toc-text">2. go rpc 开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-hello-world"><span class="toc-text">2.1 hello world</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-text">2.1.1 服务端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text">2.1.2 客户端</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-rpc-%E6%94%AF%E6%8C%81-json"><span class="toc-text">2.2 rpc 支持 json</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-text">2.2.1 服务端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-text">2.2.2 客户端</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%94%B9%E8%BF%9B-rpc-%E8%B0%83%E7%94%A8"><span class="toc-text">2.3 改进 rpc 调用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1-serviceName%E7%BB%9F%E4%B8%80%E5%92%8C%E5%90%8D%E7%A7%B0%E5%86%B2%E7%AA%81%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">2.3.1 serviceName统一和名称冲突的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-%E5%B1%8F%E8%94%BDHelloServiceName%E5%92%8CHello%E5%87%BD%E6%95%B0%E5%90%8D%E7%A7%B0"><span class="toc-text">2.3.2 屏蔽HelloServiceName和Hello函数名称</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-grpc%E5%85%A5%E9%97%A8"><span class="toc-text">3. grpc入门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-grpc%E5%92%8Cprotobuf"><span class="toc-text">3.1 grpc和protobuf</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1-grpc"><span class="toc-text">3.1.1 grpc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2-protobuf"><span class="toc-text">3.1.2 protobuf</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-go%E4%BD%BF%E7%94%A8protobuf"><span class="toc-text">3.2 go使用protobuf</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-%E5%AE%89%E8%A3%85protoc"><span class="toc-text">3.2.1 安装protoc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-%E4%BD%BF%E7%94%A8"><span class="toc-text">3.2.2 使用</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-go-%E4%BD%BF%E7%94%A8-grpc"><span class="toc-text">3.3 go 使用 grpc</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
