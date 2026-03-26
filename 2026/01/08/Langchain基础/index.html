@@ -1,0 +1,1164 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Langchain基础 - Lianyutian</title>
+
+  
+    <meta name="description" content="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 LangChain基础LangChain是开始构建由大型语言模型（LLMs）驱动的智能体和应用程序的最简单方法。只需不到10行代码，就可以连接到OpenAI、Anthropic、谷歌以及更多平台。LangChain提供了预先构建的智能体架构和模型集成，帮助你">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Langchain基础">
+<meta property="og:url" content="http://example.com/2026/01/08/Langchain%E5%9F%BA%E7%A1%80/">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="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 LangChain基础LangChain是开始构建由大型语言模型（LLMs）驱动的智能体和应用程序的最简单方法。只需不到10行代码，就可以连接到OpenAI、Anthropic、谷歌以及更多平台。LangChain提供了预先构建的智能体架构和模型集成，帮助你">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2026-01-08T19:25:27.000Z">
+<meta property="article:modified_time" content="2026-03-26T00:12:11.533Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="Langchain">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="Langchain">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"dateCreated":"2026-01-08T19:25:27+00:00","dateModified":"2026-03-26T00:12:11+00:00","datePublished":"2026-01-08T19:25:27+00:00","description":"","headline":"Langchain基础","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2026/01/08/Langchain%E5%9F%BA%E7%A1%80/"},"publisher":{"@type":"Organization","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png","logo":{"@type":"ImageObject","url":"/assets/20240507174529.png"}},"url":"http://example.com/2026/01/08/Langchain%E5%9F%BA%E7%A1%80/","keywords":"Langchain","image":[]}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/assets/20240507174529.png" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Lianyutian</div><div class="sub cap">学无止境</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item active" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2025/03/27/%E7%A4%BE%E5%8C%BA%E5%95%86%E5%9F%8E/"><span class="title">'社区商城'</span></a><a class="item title" href="/2024/11/26/cloud-mall-vue/"><span class="title">cloud-mall-vue</span></a><a class="item title" href="/2024/09/06/protobuf%E5%9F%BA%E7%A1%80/"><span class="title">protobuf基础</span></a><a class="item title" href="/2024/09/06/rpc%E5%9F%BA%E7%A1%80/"><span class="title">rpc基础</span></a><a class="item title" href="/2025/03/25/xxl-job/"><span class="title">xxl-job基础</span></a><a class="item title" href="/2025/03/27/%E4%BA%91%E7%8E%AF%E5%A2%83/"><span class="title">云环境</span></a><a class="item title" href="/2025/03/28/%E5%8C%BA%E5%9D%97%E9%93%BE/"><span class="title">区块链</span></a><a class="item title" href="/2024/09/26/React%E5%9F%BA%E7%A1%80/"><span class="title">React基础</span></a><a class="item title" href="/2024/05/29/ReentrantLock%E8%AF%A6%E8%A7%A3/"><span class="title">ReentrantLock详解</span></a><a class="item title" href="/2024/12/13/circle-shop/"><span class="title">circle-shop</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/AI/">AI</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-01-08T19:25:27.000Z">2026-01-08</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-03-26T00:12:11.533Z">2026-03-26</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Langchain基础</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>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</p>
+<h2 id="LangChain基础"><a href="#LangChain基础" class="headerlink" title="LangChain基础"></a>LangChain基础</h2><p>LangChain是开始构建由大型语言模型（LLMs）驱动的智能体和应用程序的最简单方法。只需不到10行代码，就可以连接到OpenAI、Anthropic、谷歌以及更多平台。LangChain提供了预先构建的智能体架构和模型集成，帮助你快速上手，并将大型语言模型无缝整合到你的智能体和应用程序中。</p>
+<hr>
+<h3 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h3><h4 id="Models"><a href="#Models" class="headerlink" title="Models"></a>Models</h4><p>在 LangChain 中，**<code>Models</code> 模块（或更准确地说，模型相关组件）的核心作用是：为应用程序提供统一、标准化的接口，用于调用各种大语言模型（LLM）和聊天模型（Chat Model），无论其来自 OpenAI、Anthropic、Google、开源模型（如 Llama）还是本地部署。**</p>
+<hr>
+<p>模型可以通过两种方式使用：</p>
+<ol>
+<li><strong>使用智能体时</strong>：创建[智能体]时可以动态指定模型。</li>
+<li><strong>独立式</strong>：模型可以直接调用（在智能体循环之外），用于文本生成、分类或提取等任务，无需智能体框架。</li>
+</ol>
+<hr>
+<h5 id="初始化模型"><a href="#初始化模型" class="headerlink" title="初始化模型"></a>初始化模型</h5><p>在LangChain中开始使用独立模型最简单的方法是使用<code>init_chat_model</code>从你选择的聊天模型提供商那里初始化一个（示例如下）：</p>
+<p><code>uv add &quot;langchain[openai]&quot;</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> init_chat_model</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义OpenAI API密钥和基础URL</span></span><br><span class="line">OPENAI_API_KEY=<span class="string">&quot;sk-hDQdejxq7OmwLg0jRtuQaU2o0qwWoY36hwdNfLE5jJcLYc05&quot;</span></span><br><span class="line">OPENAI_API_BASE=<span class="string">&quot;https://api.chatanywhere.tech&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化聊天模型，配置为gpt-3.5-turbo模型</span></span><br><span class="line">model = init_chat_model(</span><br><span class="line">    model=<span class="string">&quot;gpt-4o-mini&quot;</span>,</span><br><span class="line">    model_provider=<span class="string">&quot;openai&quot;</span>,</span><br><span class="line">    api_key=OPENAI_API_KEY,</span><br><span class="line">    base_url=OPENAI_API_BASE</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 简单文本调用示例</span></span><br><span class="line">response = model.invoke(<span class="string">&quot;你是谁&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<p><code>init_chat_model</code>具体参数含义：<a target="_blank" rel="noopener" href="https://reference.langchain.com/python/langchain/models/?_gl=1*1sy7o0k*_gcl_au*MTY1OTA5NTEwMS4xNzYxMTgzMzQz*_ga*MjMzNTE4NTQwLjE3NjExODQwNTk.*_ga_47WX3HKKY2*czE3Njc3NzQxMjYkbzEwJGcxJHQxNzY3Nzc1ODUwJGo2MCRsMCRoMA..#langchain.chat_models.init_chat_model(model_provider)">https://reference.langchain.com/python/langchain/models/?_gl=1*1sy7o0k*_gcl_au*MTY1OTA5NTEwMS4xNzYxMTgzMzQz*_ga*MjMzNTE4NTQwLjE3NjExODQwNTk.*_ga_47WX3HKKY2*czE3Njc3NzQxMjYkbzEwJGcxJHQxNzY3Nzc1ODUwJGo2MCRsMCRoMA..#langchain.chat_models.init_chat_model(model_provider)</a></p>
+<hr>
+<h5 id="直接使用提供商模型"><a href="#直接使用提供商模型" class="headerlink" title="直接使用提供商模型"></a>直接使用提供商模型</h5><p><strong>支持的模型</strong>：<a target="_blank" rel="noopener" href="https://docs.langchain.com/oss/python/integrations/providers/overview">https://docs.langchain.com/oss/python/integrations/providers/overview</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os </span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 入参数详情：https://docs.langchain.com/oss/python/langchain/models#parameters</span></span><br><span class="line">client = ChatOpenAI(model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>, api_key=os.getenv(<span class="string">&quot;OPENAI_API_KEY&quot;</span>), base_url=os.getenv(<span class="string">&quot;OPENAI_API_BASE&quot;</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">##################################################################################################################################</span></span><br><span class="line"></span><br><span class="line">response = client.invoke(<span class="string">&quot;你好&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;-- info: response=<span class="subst">&#123;response.content&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="调用方式"><a href="#调用方式" class="headerlink" title="调用方式"></a>调用方式</h5><p>必须调用聊天模型才能生成输出。主要有三种调用方法，每种方法适用于不同的使用场景。</p>
+<h6 id="invoke"><a href="#invoke" class="headerlink" title="invoke"></a>invoke</h6><p>调用模型最直接的方法是使用<code>invoke()</code>，传入单条消息或消息列表。</p>
+<p>可以向聊天模型提供消息列表来表示对话历史。每条消息都有一个角色，模型用该角色来指示对话中是谁发送了这条消息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os </span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> init_chat_model</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line">client = ChatOpenAI(model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>, api_key=os.getenv(<span class="string">&quot;OPENAI_API_KEY&quot;</span>), base_url=os.getenv(<span class="string">&quot;OPENAI_API_BASE&quot;</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">##################################################################################################################################</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 传入单条消息</span></span><br><span class="line">response = client.invoke(<span class="string">&quot;你好&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;-- info: response=<span class="subst">&#123;response.content&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 传入消息列表</span></span><br><span class="line">response = client.invoke([</span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;You are a helpful assistant that translates English to French.&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;Translate: I love programming.&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;J&#x27;adore la programmation.&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;Translate: I love building applications.&quot;</span>&#125;</span><br><span class="line">])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;-- info: response=<span class="subst">&#123;response.content&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h6 id="Stream流"><a href="#Stream流" class="headerlink" title="Stream流"></a>Stream流</h6><p>大多数模型在生成输出内容时都能进行流式传输。通过逐步显示输出，流式传输显著改善了用户体验，尤其是对于较长的响应而言。</p>
+<p>调用<code>stream()</code>会返回一个<code>iterator</code> 迭代器,它会在生成输出块时将其产出。你可以使用循环来实时处理每个块。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 流式输出</span></span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> client.stream(<span class="string">&quot;你好,你是谁？&quot;</span>):</span><br><span class="line">    <span class="built_in">print</span>(chunk.text, end=<span class="string">&quot;|&quot;</span>, flush=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>与<code>invoke()</code>不同，后者会在模型完成其完整响应生成后返回单个<code>AIMessage</code>，而<code>stream()</code>会返回多个<code>AIMessageChunk</code>对象，每个对象都包含输出文本的一部分。重要的是，流中的每个块都旨在通过汇总组合成一条完整的消息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">full = <span class="literal">None</span>  <span class="comment"># None | AIMessageChunk</span></span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> model.stream(<span class="string">&quot;What color is the sky?&quot;</span>):</span><br><span class="line">    full = chunk <span class="keyword">if</span> full <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> full + chunk</span><br><span class="line">    <span class="built_in">print</span>(full.text)</span><br><span class="line"></span><br><span class="line"><span class="comment"># The</span></span><br><span class="line"><span class="comment"># The sky</span></span><br><span class="line"><span class="comment"># The sky is</span></span><br><span class="line"><span class="comment"># The sky is typically</span></span><br><span class="line"><span class="comment"># The sky is typically blue</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(full.content_blocks)</span><br><span class="line"><span class="comment"># [&#123;&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;The sky is typically blue...&quot;&#125;]</span></span><br></pre></td></tr></table></figure>
+
+<p>生成的消息可以与使用<code>invoke()</code>生成的消息同等对待——例如，它可以被聚合到消息历史中，并作为对话上下文传递回模型。</p>
+<hr>
+<h6 id="Batch批量"><a href="#Batch批量" class="headerlink" title="Batch批量"></a>Batch批量</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 批量消息</span></span><br><span class="line"><span class="comment"># 将一组独立的请求批量发送给模型可以显著提高性能，因为这些处理可以并行进行：</span></span><br><span class="line">responses = client.batch([</span><br><span class="line">    <span class="string">&quot;Why do parrots have colorful feathers?&quot;</span>,</span><br><span class="line">    <span class="string">&quot;How do airplanes fly?&quot;</span>,</span><br><span class="line">    <span class="string">&quot;What is quantum computing?&quot;</span></span><br><span class="line">])</span><br><span class="line"><span class="keyword">for</span> response <span class="keyword">in</span> responses:</span><br><span class="line">    <span class="built_in">print</span>(response.content)</span><br></pre></td></tr></table></figure>
+
+<p>默认情况下，<code>batch()</code> 只会返回整个批次的最终输出。如果你希望在每个单独的输入完成生成时就收到其输出，可以使用 <code>batch_as_completed()</code> 来流式传输结果。</p>
+<blockquote>
+<p>聊天模型方法batch()，该方法在客户端并行处理模型调用。与推理提供商（如OpenAI或Anthropic）支持的批量API不同。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> response <span class="keyword">in</span> model.batch_as_completed([</span><br><span class="line">    <span class="string">&quot;Why do parrots have colorful feathers?&quot;</span>,</span><br><span class="line">    <span class="string">&quot;How do airplanes fly?&quot;</span>,</span><br><span class="line">    <span class="string">&quot;What is quantum computing?&quot;</span></span><br><span class="line">]):</span><br><span class="line">    <span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用 [<strong>batch_as_completed()</strong>] 时，结果可能会乱序到达。每个结果都包含输入索引，以便在需要时通过匹配来重建原始顺序。</p>
+</blockquote>
+<hr>
+<h4 id="Messages"><a href="#Messages" class="headerlink" title="Messages"></a>Messages</h4><p>在 LangChain 中，消息是模型上下文的基本单位。它们代表模型的输入和输出，承载着与大语言模型（LLM）交互时表示对话状态所需的内容和元数据。</p>
+<p>消息是包含以下内容的对象：</p>
+<ul>
+<li>角色 —— 标识消息类型（例如系统、用户）</li>
+<li>内容 —— 代表消息的实际内容（如文本、图像、音频、文档等）</li>
+<li>元数据 —— 可选字段，如响应信息、消息 ID 和令牌使用情况</li>
+</ul>
+<p>LangChain 提供了一种标准的消息类型，适用于所有模型提供商，确保无论调用何种模型，都能有一致的行为。</p>
+<hr>
+<h5 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h5><h6 id="Text-prompts"><a href="#Text-prompts" class="headerlink" title="Text prompts"></a>Text prompts</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> email <span class="keyword">import</span> message</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> init_chat_model</span><br><span class="line"><span class="keyword">from</span> langchain.messages <span class="keyword">import</span> AIMessage, HumanMessage, SystemMessage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入必要的库</span></span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv  <span class="comment"># 用于加载环境变量</span></span><br><span class="line"><span class="comment"># 加载环境变量</span></span><br><span class="line">load_dotenv()  <span class="comment"># 从 .env 文件加载环境变量，通常包含 API 密钥等配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化ChatGPT模型</span></span><br><span class="line"><span class="comment"># 注意：gpt-5 是示例模型名，实际中应使用真实存在的模型如 gpt-4 或 gpt-3.5-turbo</span></span><br><span class="line">model = init_chat_model(<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line">response = model.invoke(<span class="string">&quot;你好，你是谁？&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<p>适用场景：</p>
+<ul>
+<li>单一的、独立的请求</li>
+<li>不需要对话历史</li>
+<li>希望代码复杂度最低</li>
+</ul>
+<hr>
+<h6 id="Message-prompts"><a href="#Message-prompts" class="headerlink" title="Message prompts"></a>Message prompts</h6><p>可以通过提供消息对象列表，向模型传入消息列表。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.messages <span class="keyword">import</span> SystemMessage, HumanMessage, AIMessage</span><br><span class="line"></span><br><span class="line">messages = [</span><br><span class="line">    SystemMessage(<span class="string">&quot;你是一位诗歌专家&quot;</span>),</span><br><span class="line">    HumanMessage(<span class="string">&quot;写一首关于春天的俳句&quot;</span>),</span><br><span class="line">    AIMessage(<span class="string">&quot;樱花盛开……&quot;</span>)</span><br><span class="line">]</span><br><span class="line">response = model.invoke(messages)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
+
+<p>适用场景：</p>
+<ul>
+<li>管理多轮对话</li>
+<li>处理多模态内容（图像、音频、文件）</li>
+<li>系统指令</li>
+</ul>
+<hr>
+<h6 id="Dictionary-format"><a href="#Dictionary-format" class="headerlink" title="Dictionary format"></a>Dictionary format</h6><p>可以直接以 OpenAI 聊天补全格式指定消息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">messages = [</span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;system&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你是一位诗歌专家&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;写一首关于春天的诗句&quot;</span>&#125;,</span><br><span class="line">    &#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;assistant&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;樱花盛开，春风轻抚面庞，万物复苏&quot;</span>&#125;</span><br><span class="line">]</span><br><span class="line">response = model.invoke(messages)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="消息类型"><a href="#消息类型" class="headerlink" title="消息类型"></a>消息类型</h5><h6 id="System-message"><a href="#System-message" class="headerlink" title="System message"></a>System message</h6><p><code>SystemMessage</code>代表一组初始指令，用于引导模型的行为。你可以使用系统消息来设定语气、定义模型的角色，并建立响应准则。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">system_msg = SystemMessage(content=<span class="string">&quot;你是一个助手，你需要根据用户的指令进行回答。&quot;</span>)</span><br><span class="line">human_msg = HumanMessage(content=<span class="string">&quot;你好，你是谁？&quot;</span>)</span><br><span class="line">messages = [system_msg, human_msg]</span><br><span class="line">response = model.invoke(messages) <span class="comment">#你好！我是一个人工智能助手，旨在帮助你回答问题和提供信息。有什么我可以帮助你的吗？</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">system_msg = SystemMessage(<span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">你是一位资深的Python开发人员，专精于Web框架。</span></span><br><span class="line"><span class="string">始终提供代码示例并解释你的思路。</span></span><br><span class="line"><span class="string">在解释时要简洁但全面。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span>)</span><br><span class="line">human_msg = HumanMessage(content=<span class="string">&quot;你好，你是谁？&quot;</span>)</span><br><span class="line">messages = [system_msg, human_msg]</span><br><span class="line">response = model.invoke(messages) <span class="comment">#你好！我是一个虚拟助手，专注于Python开发和Web框架的知识。我的目标是帮助你解决编程相关的问题，提供代码示例，并解释解决方案的思路。如果你有任何想要了解的内容，请随时问我！</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h6 id="Human-message"><a href="#Human-message" class="headerlink" title="Human message"></a>Human message</h6><p>一个<code>HumanMessage</code>代表用户输入和交互。它们可以包含文本、图像、音频、文件以及其他任何形式的多模态内容。</p>
+<p><code>文本内容</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">human_msg = HumanMessage(content=<span class="string">&quot;你好，你是谁？&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>消息元数据</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">human_msg = HumanMessage(</span><br><span class="line">    content=<span class="string">&quot;你好!&quot;</span>,</span><br><span class="line">    name=<span class="string">&quot;alice&quot;</span>,  </span><br><span class="line">    <span class="built_in">id</span>=<span class="string">&quot;msg_123&quot;</span>,  </span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h6 id="AI-message"><a href="#AI-message" class="headerlink" title="AI message"></a>AI message</h6><p><code>AIMessage</code> 表示模型调用的输出。它们可以包含多模态数据、工具调用以及你之后可以访问的特定于提供商的元数据。</p>
+<p><code>AIMessage</code>对象在调用模型时由模型返回，其中包含响应中的所有相关元数据。</p>
+<p>提供商对不同类型的消息会进行不同的权衡和情境分析，这意味着有时手动创建一个新的<code>AIMessage</code>对象并将其插入消息历史中，假装它来自模型，会很有帮助。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain.schema <span class="keyword">import</span> AIMessage, SystemMessage, HumanMessage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化聊天机器人</span></span><br><span class="line">model = ChatOpenAI(temperature=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟一段真实的对话过程</span></span><br><span class="line">conversation_history = []</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第一步：设置机器人的角色</span></span><br><span class="line">system_prompt = SystemMessage(content=<span class="string">&quot;你是一个友好的编程老师，擅长用简单的语言解释复杂概念&quot;</span>)</span><br><span class="line">conversation_history.append(system_prompt)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第二步：用户第一次提问</span></span><br><span class="line">user_question_1 = HumanMessage(content=<span class="string">&quot;你好，我想学Python，它是什么？&quot;</span>)</span><br><span class="line">conversation_history.append(user_question_1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第三步：模拟AI回复（实际项目中这通常是模型自动生成的）</span></span><br><span class="line">ai_response_1 = AIMessage(content=<span class="string">&quot;你好！Python是一种容易学习的编程语言，常用于网站开发、数据分析、人工智能等领域。&quot;</span>)</span><br><span class="line">conversation_history.append(ai_response_1)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第四步：用户继续提问（基于上一个回答）</span></span><br><span class="line">user_question_2 = HumanMessage(content=<span class="string">&quot;听起来不错！那我应该从哪里开始学呢？&quot;</span>)</span><br><span class="line">conversation_history.append(user_question_2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第五步：让模型基于整个对话历史来回答</span></span><br><span class="line">final_response = model.invoke(conversation_history)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;AI回答:&quot;</span>, final_response.content)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><code>Tool calls</code></p>
+<p>当模型进行工具调用时，工具调用消息会被包含在 <code>AIMessage</code> 中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"><span class="keyword">from</span> langchain_core.tools <span class="keyword">import</span> tool  <span class="comment"># 用于创建工具的装饰器</span></span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line">model = ChatOpenAI(</span><br><span class="line">    model_name=<span class="string">&quot;gpt-3.5-turbo&quot;</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="meta">@tool</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_weather</span>(<span class="params">location: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;获取指定地点的天气。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;<span class="subst">&#123;location&#125;</span>天气晴朗。&quot;</span></span><br><span class="line"></span><br><span class="line">model_with_tools = model.bind_tools(tools=[get_weather])</span><br><span class="line">response =model_with_tools.invoke(<span class="string">&quot;北京的天气怎样&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response.tool_calls) <span class="comment">#[&#123;&#x27;name&#x27;: &#x27;get_weather&#x27;, &#x27;args&#x27;: &#123;&#x27;location&#x27;: &#x27;北京&#x27;&#125;, &#x27;id&#x27;: &#x27;call_avge2l1rppQA4xFcSrldz68D&#x27;, &#x27;type&#x27;: &#x27;tool_call&#x27;&#125;]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> tool_call <span class="keyword">in</span> response.tool_calls:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Tool: <span class="subst">&#123;tool_call[<span class="string">&#x27;name&#x27;</span>]&#125;</span>&quot;</span>) <span class="comment"># Tool: get_weather</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Args: <span class="subst">&#123;tool_call[<span class="string">&#x27;args&#x27;</span>]&#125;</span>&quot;</span>) <span class="comment"># Args: &#123;&#x27;location&#x27;: &#x27;北京&#x27;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><code>Token usage 令牌使用量</code></p>
+<p>一个 <code>AIMessage</code> 可以在其 <code>usage_metadata</code> 字段中包含令牌计数和其他使用元数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> init_chat_model</span><br><span class="line"><span class="keyword">from</span> langchain.messages <span class="keyword">import</span> AIMessage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入必要的库</span></span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv  <span class="comment"># 用于加载环境变量</span></span><br><span class="line"><span class="comment"># 加载环境变量</span></span><br><span class="line">load_dotenv()  <span class="comment"># 从 .env 文件加载环境变量，通常包含 API 密钥等配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化ChatGPT模型</span></span><br><span class="line"><span class="comment"># 注意：gpt-5 是示例模型名，实际中应使用真实存在的模型如 gpt-4 或 gpt-3.5-turbo</span></span><br><span class="line">model = init_chat_model(<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line">response = model.invoke(<span class="string">&quot;你好&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(response.usage_metadata) <span class="comment">#&#123;&#x27;input_tokens&#x27;: 8, &#x27;output_tokens&#x27;: 9, &#x27;total_tokens&#x27;: 17, &#x27;input_token_details&#x27;: &#123;&#x27;audio&#x27;: 0, &#x27;cache_read&#x27;: 0&#125;, &#x27;output_token_details&#x27;: &#123;&#x27;audio&#x27;: 0, &#x27;reasoning&#x27;: 0&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>有关详情，请参见<a target="_blank" rel="noopener" href="https://reference.langchain.com/python/langchain/messages/?_gl=1*1mkt0pm*_gcl_au*MTkzMTcxOTYwOS4xNzY4OTY0OTY0*_ga*MjMzNTE4NTQwLjE3NjExODQwNTk.*_ga_47WX3HKKY2*czE3NjkwNjU2NjUkbzIxJGcxJHQxNzY5MDY1ODA0JGo2MCRsMCRoMA..#langchain.messages.UsageMetadata">UsageMetadata</a>。</p>
+<hr>
+<p><code>Streaming and chunks 流式传输和分块</code></p>
+<p>在流式传输过程中，你会收到 <code>AIMessageChunk</code> 对象，这些对象可以组合成一个完整的消息对象。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> init_chat_model</span><br><span class="line"><span class="keyword">from</span> langchain.messages <span class="keyword">import</span> HumanMessage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入必要的库</span></span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv  <span class="comment"># 用于加载环境变量</span></span><br><span class="line"><span class="comment"># 加载环境变量</span></span><br><span class="line">load_dotenv()  <span class="comment"># 从 .env 文件加载环境变量，通常包含 API 密钥等配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化ChatGPT模型</span></span><br><span class="line"><span class="comment"># 注意：gpt-5 是示例模型名，实际中应使用真实存在的模型如 gpt-4 或 gpt-3.5-turbo</span></span><br><span class="line">model = init_chat_model(<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 流式接收AI回复</span></span><br><span class="line">chunks = []</span><br><span class="line">full_message = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送消息并逐块接收回复</span></span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> model.stream([HumanMessage(content=<span class="string">&quot;解释一下Python的基本概念&quot;</span>)]):</span><br><span class="line">    chunks.append(chunk)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;收到文本块: <span class="subst">&#123;chunk.content&#125;</span>&quot;</span>)  <span class="comment"># 打印当前块的内容</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 将块累积成完整消息</span></span><br><span class="line">    full_message = chunk <span class="keyword">if</span> full_message <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> full_message + chunk</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;\n完整回复: <span class="subst">&#123;full_message.content&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;总共收到 <span class="subst">&#123;<span class="built_in">len</span>(chunks)&#125;</span> 个文本块&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h6 id="Tool-message"><a href="#Tool-message" class="headerlink" title="Tool message"></a>Tool message</h6><p>对于支持<strong>工具调用</strong>的模型，AI消息可以包含工具调用。工具消息用于将单次工具执行的结果传递回模型。</p>
+<p>工具可以直接生成 <code>ToolMessage</code> 对象。下面我们展示一个简单的示例。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.messages <span class="keyword">import</span> AIMessage,ToolMessage,HumanMessage</span><br><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> init_chat_model</span><br><span class="line"><span class="keyword">from</span> langchain.messages <span class="keyword">import</span> HumanMessage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 导入必要的库</span></span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv  <span class="comment"># 用于加载环境变量</span></span><br><span class="line"><span class="comment"># 加载环境变量</span></span><br><span class="line">load_dotenv()  <span class="comment"># 从 .env 文件加载环境变量，通常包含 API 密钥等配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化ChatGPT模型</span></span><br><span class="line"><span class="comment"># 注意：gpt-5 是示例模型名，实际中应使用真实存在的模型如 gpt-4 或 gpt-3.5-turbo</span></span><br><span class="line">model = init_chat_model(<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模型执行工具调用后</span></span><br><span class="line"><span class="comment"># （这里我们手动创建消息来演示）</span></span><br><span class="line">ai_message = AIMessage(</span><br><span class="line">    content=[],</span><br><span class="line">    tool_calls=[&#123;</span><br><span class="line">        <span class="string">&quot;name&quot;</span>: <span class="string">&quot;get_weather&quot;</span>,      <span class="comment"># 工具名称：获取天气</span></span><br><span class="line">        <span class="string">&quot;args&quot;</span>: &#123;<span class="string">&quot;location&quot;</span>: <span class="string">&quot;北京&quot;</span>&#125;,  <span class="comment"># 参数：地点是北京</span></span><br><span class="line">        <span class="string">&quot;id&quot;</span>: <span class="string">&quot;call_123&quot;</span>            <span class="comment"># 调用ID</span></span><br><span class="line">    &#125;]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行工具并创建结果消息</span></span><br><span class="line">weather_result = <span class="string">&quot;晴天，25°C&quot;</span></span><br><span class="line">tool_message = ToolMessage(</span><br><span class="line">    content=weather_result,     <span class="comment"># 工具返回的结果</span></span><br><span class="line">    tool_call_id=<span class="string">&quot;call_123&quot;</span>     <span class="comment"># 必须与调用ID匹配</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 继续对话</span></span><br><span class="line">messages = [</span><br><span class="line">    HumanMessage(<span class="string">&quot;北京现在的天气怎么样？&quot;</span>),  <span class="comment"># 用户询问天气</span></span><br><span class="line">    ai_message,                   <span class="comment"># 模型的工具调用</span></span><br><span class="line">    tool_message,                 <span class="comment"># 工具执行结果</span></span><br><span class="line">]</span><br><span class="line">response = model.invoke(messages)  <span class="comment"># 模型处理结果并回应用户</span></span><br><span class="line"><span class="built_in">print</span>(response.content) <span class="comment"># 北京现在天气晴朗，气温25°C。</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="消息内容"><a href="#消息内容" class="headerlink" title="消息内容"></a>消息内容</h5><p>你可以将消息的内容视为发送给模型的数据负载。消息具有一个 <code>content</code> 属性，该属性为松散类型，支持字符串和非类型化对象的列表（例如字典）。这使得  <code>LangChain</code> 聊天模型可以直接支持提供商原生结构，例如多模态内容和其他数据。</p>
+<p>此外，<code>LangChain</code> 为文本、推理、引用、多模态数据、服务器端工具调用和其他消息内容提供了专用的内容类型。</p>
+<p><code>LangChain</code> 聊天模型接受 <code>content</code> 属性中的消息内容,可能包含以下任一内容</p>
+<ul>
+<li>一个字符串</li>
+<li>以提供商原生格式呈现的内容块列表</li>
+<li><code>LangChain</code>的标准内容块列表</li>
+</ul>
+<hr>
+<p><code>标准内容块</code><br><code>LangChain</code> 提供了一种适用于所有提供商的消息内容标准表示形式。</p>
+<p>消息对象实现了一个<code>content_blocks</code>属性，该属性会将<code>content</code>属性延迟解析为标准的、类型安全的表示形式。例如，从<code>ChatAnthropic</code>或<code>ChatOpenAI</code>生成的消息会包含各自提供商格式的<code>thinking</code>（思考）或<code>reasoning</code>（推理）块，但可以被延迟解析为一致的<code>ReasoningContentBlock</code>表示形式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.messages <span class="keyword">import</span> AIMessage</span><br><span class="line"></span><br><span class="line"><span class="comment"># Anthropic 模型示例（包含思考块）</span></span><br><span class="line">message_anthropic = AIMessage(</span><br><span class="line">    content=[</span><br><span class="line">        &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;thinking&quot;</span>, <span class="string">&quot;thinking&quot;</span>: <span class="string">&quot;用户询问Python中的列表操作。我需要提供常见操作的示例。&quot;</span>, <span class="string">&quot;signature&quot;</span>: <span class="string">&quot;WaUjzkyp...&quot;</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span>, <span class="string">&quot;text&quot;</span>: <span class="string">&quot;在Python中，列表是一种非常常用的数据结构。以下是常见的列表操作示例：\n\n1. 创建列表: my_list = [1, 2, 3]\n2. 添加元素: my_list.append(4)\n3. 访问元素: first_element = my_list[0]\n4. 列表切片: sub_list = my_list[1:3]&quot;</span>&#125;,</span><br><span class="line">    ],</span><br><span class="line">    response_metadata=&#123;<span class="string">&quot;model_provider&quot;</span>: <span class="string">&quot;anthropic&quot;</span>&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 尝试访问内容块</span></span><br><span class="line">blocks_anthropic = message_anthropic.content_blocks</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Anthropic 消息的内容块: <span class="subst">&#123;blocks_anthropic&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># Anthropic 消息的内容块: [&#123;&#x27;type&#x27;: &#x27;reasoning&#x27;, &#x27;reasoning&#x27;: &#x27;用户询问Python中的列表操作。我需要提供常见操作的示例。&#x27;, &#x27;extras&#x27;: &#123;&#x27;signature&#x27;: &#x27;WaUjzkyp...&#x27;&#125;&#125;, &#123;&#x27;type&#x27;: &#x27;text&#x27;, &#x27;text&#x27;: &#x27;在Python中，列表是一种非常常用的数据结构。以下是常见的列表操作示例：\n\n1. 创建列表: my_list = [1, 2, 3]\n2. 添加元素: my_list.append(4)\n3. 访问元素: first_element = my_list[0]\n4. 列表切片: sub_list = my_list[1:3]&#x27;&#125;]</span></span><br><span class="line"><span class="built_in">print</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># OpenAI 模型示例（包含推理块）</span></span><br><span class="line">message_openai = AIMessage(</span><br><span class="line">    content=[</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">&quot;type&quot;</span>: <span class="string">&quot;reasoning&quot;</span>,</span><br><span class="line">            <span class="string">&quot;id&quot;</span>: <span class="string">&quot;rs_abc123&quot;</span>,</span><br><span class="line">            <span class="string">&quot;summary&quot;</span>: [</span><br><span class="line">                &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;summary_text&quot;</span>, <span class="string">&quot;text&quot;</span>: <span class="string">&quot;分析用户对Python函数的需求&quot;</span>&#125;,</span><br><span class="line">                &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;summary_text&quot;</span>, <span class="string">&quot;text&quot;</span>: <span class="string">&quot;决定提供函数定义和使用示例&quot;</span>&#125;,</span><br><span class="line">            ],</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span>, <span class="string">&quot;text&quot;</span>: <span class="string">&quot;在Python中定义函数非常简单，使用def关键字即可。例如：\n\ndef greet(name):\n    return f&#x27;Hello, &#123;name&#125;!&#x27;\n\nresult = greet(&#x27;Alice&#x27;)&quot;</span>, <span class="string">&quot;id&quot;</span>: <span class="string">&quot;msg_abc123&quot;</span>&#125;,</span><br><span class="line">    ],</span><br><span class="line">    response_metadata=&#123;<span class="string">&quot;model_provider&quot;</span>: <span class="string">&quot;openai&quot;</span>&#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 尝试访问内容块</span></span><br><span class="line">blocks_openai = message_openai.content_blocks</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;OpenAI 消息的内容块: <span class="subst">&#123;blocks_openai&#125;</span>&quot;</span>)</span><br><span class="line"><span class="comment"># OpenAI 消息的内容块: [&#123;&#x27;type&#x27;: &#x27;reasoning&#x27;, &#x27;id&#x27;: &#x27;rs_abc123&#x27;, &#x27;reasoning&#x27;: &#x27;分析用户对Python函数的需求&#x27;&#125;, &#123;&#x27;type&#x27;: &#x27;reasoning&#x27;, &#x27;id&#x27;: &#x27;rs_abc123&#x27;, &#x27;reasoning&#x27;: &#x27;决定提供函数定义和使用示例&#x27;&#125;, &#123;&#x27;type&#x27;: &#x27;text&#x27;, &#x27;text&#x27;: &quot;在Python中定义函数非常简单，使用def关键字即可。例如：\n\ndef greet(name):\n    return f&#x27;Hello, &#123;name&#125;!&#x27;\n\nresult = greet(&#x27;Alice&#x27;)&quot;, &#x27;id&#x27;: &#x27;msg_abc123&#x27;&#125;]</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">注意：content_blocks 属性的具体实现依赖于LangChain版本和消息类型。</span></span><br><span class="line"><span class="string">在某些实现中，它会将不同提供商的特定格式（如Anthropic的thinking块或</span></span><br><span class="line"><span class="string">OpenAI的reasoning块）标准化为统一的表示形式。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><code>多模态</code></p>
+<p><strong>多模态</strong>指的是处理不同形式数据的能力，例如文本、音频、图像和视频。<code>LangChain</code>包含了可跨提供商使用的这些数据的标准类型。</p>
+<p>聊天模型可以接受多模态数据作为输入并生成多模态数据作为输出。下面我们展示几个包含多模态数据的输入消息的简短示例。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.chat_models <span class="keyword">import</span> init_chat_model</span><br><span class="line"><span class="keyword">from</span> langchain.messages <span class="keyword">import</span> HumanMessage</span><br><span class="line"></span><br><span class="line"><span class="comment"># 同样的消息格式可以在不同供应商间切换</span></span><br><span class="line">message_with_image = HumanMessage(</span><br><span class="line">    content=[</span><br><span class="line">        &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span>, <span class="string">&quot;text&quot;</span>: <span class="string">&quot;请描述这张图片&quot;</span>&#125;,</span><br><span class="line">        &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;image_url&quot;</span>, <span class="string">&quot;image_url&quot;</span>: &#123;<span class="string">&quot;url&quot;</span>: <span class="string">&quot;data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAMAAzAMBIgACEQEDEQH/xAAbAAEAAQUBAAAAAAAAAAAAAAAABgECAwQFB//EADwQAAEDAwMCAwcCBAUDBQAAAAEAAgMEBRESITEGQRNRYRQiMkJxgaGRwRVSsfAHI3LR4TNDUxYkJSY0/8QAGAEBAQEBAQAAAAAAAAAAAAAAAAECAwT/xAAfEQEBAAICAwEBAQAAAAAAAAAAAQIREiEDMUETIlH/2gAMAwEAAhEDEQA/APaUREBERAREQEREBEVHENBJ7DKDkXy4GHFPG73nfFjlcylrnQSh/G+4xytSSY1twfK4ZGTjZX1rQIwQMP7Fcct3t11PSYRSCWNj2fC4ZCvXK6cqRPQmPOTG78H+yuqumN3HOzVERFpBERAREQEREBERAREQEREBERAREQEREBc++T+BbpMfE8aR6Z/4yugo91XMWtp487atR9eymXprGbrlUDwJBHntucrbrG5ZvsDtlalO0Nqw3IGR5LoS48MtPks66ayv9NfpWp8CqkgeR72W/wCxClwGBzlQOMaK8OidjjAHYqbUdQyqpopoyMOG/oQcEfrlZ8V+JnPrMiIurAiIgIiICIiAiIgIiICIiAiIgIqEgJnZBVFbnKoSguyAMnhQyvE9Q55qpGl3iOc1v8rc7fhSW5VLIKcguGuTZo4Xn12me67te0kt8PDgPqB+64+TLt28cdOSq0vhdpywgjPljuujqc6PAGpXeyQRtp8AEMbjC1qm4RwM43xwpc9RNbWRlmsPeWMPOT2XHsXV81uvlfTTND7bJMSzB3jdn3iPQ+XmtW71E9S9sUADQ4g6weGk5yo3epZJZmQULM1MsmqUj5QP7/Cxhld7ayks092pKmCshbNSyNlY4AgtOdjws3fHdeE3GEUdrijErqaXZ7p2vI88HbvstaLrXqSkhJp7lUFgADWPw8/nPYLvMnK46e//AIReXdJ/4lzVNwp6W/tgjimGI5mtx73bV5Beo753Wts6ETsmVQRUB2yqavRBcmVYTuN+UG6C7Um54VMFV0jyQVREQWl3bCtJV2nJVdIQYyM4wVc0bEK/byRBQNwrJ3+FDJJ3Y0kLIudfKxtJRn/yP2aPTupldRZN1G3GasqHT1bsl2wB4AWMspy74CSDgOwtS5Xyjtxb7Y5zdW4AW1R11NXsZJRytdC7Bxjg+S8Vyt7emY6XeK94ZkEbYwf0Ws+mZmQzPLpI/iJ9Au4KcGPDQN2+WVyH0FQ26FweZIH4GDyO2StybZ9OVVSwxaneGWuPw5HBGR/UFQu11M8XU1W+5P8A/blwMG2Ackj9iF2+tamVvUMFBDGXyvDRpYeNzn+qp1Xaoo7lYaR5dG17i6QN2JHIH6rcmmdsfUFJBVviMod4ZLX5AwXjgNHkM9/RcWaN7KaSSARvqJgWsjByACDqIH0GAuj1BPLVXT2anDXZZjS0n3TjbJ/OPv5Y3rdSU9uhpXVH/wCyZmRtjSN8Dfgcefb6qqjz7ZQ2uES18xkle0EN1/Ae35XoPRfXUjbc7+Klz4Gu9yXl0bewPn/fK81ufi32qdDCwRNikDRr2AbnkkeX688rs+yRuoYqWLWPDG4yAXOPc+X7Jy4px5Pb6Gup7jSx1NHMyWJ7chzSs7i0DLnAfVeZ9OUVDaad8zNckzt3YJDR9iuy6snle3XIxmRnQDkkft+VZ5ds/npKprjTU+z5NXoFoSX+LXiNn01FcoU0wbqiEQJ9cn8rA10sgc2U+83kcJvKkkdY32cbkNaPoFvWm7e1zmB+C4t1BwHKi72A5BGT2J5Xa6cpyZzNvhjMDPqk5cotk0kaJkdkXZyEREBERAREQBz5+igvXd9hoqsUoxLU6Q1sTeQXDPKnWO4Bz6dlF32emN5qq+T35Huxk+m23kseT03h7QKlsD43iqvcjnsc7DWP+Unf7KVWvp6ko5Hz0T3QxkEvjJ936rX6nZNGzw4ZBJrILWO2cPp+ixdH3OSqfLR1Rw6SNzNRHfy+q8096d762i92uFdXPnrKa71FFQRktjDCNT8bZ8gsNh64qqKds9TWm42xsgZM98emWHPzfT7LXbJcrXEbfRyRU91opC0CZuWuG4z9wcrnwWyKnpxb8Rvq7i9kb2xkuBJO7vQbkrtOnG7eqQ9Mf/a6q91Aa+N4b4HmBjdaHVkTZKqKaNrTMyNwYS3O/ofpndTWrd4VEBzhun6BQ6pa2oqdUgIAcdLTwP7ylmlxQ6O0XKC4U9RTM8cytywPIwx+d3E87749MLJX04tLnmvqRPcpmN1DUAI+2AOwyfPyyvQKSEUdI+Ytc8Rxntk4XnNLZ6rq3qCa41T9FvgfyRjLhtsorZt1ExlE9seGxzOBMzjpBOM8nt991fDCaWXD2ag3S1hcNIG2efmXRrqijoquGlaQ/f3SSDp+6w1sDXyxy5AIH/Ve7Oof1KzlI1HZkpnTUpfmRx5G2d/2V9qp4yMTPcH57tJb/f1S0S6qcB8Ws442AH+6wyufFUua3xGH5feIDvoeFfGzk7UgbCcOcBp4B2WsCNOc5dGeT3C40FTUVVSI2guPDtsY/RdqGHw26pjn0C7dMyLwxzyAwZe7YBS23UwpKYRfOd3n1XOstvxpqphz/wBNp7DzXaUk72mV+CIi2wIiICIiAiIgtccNccZwMry26XS81pfSQQvjy8/5rR6r1MjLXDPIUcpYGRvcPdLs91y8nxvC6QqSK4w0fg3szOIINPVxDdh8jhY7XJM2oc4u1yj52jGfXPZeiGLWHAtBbjdcyptkLWPNI+GCU8lzOSf39Vy06zKOZVw2i+UobfbczxoR7kzjpePo8HIUC6TjoGdc1M7PE9lhOWuLi7U7gbnc4XoNvtBudPLT3KM+I1xy5o91zfyoA+5W+33SajjYWYkIkLhu3fATeXwkx+vU666QTUry17d9gP5lp0VAJXMaTnfU4HfG3/CgdwmdGGSU8uRnIOrIW27rttrtkwa1prXgtjb2J81nDLK5f01lhJj/AClHWfWVF01Cyljh9sr5jiOmYedty70UQpv8QrjC9sFwstPHTu3d7I/L2+ukjdRC1zSzXp1ddnl9bOXe5IMEsOktI9NnD7eqtr9V46mbUUNtkoJIpWhzG5LHAD49R4zxgBehw9PWqZ9su9K2tpPDnheMZDcEH17/AGXNudO6N0bHEFuchoGD9c5XD6Siqqe7XGalyKEkCXHBkwM4H7ru1RbWyMw0PLNsgb/39F588tO2M2pbnOpqlzXtw47keX6lYOpb7HTs8Njgal/OQMhZpYnUu41EDcDbcqyuoI6sMqCXZaMnPvYPmEwyXLFs9LDXSDQ7/NI1YydvUqQ9NyxXKqcxlO/w4d5JX4wT2A81rWWnjhoWsia1ofhoxy8lSqz26K10DKaEZIOXu8yV2w3k552Ru4AJwMeSIi7OIiIgIiICIiAiIgKOVbZI7g8DIbqzucArsV1fBRaRI4eI/wCFoO64lXVMneJdQJ76MFYzax9urAQWcLBUAPBY+Jsjc/C5X0j2mPIO2FdNTCQamk5WddLvVWUDYKaJwa0xA/p9l4f/AIs0TafqdlRSMbioYcOZ3xzlesXCW5APZSUzXBo5e/n7KA2qOtl6xH8epy17Yy2BwGWnPPPmrJpfaHWmy9S1745WW+cUzycFvf1OSNl2pOk6llwgqKxpc0yh3h9hgY5XtkemOkIjY3UOGHbP0UOu0VwuNXM2iliiLXY8CobpcCGjOk/MCeSsZ+9tY3rSyttFgvNFTUVygfTywNxBPEdL2nyB7rRZ0hQUzg2p6nnNONi0RhryPV4/YKlYa1jAXaWTMxrDyNiPLz+y5NzqKrGapk7ItezwwkffbGFne4ukthuNhpKJtstjWiBu3+o+efP6qC31r7FW+2W2odoc7JjJJws1NabnO98tMaeRrjtI12/4WS/2SYWgklzpx8QWN7vbfzp1KK6urbcypLcZHwkd1sSVJFO7BcBjkbKHdI1z30s1OWkGI7ZGMqW2emmukwpYme+T74zwPMrHHWbVynFLuibWwRuuEkj5CXYiY87R+Z+pyf0UtWrbaGK3UbKWH4Gdz3K2l7sZqPJbuiIiqCIiAiIgIiICsllbCwySOAY3ckq9cHqefXE2jZMWOdudJ39FLdRZ3UU6uvkn8UgLWCOJzS1pO2ypb7saZgbVjDJD/luDtWpc2ubPUE0tealgB92drNv1K0HU92tzXuYx1fRcNAALsLz8v9dePT0CirDGS5mHR98EHC7kMrZWhzHAg915Ja+oYmuDKaZsWNnU1R7jgfRS2x3casukALvkByPsV1mUYyxqXloJLzznZca7W6KqZIP+4PeDhyD2W+ahpjyHDZaZkIBdnJcey3tmVR05NOzxAdWACRyDx/utKaWOQB0+l+n4JBs4A7DdZXkyF2dXP9Fqthjjmx8o5B437Lll23jWGeJtTPr0H3dhntsufN09C5xNHI+jkdvmI4a77cLstwxzg44cPhPmPJVimY7Lo8NeOW5yHLl6dfbz6nu1y6avHstwl8WkccglgBA89uVLayqhr6ESR6Xsdv8AZcnri3x3OFskBxKwbs9PMeqilqrLrbaZ0D4H+EXZBxsQpe1jYitdbbbu+Wlp3S0dQeYuASvaem7Sy1UQHM8uDI/z8h9lHOh4fbXMqCzw2RbuBORnyU6Xfx4/XHPL5BERdXMREQEREBERAREQUcQ1pc74QMlQa4vmqK6SqdWNgaTs3IOB9SFJb/VPigFPFp8SUbknGAozXW+MFrjGZH4952rZq5eSt4RhqKeqqGCShrGOfjcObkO/K58V2uFvqBDXUcLmn54tlvuljt8ep02+OPNaL+o6dwLhGBp51Lz2uzcq7RZ79Bqlp2iU8OZhr2n6qNO6UvlvrY5aK4eNA04YyXbSPU75/C36jqKmbAyoihBzvlh3K3Ldf4qwBkmpuf5klpY5tXe75bhJ7bbD4TDjxac6gfXHK6trvrqimDvDlyASdbCB+qrW10TJhrGprWng7fcLVbcRUNa1k7I2SOw46SD9MK/pYn5ytiPqE63tEOSGnGHckLJT3n2qOUyUUgdG7BGQdXqP1/CwwUsZJ8NzSclrjp32WwTDRl3hxnU74ieFf0SYKvifO0vifKxp30yDcK+nppBpcSzU3lw7/ZcyW7GM7Zd/pWenu0mpvuHJWLlv43rTsupqZp8Q7uPfHdca6mm1bSNaMjLVvsrPaY9EhHvctK5NxsdTI4yRPMjCMacZW5cal5PROn6WmpLRAyjcHRObq1D5ieV0VwuiqZ1JYIoyXYLnFod8o4/rld1eqennoiIqgioSAmUFUVuc+Sbd/wABBciIgbKhcACT2VjieAuV1Dcv4fSjw8+LJ8J0k4GDkoONV1Ta65vlBJDTpaMdlp9QVLbbRSF0jdZGQHFWdNRPdUyO99xzloO2/wBFCeo21V4iuj5HOZNT1BjHljsuVm3SXTqWec3yEySY0hxAC079Qsp6OUh7dTWHIC6PQ1ELfYWCQ/5jjlcnqaPJqPGc4MMZdt3XGY3k6W9OZ05A+qoISTljXHAB4UmFqPs+qLkeqj3T1O+ktDfDzoLs57qRW+olip3Oe4locQmUtpjWx0++OpYWTPY6ZuW6XDdpWaotkJka7I8VjtXPdRupoZ3msqKOV7ZS4OixySOy77XyS0UchaTL4eXAA5ys3CtSutDLDS0UtQ7S7TnBHcqP01TV3iYSEGKMk+6fJbtpeD0+1lZG+Mte74mkZBKvihkw59NjTnAx2WuHTHJgrG09vDS9wLz2Wn/GaX2trAMuOw9FnuNvaAaudxJA4UftkETql1TICXE7KTBeW0pnbEIfFa/BHZb1qrXyRe4/Vjnfhca4yNhtLzjcjYLB0ayoY1zpXfGeEkW161aXf/GQauS0n8lbRctS3txb6fnOgbflbQbn0Xrx9PPfa5p1BWgk5VQ1VxhVFpBVWhXIgppCrgeSIgqiIgpgZ4VUREMeWxUdvHStDcXSu8PT4rg5+n3dRHdSJFNQRb/002nohTUzjgcZ5Ci/UPTVVPAA050gjHmvTyMhYZIGvG7VOMXdeVW2zTi3mJ8b2ks0nPZdGltb20QgliLiN/up4+iZ/KrGUTWn4U4xdoZQWCoNRDM6TQGk6ogNnZUttNIKQaWNAB5GOFusp2j5eFnbHjdWSRLdrKinjq6Z8E7Q6N4wQRlQSt6UulJO5toqGtgJzh+5HovQQELcq9G3lt5ornLT+B4DzKBu5vwlcuhsdZFGyOpjcxw52yF6/JTg8rXfSMPy5U4w3XmN5i004pYqeWR+x+FdKw2ypmibmMwhp3DuSFNjQs1atCyx04HAwFOEXalI+VjGsDiGtGBsFutcTySVjZHhZQFpleCmVREVXKplUJVMoK6lTWrSVaSg2UREQREQFREQEREFMKmlXIgphVwqogIiICtLVciDHoTSsioUFmEwrlRBRUKEqioFW5QlUygZVCmVRB//2Q==&quot;</span>&#125;&#125;</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义OpenAI API密钥和基础URL</span></span><br><span class="line">OPENAI_API_KEY</span><br><span class="line">OPENAI_API_BASE</span><br><span class="line"></span><br><span class="line">DEEPSEEK_API_KEY</span><br><span class="line">DEEPSEEK_API_BASE</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">openai_model = init_chat_model(</span><br><span class="line">    model=<span class="string">&quot;gpt-4o-mini&quot;</span>,</span><br><span class="line">    model_provider=<span class="string">&quot;openai&quot;</span>,</span><br><span class="line">    api_key=OPENAI_API_KEY,</span><br><span class="line">    base_url=OPENAI_API_BASE</span><br><span class="line">)</span><br><span class="line">deepseek_model = init_chat_model(</span><br><span class="line">    model=<span class="string">&quot;deepseek-3.5&quot;</span>,</span><br><span class="line">    model_provider=<span class="string">&quot;deepseek&quot;</span>,</span><br><span class="line">    api_key=OPENAI_API_KEY,</span><br><span class="line">    base_url=OPENAI_API_BASE</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">response1 = openai_model.invoke([message_with_image])  <span class="comment"># 相同的消息格式！</span></span><br><span class="line">response2 = deepseek_model.invoke([message_with_image])</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;OpenAI 回复:&quot;</span>, response1.content)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Deepseek 回复:&quot;</span>, response2.content)</span><br></pre></td></tr></table></figure>
+
+<p><strong>跨提供商标准类型的含义：</strong></p>
+<ol>
+<li>统一的消息格式<br>LangChain 定义了标准的 <code>HumanMessage</code>、<code>AIMessage</code> 等消息类型，<br>无论底层是 OpenAI、Anthropic 还是 Google，都使用相同的接口</li>
+<li>标准化的多模态数据结构<br>图像：统一使用 {“type”: “image_url”, …} 格式<br>文本：统一使用 {“type”: “text”, …} 格式<br>LangChain 在内部转换为各供应商的特定格式</li>
+<li>供应商无关的代码<br>更换 AI 提供商时无需修改消息构建代码<br>只需更改模型初始化部分<br>降低了供应商锁定风险</li>
+<li>抽象化处理<br>LangChain 屏蔽了各供应商 API 的差异<br>开发者只需关注业务逻辑，不需关心底层实现细节<br>便于 A&#x2F;B 测试不同供应商的模型性能<br>这就是所谓的”跨提供商标准类型”——为不同的 AI 服务提供了统一的接口和数据格式。</li>
+</ol>
+<hr>
+<h4 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h4><p>工具扩展了<strong>智能体</strong>的能力——使它们能够获取实时数据、执行代码、查询外部数据库以及在现实世界中采取行动。</p>
+<p>从本质上来说，工具是具有明确定义的输入和输出的<strong>可调用函数</strong>，这些函数会被传递给聊天模型。该模型会根据对话上下文决定何时调用工具，以及提供哪些输入参数。</p>
+<hr>
+<h5 id="创建工具"><a href="#创建工具" class="headerlink" title="创建工具"></a>创建工具</h5><p>创建工具最简单的方法是使用<code>@tool</code>装饰器。默认情况下，函数的文档字符串会成为工具的描述，帮助模型了解何时使用该工具。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.tools <span class="keyword">import</span> tool</span><br><span class="line"></span><br><span class="line"><span class="meta">@tool</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">search_database</span>(<span class="params">query: <span class="built_in">str</span>, limit: <span class="built_in">int</span> = <span class="number">10</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;搜索数据库以获取信息，并将结果作为字符串返回。</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    参数:</span></span><br><span class="line"><span class="string">        query: 要查找的搜索词</span></span><br><span class="line"><span class="string">        limit: 返回的最大结果数量</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;结果限制: <span class="subst">&#123;limit&#125;</span> 条，查询: &#x27;<span class="subst">&#123;query&#125;</span>&#x27;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@tool(<span class="params"><span class="string">&quot;web_search&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">web_search</span>(<span class="params">query: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;搜索网络以获取信息。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;查询结果: <span class="subst">&#123;query&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>类型提示是必需的，因为它们定义了工具的输入模式。文档字符串应内容丰富且简洁，以帮助模型理解工具的用途。</p>
+<hr>
+<h5 id="自定义工具属性"><a href="#自定义工具属性" class="headerlink" title="自定义工具属性"></a>自定义工具属性</h5><p><code>自定义工具名称</code></p>
+<p>默认情况下，工具名称来自函数名。当你需要更具描述性的名称时，可以覆盖它：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@tool(<span class="params"><span class="string">&quot;web_search&quot;</span></span>) </span><span class="comment"># 自定义名称</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">query: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;搜索网络以获取信息。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;查询结果: <span class="subst">&#123;query&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>自定义工具描述</code></p>
+<p>覆盖自动生成的工具描述，以提供更清晰的模型指导：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@tool(<span class="params"><span class="string">&quot;web_search&quot;</span>,  description=<span class="string">&quot;搜索网络以获取信息。&quot;</span></span>) </span><span class="comment"># 自定义工具描述</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">query: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;搜索信息。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;查询结果: <span class="subst">&#123;query&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="高级模式定义"><a href="#高级模式定义" class="headerlink" title="高级模式定义"></a>高级模式定义</h5><p>使用<code>Pydantic</code>模型或<code>JSON</code>模式定义复杂输入：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.tools <span class="keyword">import</span> tool</span><br><span class="line"><span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel, Field</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Literal</span>, <span class="type">List</span>, <span class="type">Optional</span></span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> date</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line">model = ChatOpenAI(model_name=<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 复杂输入参数示例</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GeoLocation</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;地理坐标信息&quot;&quot;&quot;</span></span><br><span class="line">    latitude: <span class="built_in">float</span> = Field(ge=-<span class="number">90.0</span>, le=<span class="number">90.0</span>, description=<span class="string">&quot;纬度，范围-90到90&quot;</span>)</span><br><span class="line">    longitude: <span class="built_in">float</span> = Field(ge=-<span class="number">180.0</span>, le=<span class="number">180.0</span>, description=<span class="string">&quot;经度，范围-180到180&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TimeRange</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;时间范围&quot;&quot;&quot;</span></span><br><span class="line">    start_date: date = Field(description=<span class="string">&quot;开始日期&quot;</span>)</span><br><span class="line">    end_date: date = Field(description=<span class="string">&quot;结束日期&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AdvancedWeatherInput</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;高级天气查询的输入参数&quot;&quot;&quot;</span></span><br><span class="line">    location: <span class="built_in">str</span> = Field(min_length=<span class="number">1</span>, max_length=<span class="number">100</span>, description=<span class="string">&quot;城市名称或地点&quot;</span>)</span><br><span class="line">    geo_location: <span class="type">Optional</span>[GeoLocation] = Field(<span class="literal">None</span>, description=<span class="string">&quot;可选的地理坐标信息&quot;</span>)</span><br><span class="line">    units: <span class="type">Literal</span>[<span class="string">&quot;celsius&quot;</span>, <span class="string">&quot;fahrenheit&quot;</span>, <span class="string">&quot;kelvin&quot;</span>] = Field(</span><br><span class="line">        default=<span class="string">&quot;celsius&quot;</span>,</span><br><span class="line">        description=<span class="string">&quot;温度单位&quot;</span></span><br><span class="line">    )</span><br><span class="line">    include_forecast: <span class="built_in">bool</span> = Field(</span><br><span class="line">        default=<span class="literal">False</span>,</span><br><span class="line">        description=<span class="string">&quot;是否包含天气预报&quot;</span></span><br><span class="line">    )</span><br><span class="line">    forecast_days: <span class="built_in">int</span> = Field(</span><br><span class="line">        default=<span class="number">5</span>,</span><br><span class="line">        ge=<span class="number">1</span>,</span><br><span class="line">        le=<span class="number">14</span>,</span><br><span class="line">        description=<span class="string">&quot;预报天数，范围1-14天&quot;</span></span><br><span class="line">    )</span><br><span class="line">    include_historical: <span class="built_in">bool</span> = Field(</span><br><span class="line">        default=<span class="literal">False</span>,</span><br><span class="line">        description=<span class="string">&quot;是否包含历史天气数据&quot;</span></span><br><span class="line">    )</span><br><span class="line">    historical_range: <span class="type">Optional</span>[TimeRange] = Field(</span><br><span class="line">        <span class="literal">None</span>,</span><br><span class="line">        description=<span class="string">&quot;历史数据的时间范围&quot;</span></span><br><span class="line">    )</span><br><span class="line">    additional_data: <span class="type">List</span>[<span class="built_in">str</span>] = Field(</span><br><span class="line">        default=[],</span><br><span class="line">        description=<span class="string">&quot;额外数据类型列表，例如：湿度、风速、气压等&quot;</span></span><br><span class="line">    )</span><br><span class="line">    prefer_imperial: <span class="built_in">bool</span> = Field(</span><br><span class="line">        default=<span class="literal">False</span>,</span><br><span class="line">        description=<span class="string">&quot;是否优先使用英制单位&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="meta">@tool(<span class="params">args_schema=AdvancedWeatherInput</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_advanced_weather</span>(<span class="params"></span></span><br><span class="line"><span class="params">    location: <span class="built_in">str</span>, </span></span><br><span class="line"><span class="params">    geo_location: <span class="type">Optional</span>[GeoLocation] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">    units: <span class="built_in">str</span> = <span class="string">&quot;celsius&quot;</span>, </span></span><br><span class="line"><span class="params">    include_forecast: <span class="built_in">bool</span> = <span class="literal">False</span>,</span></span><br><span class="line"><span class="params">    forecast_days: <span class="built_in">int</span> = <span class="number">5</span>,</span></span><br><span class="line"><span class="params">    include_historical: <span class="built_in">bool</span> = <span class="literal">False</span>,</span></span><br><span class="line"><span class="params">    historical_range: <span class="type">Optional</span>[TimeRange] = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">    additional_data: <span class="type">List</span>[<span class="built_in">str</span>] = [],</span></span><br><span class="line"><span class="params">    prefer_imperial: <span class="built_in">bool</span> = <span class="literal">False</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;获取高级天气信息，支持多种参数选项。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 模拟天气数据</span></span><br><span class="line">    temp = <span class="number">22</span> <span class="keyword">if</span> units == <span class="string">&quot;celsius&quot;</span> <span class="keyword">else</span> (<span class="number">72</span> <span class="keyword">if</span> units == <span class="string">&quot;fahrenheit&quot;</span> <span class="keyword">else</span> <span class="number">295.15</span>)</span><br><span class="line">    </span><br><span class="line">    result = <span class="string">f&quot;当前位置 <span class="subst">&#123;location&#125;</span> 的天气:\n&quot;</span></span><br><span class="line">    result += <span class="string">f&quot;- 温度: <span class="subst">&#123;temp&#125;</span> <span class="subst">&#123;units[<span class="number">0</span>].upper()&#125;</span>\n&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> geo_location:</span><br><span class="line">        <span class="comment"># 使用点号语法访问Pydantic模型的属性</span></span><br><span class="line">        result += <span class="string">f&quot;- 地理坐标: <span class="subst">&#123;geo_location.latitude&#125;</span>, <span class="subst">&#123;geo_location.longitude&#125;</span>\n&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> include_forecast:</span><br><span class="line">        result += <span class="string">f&quot;- <span class="subst">&#123;forecast_days&#125;</span>天天气预报: 晴天为主\n&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> include_historical <span class="keyword">and</span> historical_range:</span><br><span class="line">        <span class="comment"># 使用点号语法访问TimeRange模型的属性</span></span><br><span class="line">        result += <span class="string">f&quot;- 历史数据范围: <span class="subst">&#123;historical_range.start_date&#125;</span> 到 <span class="subst">&#123;historical_range.end_date&#125;</span>\n&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> additional_data:</span><br><span class="line">        result += <span class="string">f&quot;- 额外数据: <span class="subst">&#123;<span class="string">&#x27;, &#x27;</span>.join(additional_data)&#125;</span>\n&quot;</span></span><br><span class="line">    </span><br><span class="line">    result += <span class="string">f&quot;- 使用英制单位: <span class="subst">&#123;<span class="string">&#x27;是&#x27;</span> <span class="keyword">if</span> prefer_imperial <span class="keyword">else</span> <span class="string">&#x27;否&#x27;</span>&#125;</span>\n&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绑定工具到模型</span></span><br><span class="line">model_with_tools = model.bind_tools([get_advanced_weather])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义输出格式的Pydantic模型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">WeatherOutput</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;天气查询的输出格式&quot;&quot;&quot;</span></span><br><span class="line">    location: <span class="built_in">str</span></span><br><span class="line">    temperature: <span class="built_in">str</span></span><br><span class="line">    unit: <span class="built_in">str</span></span><br><span class="line">    forecast_summary: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span><br><span class="line">    additional_info: <span class="type">List</span>[<span class="built_in">str</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用结构化输出配置模型</span></span><br><span class="line">structured_model = model.with_structured_output(WeatherOutput)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试完整的模型-工具交互流程</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=== 测试1: 直接模型调用并触发工具 ===&quot;</span>)</span><br><span class="line">    messages = model_with_tools.invoke([</span><br><span class="line">        (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;请查询北京市的天气情况，包括温度和5天预报&quot;</span>)</span><br><span class="line">    ])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;模型响应: <span class="subst">&#123;messages.content&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 检查是否有工具调用</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(messages, <span class="string">&#x27;tool_calls&#x27;</span>) <span class="keyword">and</span> messages.tool_calls:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;\n检测到 <span class="subst">&#123;<span class="built_in">len</span>(messages.tool_calls)&#125;</span> 个工具调用:&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> i, tool_call <span class="keyword">in</span> <span class="built_in">enumerate</span>(messages.tool_calls):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;工具调用 <span class="subst">&#123;i+<span class="number">1</span>&#125;</span>: <span class="subst">&#123;tool_call&#125;</span>&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 执行工具调用</span></span><br><span class="line">            tool_result = get_advanced_weather.invoke(tool_call[<span class="string">&#x27;args&#x27;</span>])</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;工具结果 <span class="subst">&#123;i+<span class="number">1</span>&#125;</span>: \n<span class="subst">&#123;tool_result&#125;</span>&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 使用工具结果继续对话</span></span><br><span class="line">            followup_messages = model_with_tools.invoke([</span><br><span class="line">                (<span class="string">&quot;human&quot;</span>, <span class="string">f&quot;这是天气查询结果：<span class="subst">&#123;tool_result&#125;</span>&quot;</span>),</span><br><span class="line">                (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;请总结一下天气情况并给出出行建议&quot;</span>)</span><br><span class="line">            ])</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;跟进响应: <span class="subst">&#123;followup_messages.content&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span> + <span class="string">&quot;=&quot;</span>*<span class="number">60</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=== 测试2: 结构化输出 ===&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 测试结构化输出</span></span><br><span class="line">    structured_response = structured_model.invoke(</span><br><span class="line">        <span class="string">&quot;上海市目前气温22度，有轻度雾霾，湿度65%，风速10km/h，请提取这些信息&quot;</span></span><br><span class="line">    )</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;结构化输出结果: <span class="subst">&#123;structured_response&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span> + <span class="string">&quot;=&quot;</span>*<span class="number">60</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=== 测试3: 复杂参数工具调用 ===&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 手动构造复杂参数并调用工具</span></span><br><span class="line">    complex_args = &#123;</span><br><span class="line">        <span class="string">&quot;location&quot;</span>: <span class="string">&quot;纽约&quot;</span>,</span><br><span class="line">        <span class="string">&quot;geo_location&quot;</span>: &#123;<span class="string">&quot;latitude&quot;</span>: <span class="number">40.7128</span>, <span class="string">&quot;longitude&quot;</span>: -<span class="number">74.0060</span>&#125;,</span><br><span class="line">        <span class="string">&quot;units&quot;</span>: <span class="string">&quot;fahrenheit&quot;</span>,</span><br><span class="line">        <span class="string">&quot;include_forecast&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">&quot;forecast_days&quot;</span>: <span class="number">7</span>,</span><br><span class="line">        <span class="string">&quot;include_historical&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">        <span class="string">&quot;historical_range&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;start_date&quot;</span>: <span class="string">&quot;2023-01-01&quot;</span>,</span><br><span class="line">            <span class="string">&quot;end_date&quot;</span>: <span class="string">&quot;2023-01-07&quot;</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">&quot;additional_data&quot;</span>: [<span class="string">&quot;humidity&quot;</span>, <span class="string">&quot;wind_speed&quot;</span>, <span class="string">&quot;pressure&quot;</span>, <span class="string">&quot;visibility&quot;</span>],</span><br><span class="line">        <span class="string">&quot;prefer_imperial&quot;</span>: <span class="literal">True</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    result = get_advanced_weather.invoke(complex_args)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;复杂参数查询结果:\n<span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p><code>保留的参数名称</code></p>
+<p>以下参数名称为保留名称，不能用作工具参数。使用这些名称会导致运行时错误。</p>
+<table>
+<thead>
+<tr>
+<th align="left">Parameter name 参数名称</th>
+<th align="left">Purpose 用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>config</code></td>
+<td align="left">预留用于在内部将<code>RunnableConfig</code>传递给工具</td>
+</tr>
+<tr>
+<td align="left"><code>runtime</code></td>
+<td align="left">为<code>ToolRuntime</code>参数预留（用于访问状态、上下文、存储）</td>
+</tr>
+</tbody></table>
+<p>要访问运行时信息，请使用<a target="_blank" rel="noopener" href="https://reference.langchain.com/python/langchain/tools/#langchain.tools.ToolRuntime">ToolRuntime</a>参数，而非将参数命名为<code>config</code>或<code>runtime</code>。</p>
+<hr>
+<h5 id="访问上下文"><a href="#访问上下文" class="headerlink" title="访问上下文"></a>访问上下文</h5><p><strong>重要性何在</strong>：当工具能够访问智能体状态、运行时上下文和长期记忆时，它们的功能最为强大。这使工具能够做出具有上下文感知的决策、提供个性化响应，并在对话中保留信息。</p>
+<p>运行时上下文提供了一种在运行时将依赖项（如数据库连接、用户ID或配置）注入工具的方法，使这些工具更易于测试和复用。</p>
+<p>工具可以通过<code>ToolRuntime</code>参数访问运行时信息，该参数提供：</p>
+<ul>
+<li><strong>State</strong> - 在执行过程中流动的可变数据（例如，消息、计数器、自定义字段）</li>
+<li><strong>Context</strong> - 不可变配置，如用户ID、会话详情或特定于应用程序的配置</li>
+<li><strong>Store</strong> - 跨对话的持久性长期记忆</li>
+<li><strong>Stream Writer</strong> - 在工具执行时流式传输自定义更新</li>
+<li><strong>Config</strong> - 用于执行的<code>RunnableConfig</code></li>
+<li><strong>Tool Call ID</strong> - 当前工具调用的ID</li>
+</ul>
+<p>使用<code>ToolRuntime</code>在单个参数中访问所有运行时信息。只需将<code>[runtime: ToolRuntime]</code>添加到工具签名中，它将被自动注入，且不会暴露给大语言模型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> create_agent</span><br><span class="line"><span class="keyword">from</span> langchain.tools <span class="keyword">import</span> tool, ToolRuntime</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@tool</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_weather</span>(<span class="params">location: <span class="built_in">str</span>, runtime: ToolRuntime</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;获取指定地点的天气。&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    messages = runtime.state[<span class="string">&quot;messages&quot;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;runtime: <span class="subst">&#123;runtime&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    human_msgs = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> m <span class="keyword">in</span> messages <span class="keyword">if</span> m.__class__.__name__ == <span class="string">&quot;HumanMessage&quot;</span>)</span><br><span class="line">    ai_msgs = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> m <span class="keyword">in</span> messages <span class="keyword">if</span> m.__class__.__name__ == <span class="string">&quot;AIMessage&quot;</span>)</span><br><span class="line">    tool_msgs = <span class="built_in">sum</span>(<span class="number">1</span> <span class="keyword">for</span> m <span class="keyword">in</span> messages <span class="keyword">if</span> m.__class__.__name__ == <span class="string">&quot;ToolMessage&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;Conversation has <span class="subst">&#123;human_msgs&#125;</span> user messages, <span class="subst">&#123;ai_msgs&#125;</span> AI responses, and <span class="subst">&#123;tool_msgs&#125;</span> tool results, <span class="subst">&#123;location&#125;</span>天气晴朗。&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">model = ChatOpenAI(model=<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line">agent = create_agent(</span><br><span class="line">    model,</span><br><span class="line">    tools=[get_weather],</span><br><span class="line">    system_prompt=<span class="string">&quot;你是一个天气助手，你可以获取指定地点的天气。&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">result = agent.invoke(</span><br><span class="line">    &#123;<span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;北京的天气怎样&quot;</span>&#125;]&#125;</span><br><span class="line">)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/c231ffd0f0020de456f6ec599843440642a3e315721b7b2d313e7ced3fde33ab.png" alt="图 0">  </p>
+<hr>
+<h4 id="短期记忆"><a href="#短期记忆" class="headerlink" title="短期记忆"></a>短期记忆</h4><h5 id="核心概念总结"><a href="#核心概念总结" class="headerlink" title="核心概念总结"></a>核心概念总结</h5><p><strong>1. 什么是短期记忆</strong>：</p>
+<p>LangChain 中的<strong>短期记忆</strong>，是指智能体在<strong>单个对话线程（thread）</strong> 内，对历史交互信息的临时存储与调用能力，核心是保留单轮对话的上下文，让 AI 能够连贯理解用户的连续提问。</p>
+<ul>
+<li><strong>线程（thread）</strong>：相当于一次独立的对话会话，类似邮件的单条对话分组，不同线程的记忆完全隔离，互不干扰。</li>
+<li><strong>核心载体</strong>：以对话消息列表（<code>messages</code>）为主要形式，记录用户输入与 AI 回复的完整历史。</li>
+<li><strong>核心问题</strong>：大模型存在<strong>上下文窗口限制</strong>，过长的对话历史会超出窗口导致信息丢失、模型效果下降、响应变慢且成本增加。</li>
+</ul>
+<p><strong>2. 短期记忆的核心价值</strong>：</p>
+<ul>
+<li>实现对话连贯性，让 AI 记住用户在当前对话中提及的信息（如姓名、偏好、历史问题）。</li>
+<li>支持智能体在多步骤任务中，复用之前的交互结果与工具调用信息。</li>
+<li>通过持久化存储，支持对话线程的中断与恢复。</li>
+</ul>
+<p><strong>3. 核心工作机制</strong>：</p>
+<p>LangChain 通过<strong>状态（State）+ 检查点（Checkpointer）</strong> 实现短期记忆：</p>
+<ol>
+<li>智能体的对话历史、自定义信息都存储在<strong>AgentState</strong>中，作为记忆的核心载体。</li>
+<li><code>Checkpointer</code> 负责将状态持久化到内存或数据库，实现线程隔离与记忆保存。</li>
+<li>每次调用智能体或完成工具调用时，记忆自动更新；每次执行步骤前，自动读取历史状态。</li>
+</ol>
+<h5 id="基础使用"><a href="#基础使用" class="headerlink" title="基础使用"></a>基础使用</h5><h6 id="内存版短期记忆（开发调试用）"><a href="#内存版短期记忆（开发调试用）" class="headerlink" title="内存版短期记忆（开发调试用）"></a>内存版短期记忆（开发调试用）</h6><p>使用 <code>InMemorySaver</code> 将记忆存储在程序内存中，适合本地开发、测试场景，重启程序后记忆丢失。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> create_agent</span><br><span class="line"><span class="keyword">from</span> langgraph.checkpoint.memory <span class="keyword">import</span> InMemorySaver</span><br><span class="line"><span class="comment"># 导入OpenAI模型，替换为你使用的大模型</span></span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化大模型</span></span><br><span class="line">model = ChatOpenAI(model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 初始化内存检查点，实现短期记忆</span></span><br><span class="line">checkpointer = InMemorySaver()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 创建带短期记忆的智能体</span></span><br><span class="line">agent = create_agent(</span><br><span class="line">    model,</span><br><span class="line">    tools=[],  <span class="comment"># 暂无工具，先实现基础对话记忆</span></span><br><span class="line">    checkpointer=checkpointer,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 调用智能体，指定thread_id区分不同对话线程</span></span><br><span class="line">config = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;thread_id&quot;</span>: <span class="string">&quot;conversation_1&quot;</span>&#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第一轮对话：告知AI姓名</span></span><br><span class="line">agent.invoke(</span><br><span class="line">    &#123;<span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;Hi! My name is Bob.&quot;</span>&#125;]&#125;,</span><br><span class="line">    config=config</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第二轮对话：测试AI是否记住姓名</span></span><br><span class="line">response = agent.invoke(</span><br><span class="line">    &#123;<span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;What&#x27;s my name?&quot;</span>&#125;]&#125;,</span><br><span class="line">    config=config</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印AI的最终回复</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;AI回复：&quot;</span>, response[<span class="string">&quot;messages&quot;</span>][-<span class="number">1</span>].content)</span><br></pre></td></tr></table></figure>
+
+<p><strong>代码说明</strong>:</p>
+<ul>
+<li><code>thread_id</code>：核心参数，用于区分不同的对话线程，相同<code>thread_id</code>共享同一份记忆。</li>
+<li><code>InMemorySaver</code>：内存级检查点，无需数据库，开箱即用。</li>
+<li>多次调用<code>agent.invoke</code>，传入相同<code>config</code>，即可实现连续对话的记忆保留。</li>
+</ul>
+<hr>
+<h6 id="生产版短期记忆"><a href="#生产版短期记忆" class="headerlink" title="生产版短期记忆"></a>生产版短期记忆</h6><p>生产环境中，内存存储无法满足需求，需使用数据库持久化记忆，支持多实例共享、记忆永久保存。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">uv add pymysql</span><br><span class="line">uv add langgraph-checkpoint-mysql</span><br><span class="line">uv add mysql-connector-python </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> create_agent</span><br><span class="line"><span class="keyword">from</span> langgraph.checkpoint.mysql.pymysql <span class="keyword">import</span> PyMySQLSaver</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line">model = ChatOpenAI(model=<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line">DB_URL = <span class="string">&quot;mysql://root:123456@127.0.0.1:3306/langchain&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> PyMySQLSaver.from_conn_string(DB_URL) <span class="keyword">as</span> checkpointer:</span><br><span class="line">    checkpointer.setup()</span><br><span class="line"></span><br><span class="line">    agent = create_agent(</span><br><span class="line">        model=model,</span><br><span class="line">        tools=[],</span><br><span class="line">        checkpointer=checkpointer,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 调用智能体，记忆会持久化到PostgreSQL</span></span><br><span class="line">    config = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;thread_id&quot;</span>: <span class="string">&quot;prod_conversation_1&quot;</span>&#125;&#125;</span><br><span class="line">    agent.invoke(</span><br><span class="line">        &#123;<span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;我喜欢喝美式咖啡&quot;</span>&#125;]&#125;,</span><br><span class="line">        config=config</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 测试记忆持久化</span></span><br><span class="line">    response = agent.invoke(</span><br><span class="line">        &#123;<span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;我喜欢喝什么咖啡？&quot;</span>&#125;]&#125;,</span><br><span class="line">        config=config</span><br><span class="line">    )</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;AI回复：&quot;</span>, response[<span class="string">&quot;messages&quot;</span>][-<span class="number">1</span>].content)</span><br><span class="line">    <span class="comment"># AI回复： 你喜欢喝美式咖啡，这是一种浓郁而清淡的咖啡选择。美式咖啡的风味通常比较简单，适合喜欢纯净咖啡味道的人。如果你喜欢其他类型的咖啡，也可以尝试拿铁、卡布奇诺、摩卡等，这些咖啡各有独特的风味和口感。你是否想尝试其他类型的咖啡呢？</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/fcde3ab3ac3cab252c8a04b7e6a918ee646f38cd2f157e11f67280fb7d8fc3df.png" alt="图 0"></p>
+<hr>
+<h5 id="自定义记忆状态"><a href="#自定义记忆状态" class="headerlink" title="自定义记忆状态"></a>自定义记忆状态</h5><p>默认的 <code>AgentState</code> 仅包含 <code>messages</code> 字段存储对话历史，实际业务中需要存储用户 ID、偏好等自定义信息，可通过扩展 <code>AgentState</code> 实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> AgentState, create_agent</span><br><span class="line"><span class="keyword">from</span> langgraph.checkpoint.memory <span class="keyword">import</span> InMemorySaver</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"><span class="keyword">from</span> pydantic <span class="keyword">import</span> Field</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载环境变量配置</span></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化ChatGPT模型实例</span></span><br><span class="line">model = ChatOpenAI(model=<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CustomAgentState</span>(<span class="title class_ inherited__">AgentState</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    自定义智能体状态类</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    该类扩展了基础的AgentState，添加了用户相关的个性化信息字段，</span></span><br><span class="line"><span class="string">    用于在对话过程中保持用户身份和偏好设置的持久化。</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    Attributes:</span></span><br><span class="line"><span class="string">        user_id (str): 用户唯一标识符，用于区分不同用户的状态</span></span><br><span class="line"><span class="string">        preferences (dict): 存储用户的个性化偏好设置，默认为空字典</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    user_id: <span class="built_in">str</span> = Field(..., description=<span class="string">&quot;用户唯一标识&quot;</span>)</span><br><span class="line">    preferences: <span class="built_in">dict</span> = Field(</span><br><span class="line">        default=&#123;&#125;,</span><br><span class="line">        description=<span class="string">&quot;用户个性化偏好&quot;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建内存检查点保存器，用于持久化对话状态</span></span><br><span class="line">checkpointer = InMemorySaver()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建自定义智能体实例</span></span><br><span class="line">agent = create_agent(</span><br><span class="line">    model=model,</span><br><span class="line">    tools=[],</span><br><span class="line">    state_schema=CustomAgentState,</span><br><span class="line">    checkpointer=checkpointer</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 调用时传入自定义记忆信息</span></span><br><span class="line">config = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;thread_id&quot;</span>: <span class="string">&quot;custom_state_1&quot;</span>&#125;&#125;</span><br><span class="line">result = agent.invoke(</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;你好，请记住我的偏好&quot;</span>&#125;],</span><br><span class="line">        <span class="string">&quot;user_id&quot;</span>: <span class="string">&quot;user_123456&quot;</span>,  <span class="comment"># 传入自定义用户ID</span></span><br><span class="line">        <span class="string">&quot;preferences&quot;</span>: &#123;<span class="string">&quot;theme&quot;</span>: <span class="string">&quot;dark&quot;</span>, <span class="string">&quot;language&quot;</span>: <span class="string">&quot;Chinese&quot;</span>&#125;  <span class="comment"># 传入用户偏好</span></span><br><span class="line">    &#125;,</span><br><span class="line">    config=config</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看自定义状态是否成功存储</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;当前记忆中的用户ID：&quot;</span>, result[<span class="string">&quot;user_id&quot;</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;当前记忆中的用户偏好：&quot;</span>, result[<span class="string">&quot;preferences&quot;</span>])</span><br></pre></td></tr></table></figure>
+
+<p><strong>核心说明</strong>:</p>
+<ul>
+<li>自定义状态需继承<code>AgentState</code>，基于 <code>Pydantic</code> 定义字段类型与默认值。</li>
+<li>调用<code>agent.invoke</code>时，可直接传入自定义字段，智能体会自动将其纳入短期记忆。</li>
+<li>自定义状态会和对话历史一起，通过 <code>Checkpointer</code> 持久化存储。</li>
+</ul>
+<hr>
+<h5 id="常见模式"><a href="#常见模式" class="headerlink" title="常见模式"></a>常见模式</h5><p>启用 <strong>短期记忆</strong> 后，长时间对话可能会超出大语言模型（LLM）的上下文窗口。</p>
+<p>针对长对话超出大模型上下文窗口的问题，LangChain 提供四种主流处理方案，以下是每种方案的可执行代码与使用场景。</p>
+<hr>
+<h6 id="裁剪消息"><a href="#裁剪消息" class="headerlink" title="裁剪消息"></a>裁剪消息</h6><p>决定何时截断消息的一种方法是计算消息历史中的令牌数量，并在接近该限制时进行截断。如果使用LangChain，可以使用修剪消息工具，并指定要从列表中保留的令牌数量，以及用于处理边界的<code>strategy</code>（例如，保留最后的<code>max_tokens</code>）。</p>
+<p>保留最新的部分消息，保留系统提示词 + 最近交互记录，是最轻量化的解决方案，通过<code>@before_model</code>中间件实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain_core.messages.base <span class="keyword">import</span> BaseMessage</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pyexpat <span class="keyword">import</span> model</span><br><span class="line"><span class="keyword">from</span> langchain.messages <span class="keyword">import</span> RemoveMessage, trim_messages</span><br><span class="line"><span class="keyword">from</span> langgraph.graph.message <span class="keyword">import</span> REMOVE_ALL_MESSAGES</span><br><span class="line"><span class="keyword">from</span> langgraph.checkpoint.memory <span class="keyword">import</span> InMemorySaver</span><br><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> create_agent,AgentState</span><br><span class="line"><span class="keyword">from</span> langchain.agents.middleware <span class="keyword">import</span> before_model</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Any</span></span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line">model = ChatOpenAI(model=<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@before_model</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">trim</span>(<span class="params">state: AgentState, runtime</span>) -&gt; <span class="built_in">dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>] | <span class="literal">None</span>:</span><br><span class="line">    messages = state[<span class="string">&quot;messages&quot;</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(messages) &lt;= <span class="number">3</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    trimmed_messages = trim_messages(</span><br><span class="line">            messages,</span><br><span class="line">            max_tokens=<span class="number">2000</span>,  <span class="comment"># 兜底</span></span><br><span class="line">            strategy=<span class="string">&quot;last&quot;</span>,   <span class="comment"># 保留最后若干条</span></span><br><span class="line">            token_counter=<span class="keyword">lambda</span> x: <span class="built_in">len</span>(<span class="built_in">str</span>(x)),  <span class="comment"># 简易计数器，实际可用模型 Tokenizer</span></span><br><span class="line">            include_system=<span class="literal">True</span>  <span class="comment"># 系统消息不被裁剪</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;messages&quot;</span>: [RemoveMessage(<span class="built_in">id</span>=REMOVE_ALL_MESSAGES), *trimmed_messages]&#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建带裁剪功能的智能体</span></span><br><span class="line">checkpointer = InMemorySaver()</span><br><span class="line">agent = create_agent(</span><br><span class="line">    model,</span><br><span class="line">    tools=[],</span><br><span class="line">    middleware=[trim],  <span class="comment"># 注册裁剪中间件</span></span><br><span class="line">    checkpointer=checkpointer,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试多轮对话，验证裁剪效果</span></span><br><span class="line">config = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;thread_id&quot;</span>: <span class="string">&quot;trim_test_1&quot;</span>&#125;&#125;</span><br><span class="line"><span class="comment"># 多轮输入</span></span><br><span class="line">agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: <span class="string">&quot;Hi, my name is Bob.&quot;</span>&#125;, config)</span><br><span class="line">agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: <span class="string">&quot;Hi, my age is 18.&quot;</span>&#125;, config)</span><br><span class="line">agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: <span class="string">&quot;Write a short poem about cats.&quot;</span>&#125;, config)</span><br><span class="line">agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: <span class="string">&quot;Now write one about dogs.&quot;</span>&#125;, config)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试记忆是否保留</span></span><br><span class="line">final_response = agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: <span class="string">&quot;What&#x27;s my name?&quot;</span>&#125;, config)</span><br><span class="line">final_response[<span class="string">&quot;messages&quot;</span>][-<span class="number">1</span>].pretty_print()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h6 id="删除消息"><a href="#删除消息" class="headerlink" title="删除消息"></a>删除消息</h6><p>主动删除指定或全部历史消息，适用于需要清理敏感信息、重置对话上下文的场景，通过<code>RemoveMessage</code>实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.messages <span class="keyword">import</span> RemoveMessage</span><br><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> create_agent, AgentState</span><br><span class="line"><span class="keyword">from</span> langchain.agents.middleware <span class="keyword">import</span> after_model</span><br><span class="line"><span class="keyword">from</span> langgraph.checkpoint.memory <span class="keyword">import</span> InMemorySaver</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line">model = ChatOpenAI(model=<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@after_model</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">delete_old_messages</span>(<span class="params">state: AgentState, runtime</span>) -&gt; <span class="built_in">dict</span> | <span class="literal">None</span>:</span><br><span class="line">    messages = state[<span class="string">&quot;messages&quot;</span>]</span><br><span class="line">    <span class="comment"># 消息数量大于1条时，删除最早的1条</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(messages) &gt; <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;messages&quot;</span>: [RemoveMessage(<span class="built_in">id</span>=m.<span class="built_in">id</span>) <span class="keyword">for</span> m <span class="keyword">in</span> messages[:<span class="number">1</span>]]&#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建带消息删除功能的智能体</span></span><br><span class="line">checkpointer = InMemorySaver()</span><br><span class="line">agent = create_agent(</span><br><span class="line">    model,</span><br><span class="line">    tools=[],</span><br><span class="line">    system_prompt=<span class="string">&quot;Please be concise and to the point.&quot;</span>,</span><br><span class="line">    middleware=[delete_old_messages],  <span class="comment"># 注册删除中间件</span></span><br><span class="line">    checkpointer=checkpointer,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试消息删除效果</span></span><br><span class="line">config = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;thread_id&quot;</span>: <span class="string">&quot;delete_test_1&quot;</span>&#125;&#125;</span><br><span class="line"><span class="comment"># 第一轮对话</span></span><br><span class="line">agent.invoke(</span><br><span class="line">    &#123;<span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;hi! I&#x27;m bob&quot;</span>&#125;]&#125;,</span><br><span class="line">    config</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 第二轮对话，查看消息是否被删除</span></span><br><span class="line">response = agent.invoke(</span><br><span class="line">    &#123;<span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;what&#x27;s my name?&quot;</span>&#125;]&#125;,</span><br><span class="line">    config</span><br><span class="line">)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br><span class="line"><span class="comment"># &#123;&#x27;messages&#x27;: [HumanMessage(content=&quot;what&#x27;s my name?&quot;, additional_kwargs=&#123;&#125;, response_metadata=&#123;&#125;, id=&#x27;c5fe9872-e628-473e-aa3f-81ec359e27f5&#x27;), AIMessage(content=&#x27;Your name is Bob.&#x27;, additional_kwargs=&#123;&#x27;refusal&#x27;: None&#125;, response_metadata=&#123;&#x27;token_usage&#x27;: &#123;&#x27;completion_tokens&#x27;: 6, &#x27;prompt_tokens&#x27;: 39, &#x27;total_tokens&#x27;: 45, &#x27;completion_tokens_details&#x27;: &#123;&#x27;accepted_prediction_tokens&#x27;: None, &#x27;audio_tokens&#x27;: 0, &#x27;reasoning_tokens&#x27;: 0, &#x27;rejected_prediction_tokens&#x27;: None&#125;, &#x27;prompt_tokens_details&#x27;: &#123;&#x27;audio_tokens&#x27;: 0, &#x27;cached_tokens&#x27;: 0&#125;&#125;, &#x27;model_provider&#x27;: &#x27;openai&#x27;, &#x27;model_name&#x27;: &#x27;gpt-4o-mini-2024-07-18&#x27;, &#x27;system_fingerprint&#x27;: &#x27;fp_f97eff32c5&#x27;, &#x27;id&#x27;: &#x27;chatcmpl-D2wQdb7zugIcTp3NjrstvgbIqDjCI&#x27;, &#x27;finish_reason&#x27;: &#x27;stop&#x27;, &#x27;logprobs&#x27;: None&#125;, id=&#x27;lc_run--019c03ff-e111-7a00-ae71-472f0656f999-0&#x27;, tool_calls=[], invalid_tool_calls=[], usage_metadata=&#123;&#x27;input_tokens&#x27;: 39, &#x27;output_tokens&#x27;: 6, &#x27;total_tokens&#x27;: 45, &#x27;input_token_details&#x27;: &#123;&#x27;audio&#x27;: 0, &#x27;cache_read&#x27;: 0&#125;, &#x27;output_token_details&#x27;: &#123;&#x27;audio&#x27;: 0, &#x27;reasoning&#x27;: 0&#125;&#125;)]&#125;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h6 id="总结消息"><a href="#总结消息" class="headerlink" title="总结消息"></a>总结消息</h6><p>将早期的长对话历史总结为精简文本，替换原有历史，既保留关键信息，又减少 token 占用，是长对话的最优解。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/037805b42d08bd7f7dd8e517ad418690630a60b7136e427ccad27a9d4a85d6d8.png" alt="图 1">  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> create_agent</span><br><span class="line"><span class="keyword">from</span> langchain.agents.middleware <span class="keyword">import</span> SummarizationMiddleware</span><br><span class="line"><span class="keyword">from</span> langgraph.checkpoint.memory <span class="keyword">import</span> InMemorySaver</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line">main_model = ChatOpenAI(model=<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line">summarize_model = ChatOpenAI(model=<span class="string">&quot;gpt-3.5-turbo&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化检查点</span></span><br><span class="line">checkpointer = InMemorySaver()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建带总结中间件的智能体</span></span><br><span class="line">agent = create_agent(</span><br><span class="line">    model=main_model,</span><br><span class="line">    tools=[],</span><br><span class="line">    middleware=[</span><br><span class="line">        SummarizationMiddleware(</span><br><span class="line">            model=summarize_model,  <span class="comment"># 总结使用的模型</span></span><br><span class="line">            trigger=(<span class="string">&quot;tokens&quot;</span>, <span class="number">1000</span>),  <span class="comment"># 触发总结的token阈值</span></span><br><span class="line">            keep=(<span class="string">&quot;messages&quot;</span>, <span class="number">2</span>)  <span class="comment"># 保留最新的10条原始消息，其余总结</span></span><br><span class="line">        )</span><br><span class="line">    ],</span><br><span class="line">    checkpointer=checkpointer,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试长对话总结效果</span></span><br><span class="line">config = &#123;<span class="string">&quot;configurable&quot;</span>: &#123;<span class="string">&quot;thread_id&quot;</span>: <span class="string">&quot;summarize_test_1&quot;</span>&#125;&#125;</span><br><span class="line"><span class="comment"># 多轮对话输入</span></span><br><span class="line">agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: <span class="string">&quot;hi, my name is Bob.&quot;</span>&#125;, config)</span><br><span class="line">agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: <span class="string">&quot;I like reading and playing basketball.&quot;</span>&#125;, config)</span><br><span class="line">agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: <span class="string">&quot;I work as a software engineer.&quot;</span>&#125;, config)</span><br><span class="line"><span class="comment"># 测试总结后的记忆效果</span></span><br><span class="line">final_response = agent.invoke(&#123;<span class="string">&quot;messages&quot;</span>: <span class="string">&quot;What do I do and what do I like?&quot;</span>&#125;, config)</span><br><span class="line">final_response[<span class="string">&quot;messages&quot;</span>][-<span class="number">1</span>].pretty_print()</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="记忆的读写与操作"><a href="#记忆的读写与操作" class="headerlink" title="记忆的读写与操作"></a>记忆的读写与操作</h5><h6 id="在工具中读取短期记忆"><a href="#在工具中读取短期记忆" class="headerlink" title="在工具中读取短期记忆"></a>在工具中读取短期记忆</h6><p>通过<code>ToolRuntime</code>参数，工具可直接读取智能体的状态（包括对话历史、自定义字段）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> create_agent, AgentState</span><br><span class="line"><span class="keyword">from</span> langchain.tools <span class="keyword">import</span> tool, ToolRuntime</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line">model = ChatOpenAI(model=<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CustomState</span>(<span class="title class_ inherited__">AgentState</span>):</span><br><span class="line">    user_id: <span class="built_in">str</span> </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义可读取记忆的工具</span></span><br><span class="line"><span class="meta">@tool</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_user_info</span>(<span class="params">runtime: ToolRuntime</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;查询用户信息，从智能体记忆中读取user_id&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 从runtime中读取自定义状态</span></span><br><span class="line">    user_id = runtime.state[<span class="string">&quot;user_id&quot;</span>]</span><br><span class="line">    <span class="comment"># 模拟数据库查询</span></span><br><span class="line">    <span class="keyword">if</span> user_id == <span class="string">&quot;user_123&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;User is John Smith, aged 28&quot;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Unknown user&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建智能体</span></span><br><span class="line">agent = create_agent(</span><br><span class="line">    model=model,</span><br><span class="line">    tools=[get_user_info],</span><br><span class="line">    state_schema=CustomState,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调用智能体，传入自定义user_id</span></span><br><span class="line">result = agent.invoke(&#123;</span><br><span class="line">    <span class="string">&quot;messages&quot;</span>: <span class="string">&quot;look up user information&quot;</span>,</span><br><span class="line">    <span class="string">&quot;user_id&quot;</span>: <span class="string">&quot;user_123&quot;</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;工具调用结果：&quot;</span>, result[<span class="string">&quot;messages&quot;</span>][-<span class="number">1</span>].content)</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h6 id="在工具中写入短期记忆"><a href="#在工具中写入短期记忆" class="headerlink" title="在工具中写入短期记忆"></a>在工具中写入短期记忆</h6><p>通过<code>Command</code>，工具可直接修改智能体的状态，实现记忆的动态更新。</p>
+<h6 id="动态提示词中使用记忆"><a href="#动态提示词中使用记忆" class="headerlink" title="动态提示词中使用记忆"></a>动态提示词中使用记忆</h6><p>通过<code>@dynamic_prompt</code>中间件，读取记忆中的信息，生成动态的系统提示词。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.agents <span class="keyword">import</span> create_agent</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> TypedDict</span><br><span class="line"><span class="keyword">from</span> langchain.agents.middleware <span class="keyword">import</span> dynamic_prompt, ModelRequest</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"><span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line"></span><br><span class="line">model = ChatOpenAI(model_name=<span class="string">&quot;gpt-4o-mini&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CustomContext</span>(<span class="title class_ inherited__">TypedDict</span>):</span><br><span class="line">    user_name: <span class="built_in">str</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 模拟天气工具</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_weather</span>(<span class="params">city: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;获取城市天气&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;The weather in <span class="subst">&#123;city&#125;</span> is always sunny!&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 动态系统提示词，读取记忆中的用户名</span></span><br><span class="line"><span class="meta">@dynamic_prompt</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">dynamic_system_prompt</span>(<span class="params">request: ModelRequest</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    user_name = request.runtime.context[<span class="string">&quot;user_name&quot;</span>]</span><br><span class="line">    <span class="comment"># 基于记忆生成个性化提示词</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">f&quot;You are a helpful assistant. Address the user as <span class="subst">&#123;user_name&#125;</span>.&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建智能体</span></span><br><span class="line">agent = create_agent(</span><br><span class="line">    model=model,</span><br><span class="line">    tools=[get_weather],</span><br><span class="line">    middleware=[dynamic_system_prompt],</span><br><span class="line">    context_schema=CustomContext,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 调用智能体，传入用户名</span></span><br><span class="line">result = agent.invoke(</span><br><span class="line">    &#123;<span class="string">&quot;messages&quot;</span>: [&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;What is the weather in San Francisco?&quot;</span>&#125;]&#125;,</span><br><span class="line">    context=CustomContext(user_name=<span class="string">&quot;John Smith&quot;</span>),</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 打印所有消息</span></span><br><span class="line"><span class="keyword">for</span> msg <span class="keyword">in</span> result[<span class="string">&quot;messages&quot;</span>]:</span><br><span class="line">    msg.pretty_print()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">================================ Human Message =================================</span><br><span class="line"></span><br><span class="line">What <span class="keyword">is</span> the weather <span class="keyword">in</span> San Francisco?</span><br><span class="line">================================== Ai Message ==================================</span><br><span class="line">Tool Calls:</span><br><span class="line">  get_weather (call_SRXy3JJeytBFpyKEmPptkSTn)</span><br><span class="line"> Call ID: call_SRXy3JJeytBFpyKEmPptkSTn</span><br><span class="line">  Args:</span><br><span class="line">    city: San Francisco</span><br><span class="line">================================= Tool Message =================================</span><br><span class="line">Name: get_weather</span><br><span class="line"></span><br><span class="line">The weather <span class="keyword">in</span> San Francisco <span class="keyword">is</span> always sunny!</span><br><span class="line">================================== Ai Message ==================================</span><br><span class="line"></span><br><span class="line">The weather <span class="keyword">in</span> San Francisco <span class="keyword">is</span> always sunny! If you need more specific details <span class="keyword">or</span> updates, feel free to ask, John Smith.</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h4 id="流式输出"><a href="#流式输出" class="headerlink" title="流式输出"></a>流式输出</h4><h5 id="核心概念总结-1"><a href="#核心概念总结-1" class="headerlink" title="核心概念总结"></a>核心概念总结</h5><p><strong>1. 什么是 LangChain 流式输出</strong>：</p>
+<p>LangChain 提供完善的流式系统，可在智能体（Agent）运行过程中，<strong>实时推送状态更新、LLM 生成的词元、自定义信息</strong>，无需等待完整响应生成完毕，大幅提升应用的响应速度和用户体验，解决大模型推理延迟的问题。</p>
+<p><strong>2. 核心流式模式</strong>：</p>
+<p>LangChain 支持三种基础流式模式，可单独使用或组合使用，所有模式通过 <code>stream</code>&#x2F;<code>astream</code> 方法指定：</p>
+<table>
+<thead>
+<tr>
+<th align="left">模式</th>
+<th align="left">核心作用</th>
+<th align="left">输出内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>updates</code></td>
+<td align="left">流式输出智能体执行进度</td>
+<td align="left">每个步骤后的状态更新，如 LLM 节点的工具调用、工具节点的执行结果</td>
+</tr>
+<tr>
+<td align="left"><code>messages</code></td>
+<td align="left">流式输出 LLM 生成词元</td>
+<td align="left"><code>(token, metadata)</code> 元组，包含逐词生成的内容和节点元信息</td>
+</tr>
+<tr>
+<td align="left"><code>custom</code></td>
+<td align="left">流式输出自定义信息</td>
+<td align="left">通过流写入器，在工具 &#x2F; 节点中推送自定义文本、数据等</td>
+</tr>
+</tbody></table>
+</article>
+<div class="article-footer">
+    <section id="license">
+      <div class="header"><span>许可协议</span></div>
+      <div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div>
+    </section>
+    
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2026/01/08/AI%E5%B7%A5%E7%A8%8B%E5%8C%96/">AI工程化</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2025/04/17/FastAPI%E5%9F%BA%E7%A1%80/">FastAPI基础</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#LangChain%E5%9F%BA%E7%A1%80"><span class="toc-text">LangChain基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-text">核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Models"><span class="toc-text">Models</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%A8%A1%E5%9E%8B"><span class="toc-text">初始化模型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E4%BD%BF%E7%94%A8%E6%8F%90%E4%BE%9B%E5%95%86%E6%A8%A1%E5%9E%8B"><span class="toc-text">直接使用提供商模型</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">调用方式</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#invoke"><span class="toc-text">invoke</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Stream%E6%B5%81"><span class="toc-text">Stream流</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Batch%E6%89%B9%E9%87%8F"><span class="toc-text">Batch批量</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Messages"><span class="toc-text">Messages</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="toc-text">基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#Text-prompts"><span class="toc-text">Text prompts</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Message-prompts"><span class="toc-text">Message prompts</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Dictionary-format"><span class="toc-text">Dictionary format</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E7%B1%BB%E5%9E%8B"><span class="toc-text">消息类型</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#System-message"><span class="toc-text">System message</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Human-message"><span class="toc-text">Human message</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#AI-message"><span class="toc-text">AI message</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#Tool-message"><span class="toc-text">Tool message</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E5%86%85%E5%AE%B9"><span class="toc-text">消息内容</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-text">工具</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%B7%A5%E5%85%B7"><span class="toc-text">创建工具</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B7%A5%E5%85%B7%E5%B1%9E%E6%80%A7"><span class="toc-text">自定义工具属性</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E6%A8%A1%E5%BC%8F%E5%AE%9A%E4%B9%89"><span class="toc-text">高级模式定义</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-text">访问上下文</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9F%AD%E6%9C%9F%E8%AE%B0%E5%BF%86"><span class="toc-text">短期记忆</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E6%80%BB%E7%BB%93"><span class="toc-text">核心概念总结</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-text">基础使用</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E7%89%88%E7%9F%AD%E6%9C%9F%E8%AE%B0%E5%BF%86%EF%BC%88%E5%BC%80%E5%8F%91%E8%B0%83%E8%AF%95%E7%94%A8%EF%BC%89"><span class="toc-text">内存版短期记忆（开发调试用）</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E7%94%9F%E4%BA%A7%E7%89%88%E7%9F%AD%E6%9C%9F%E8%AE%B0%E5%BF%86"><span class="toc-text">生产版短期记忆</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AE%B0%E5%BF%86%E7%8A%B6%E6%80%81"><span class="toc-text">自定义记忆状态</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E6%A8%A1%E5%BC%8F"><span class="toc-text">常见模式</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%A3%81%E5%89%AA%E6%B6%88%E6%81%AF"><span class="toc-text">裁剪消息</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%B6%88%E6%81%AF"><span class="toc-text">删除消息</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E6%B6%88%E6%81%AF"><span class="toc-text">总结消息</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E8%AE%B0%E5%BF%86%E7%9A%84%E8%AF%BB%E5%86%99%E4%B8%8E%E6%93%8D%E4%BD%9C"><span class="toc-text">记忆的读写与操作</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%B7%A5%E5%85%B7%E4%B8%AD%E8%AF%BB%E5%8F%96%E7%9F%AD%E6%9C%9F%E8%AE%B0%E5%BF%86"><span class="toc-text">在工具中读取短期记忆</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%9C%A8%E5%B7%A5%E5%85%B7%E4%B8%AD%E5%86%99%E5%85%A5%E7%9F%AD%E6%9C%9F%E8%AE%B0%E5%BF%86"><span class="toc-text">在工具中写入短期记忆</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E6%8F%90%E7%A4%BA%E8%AF%8D%E4%B8%AD%E4%BD%BF%E7%94%A8%E8%AE%B0%E5%BF%86"><span class="toc-text">动态提示词中使用记忆</span></a></li></ol></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E5%BC%8F%E8%BE%93%E5%87%BA"><span class="toc-text">流式输出</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E6%80%BB%E7%BB%93-1"><span class="toc-text">核心概念总结</span></a></li></ol></li></ol></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>

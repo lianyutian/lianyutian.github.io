@@ -1,0 +1,944 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 7.3.0">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Kubernetes：Kubernetes资源清单 - Lianyutian</title>
+
+  
+    <meta name="description" content="🥧本文介绍了Kubernetes中资源清单">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kubernetes资源清单">
+<meta property="og:url" content="http://example.com/wiki/Kubernetes/%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95/">
+<meta property="og:site_name" content="Lianyutian">
+<meta property="og:description" content="🥧本文介绍了Kubernetes中资源清单">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/assets/20240507174529.png">
+<meta property="article:published_time" content="2026-03-26T00:12:11.570Z">
+<meta property="article:modified_time" content="2026-03-26T00:12:11.570Z">
+<meta property="article:author" content="lianyutian">
+<meta property="article:tag" content="Kubernetes">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/assets/20240507174529.png">
+  
+  
+  
+  <meta name="keywords" content="">
+
+  <!-- feed -->
+  
+    <link rel="alternate" href="/atom.xml" title="Lianyutian" type="application/atom+xml">
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+    <link rel="shortcut icon" href="/assets/20240507174529.png">
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"http://example.com/wiki/Kubernetes/%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95/","author":{"@type":"Person","name":"lianyutian","sameAs":[],"image":"/assets/20240507174529.png"},"name":"Kubernetes资源清单","description":"🥧本文介绍了Kubernetes中资源清单","url":"http://example.com/wiki/Kubernetes/%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95/"}</script>
+  
+</head>
+<body>
+
+
+
+<div class="l_body content" id="start" layout="page" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><div class="icon"><img no-lazy class="icon" src="/assets/wiki/Kubernetes/Kubernetes.svg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></div><a class="title" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B"><div class="main">Kubernetes</div><div class="sub cap">Kubernetes的安装及概念</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"><a class="nav-item" title="文章" href="/" style="color:#1e6150"><span>文章</span></a><a class="nav-item active" title="wiki" href="/wiki/" style="color:#1e6150"><span>wiki</span></a></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" data-filter="/wiki/Kubernetes/" placeholder="在 Kubernetes 中搜索..."></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+<widget class="widget-wrapper doc-tree post-list"><div class="widget-header dis-select"><span class="name">基础</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B/#start"><span class="toc-text">Kubernetes简介</span></a><a class="link" href="/wiki/Kubernetes/Kubernetes%E5%AE%89%E8%A3%85/"><span class="toc-text">Kubernetes安装</span></a><a class="link active" href="/wiki/Kubernetes/%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95/"><span class="toc-text">Kubernetes资源清单</span><svg class="active-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M21 11.098v4.993c0 3.096 0 4.645-.734 5.321c-.35.323-.792.526-1.263.58c-.987.113-2.14-.907-4.445-2.946c-1.02-.901-1.529-1.352-2.118-1.47a2.225 2.225 0 0 0-.88 0c-.59.118-1.099.569-2.118 1.47c-2.305 2.039-3.458 3.059-4.445 2.945a2.238 2.238 0 0 1-1.263-.579C3 20.736 3 19.188 3 16.091v-4.994C3 6.81 3 4.666 4.318 3.333C5.636 2 7.758 2 12 2c4.243 0 6.364 0 7.682 1.332C21 4.665 21 6.81 21 11.098" opacity=".5"/><path fill="currentColor" d="M9 5.25a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5z"/></svg></a><a class="link" href="/wiki/Kubernetes/Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/"><span class="toc-text">Kubernetes Pod</span></a><a class="link" href="/wiki/Kubernetes/%E6%8E%A7%E5%88%B6%E5%99%A8/"><span class="toc-text">Kubernetes控制器</span></a><a class="link" href="/wiki/Kubernetes/Service/"><span class="toc-text">Kubernetes Service</span></a><a class="link" href="/wiki/Kubernetes/%E5%AD%98%E5%82%A8/"><span class="toc-text">Kubernetes存储</span></a><a class="link" href="/wiki/Kubernetes/%E8%B0%83%E5%BA%A6%E5%99%A8/"><span class="toc-text">Kubernetes调度器</span></a><a class="link" href="/wiki/Kubernetes/Helm/"><span class="toc-text">Helm</span></a><a class="link" href="/wiki/Kubernetes/Ingress/"><span class="toc-text">Ingress</span></a></div><div class="widget-header dis-select"><span class="name">高可用</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%AE%89%E8%A3%85/"><span class="toc-text">Kubernetes 二进制安装</span></a></div><div class="widget-header dis-select"><span class="name">CICD</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Habor%E5%AE%89%E8%A3%85/"><span class="toc-text">Habor安装</span></a><a class="link" href="/wiki/Kubernetes/Rancher%E5%AE%89%E8%A3%85/"><span class="toc-text">Rancher安装</span></a></div><div class="widget-header dis-select"><span class="name">...</span></div><div class="widget-body fs14"><a class="link" href="/wiki/Kubernetes/Gitlab%E5%AE%89%E8%A3%85/"><span class="toc-text">Gitlab安装</span></a><a class="link" href="/wiki/Kubernetes/Jenkins%E5%AE%89%E8%A3%85/"><span class="toc-text">Jenkins安装</span></a><a class="link" href="/wiki/Kubernetes/loki%E5%AE%89%E8%A3%85/"><span class="toc-text">Loki安装</span></a><a class="link" href="/wiki/Kubernetes/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"><span class="toc-text">Kubernetes常用命令</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" id="menu" href="/wiki/">文档</a><span class="sep"></span><a class="cap breadcrumb" id="proj" href="/wiki/Kubernetes/Kubernetes%E7%AE%80%E4%BB%8B/">Kubernetes</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">更新于：<time datetime="2026-03-26T00:12:11.570Z">2026-03-26</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Kubernetes资源清单</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><h2 id="资源清单"><a href="#资源清单" class="headerlink" title="资源清单"></a>资源清单</h2><h3 id="什么是资源清单？"><a href="#什么是资源清单？" class="headerlink" title="什么是资源清单？"></a>什么是资源清单？</h3><p><strong>资源</strong>：K8S 中所有的内容都抽象为 <strong>资源</strong>，资源实例化之后称为 <strong>对象‌</strong>。</p>
+<p><strong>资源清单的作用</strong>‌：是与 K8S 集群交互的机制，用于传递配置信息，创建符合预期的 Pod 或其他资源‌。</p>
+<p>在 Kubernetes（K8S）中，‌<strong>资源</strong>‌、‌<strong>对象</strong>‌和‌<strong>资源清单</strong>‌是三个核心概念，它们的关系可以用日常生活中的例子来类比：</p>
+<h4 id="资源（Resource）"><a href="#资源（Resource）" class="headerlink" title="资源（Resource）"></a>资源（Resource）</h4><ul>
+<li>‌通俗解释：资源是 K8S 里的“工具”或“原材料”，每种工具都有特定功能。比如：<ul>
+<li><code>Pod</code>：像是一个“快递包裹”，里面装着一个或多个容器（比如 Nginx 服务）‌。</li>
+<li><code>Deployment</code>：像“流水线说明书”，告诉 K8S 如何批量管理相同的 Pod（比如始终保持 3 个 Nginx 副本运行）‌。</li>
+<li><code>Service</code>：相当于“电话号码簿”，让其他服务能找到你的 Pod‌。</li>
+</ul>
+</li>
+<li>‌<strong>本质</strong>‌：K8S 将计算、存储、网络等能力抽象成不同类型的资源，用户通过操作这些资源来管理应用‌。</li>
+</ul>
+<h4 id="对象（Object）"><a href="#对象（Object）" class="headerlink" title="对象（Object）"></a>对象（Object）</h4><ul>
+<li>‌通俗解释‌：对象是资源的“具体实例”。比如：<ul>
+<li>资源是“菜谱”，对象就是“按菜谱做出来的菜”。</li>
+<li>你定义一个 <code>Deployment</code> 资源（菜谱），K8S 实际创建的就是一个 <code>Deployment</code> 对象（一盘菜）‌。</li>
+</ul>
+</li>
+<li>‌<strong>关键点</strong>‌：对象是运行时存在的实体，持有当前状态（比如 Pod 是否运行正常）‌。</li>
+</ul>
+<h4 id="资源清单（Manifest）"><a href="#资源清单（Manifest）" class="headerlink" title="资源清单（Manifest）"></a>资源清单（Manifest）</h4><ul>
+<li><p>‌通俗解释‌：资源清单是“需求说明书”，用 YAML 或 JSON 格式写下你的需求。例如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span>       <span class="comment"># 用哪个版本的“工具”（API 版本）</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span>            <span class="comment"># 要创建什么（资源类型）</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">nginx-pod</span>    <span class="comment"># 实例名称</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span>      <span class="comment"># 容器名</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">nginx</span>     <span class="comment"># 镜像地址</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>‌<strong>作用</strong>‌：把这份清单提交给 K8S，它就会按你的要求创建并管理对应的对象‌。</p>
+</li>
+</ul>
+<h4 id="三者的关系总结"><a href="#三者的关系总结" class="headerlink" title="三者的关系总结"></a>三者的关系总结</h4><ol>
+<li>‌<strong>资源</strong>‌是抽象的功能分类（如 Pod、Service）。</li>
+<li>‌<strong>对象</strong>‌是资源的实际实例（如一个名为 <code>nginx-pod</code> 的 Pod）。</li>
+<li>‌<strong>资源清单</strong>‌是生成对象的“配方”（YAML&#x2F;JSON 文件）‌。</li>
+</ol>
+<p>‌<strong>类比</strong>‌：</p>
+<ul>
+<li>资源 &#x3D; 乐高积木的类型（比如车轮、窗户）。</li>
+<li>对象 &#x3D; 拼好的乐高模型（比如一辆车）。</li>
+<li>资源清单 &#x3D; 拼装说明书（告诉你怎么拼）‌。</li>
+</ul>
+<p>通过这种机制，K8S 实现了对应用的声明式管理（你只需描述“想要什么”，而非“如何做”）‌。</p>
+<h3 id="资源类型"><a href="#资源类型" class="headerlink" title="资源类型"></a>资源类型</h3><h4 id="命名空间级别"><a href="#命名空间级别" class="headerlink" title="命名空间级别"></a>命名空间级别</h4><h5 id="工作负载型资源-Workload"><a href="#工作负载型资源-Workload" class="headerlink" title="工作负载型资源 (Workload)"></a>工作负载型资源 (Workload)</h5><p>用于管理容器化应用的生命周期：</p>
+<ul>
+<li><code>Pod</code>：最基本的可调度单位，包含一个或多个容器‌。</li>
+<li><code>Deployment</code>：管理无状态应用，支持滚动更新和回滚‌。</li>
+<li><code>StatefulSet</code>：管理有状态应用，提供稳定的存储和唯一标识‌。</li>
+<li><code>DaemonSet</code>：确保每个节点运行一个 Pod 副本‌。</li>
+<li><code>Job</code> &#x2F; <code>CronJob</code>：用于一次性或定时任务‌。</li>
+</ul>
+<h5 id="服务发现及负载均衡型资源‌"><a href="#服务发现及负载均衡型资源‌" class="headerlink" title="服务发现及负载均衡型资源‌"></a>服务发现及负载均衡型资源‌</h5><ul>
+<li><code>Service</code>：定义服务端点，实现内部或外部访问和负载均衡‌。</li>
+<li><code>Ingress</code>：管理外部访问的路由规则‌。</li>
+</ul>
+<h5 id="配置与存储型资源"><a href="#配置与存储型资源" class="headerlink" title="配置与存储型资源"></a>配置与存储型资源</h5><ul>
+<li><code>Volume</code>：提供持久化存储支持‌。</li>
+<li><code>ConfigMap</code> &#x2F; <code>Secret</code>：分别存储非敏感配置和敏感数据‌。</li>
+<li><code>CSI</code>：扩展第三方存储接口‌。</li>
+</ul>
+<h4 id="集群级资源‌"><a href="#集群级资源‌" class="headerlink" title="集群级资源‌"></a>集群级资源‌</h4><ul>
+<li><code>Namespace</code>：逻辑隔离资源，支持多租户管理‌。</li>
+<li><code>Node</code>：代表集群中的物理或虚拟机‌。</li>
+</ul>
+<h4 id="元数据型资源"><a href="#元数据型资源" class="headerlink" title="元数据型资源"></a>元数据型资源</h4><ul>
+<li><code>HPA</code> (HorizontalPodAutoscaler)：基于指标自动扩缩容‌。</li>
+<li><code>LimitRange</code>：定义资源限制范围‌。</li>
+</ul>
+<h3 id="资源的编写"><a href="#资源的编写" class="headerlink" title="资源的编写"></a>资源的编写</h3><h4 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h4><p>资源清单必须包含以下核心字段‌：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">group/version</span>  <span class="comment"># 资源所属的 API 组和版本</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">ResourceType</span>         <span class="comment"># 资源类型（如 Deployment、Service）</span></span><br><span class="line"><span class="attr">metadata:</span>                  <span class="comment"># 元数据</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">string</span>             <span class="comment"># 资源名称</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">string</span>        <span class="comment"># 所属命名空间（可选）默认是</span></span><br><span class="line"><span class="attr">spec:</span>                      <span class="comment"># 资源的详细配置</span></span><br><span class="line">  <span class="attr">containers:</span>              <span class="comment"># 容器列表（以 Pod 为例）</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">string</span>           <span class="comment"># 容器名称</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">string</span>          <span class="comment"># 容器镜像</span></span><br><span class="line">    <span class="attr">imagePullPolicy:</span> <span class="string">Always|Never|IfNotPresent</span>  <span class="comment"># 镜像拉取策略（可选）</span></span><br></pre></td></tr></table></figure>
+
+<p>资源清单的字段需严格遵循 K8S API 规范，可通过 <code>kubectl explain</code> 命令查询字段定义‌。</p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250411162010.png" alt="图"></p>
+<p><img src="https://raw.githubusercontent.com/lianyutian/tuchuang1/main/img/20250411162157.png" alt="图"></p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-demo</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-1</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">busybox-1</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/tools:busybox</span></span><br><span class="line">    <span class="attr">command:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;/bin/sh&quot;</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;-c&quot;</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&quot;sleep 3600&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>创建Pod</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl create -f 1-pod-demo.yaml</span><br></pre></td></tr></table></figure>
+
+<p>查看pod详细信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl describe pod pod-demo(pod名称)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到pod创建过程中的事件：<br><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/bc466ba382e91dccd9f5ca4a71b548cea41e6c4f3a2713822547086c746cecb9.png" alt="图 31">  </p>
+<h3 id="错误排查"><a href="#错误排查" class="headerlink" title="错误排查"></a>错误排查</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">apiVersion:</span> <span class="string">v1</span></span><br><span class="line"><span class="attr">kind:</span> <span class="string">Pod</span></span><br><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">name:</span> <span class="string">pod-demo-1</span></span><br><span class="line">  <span class="attr">namespace:</span> <span class="string">default</span></span><br><span class="line">  <span class="attr">labels:</span></span><br><span class="line">    <span class="attr">app:</span> <span class="string">myapp</span></span><br><span class="line"><span class="attr">spec:</span></span><br><span class="line">  <span class="attr">containers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-1</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-2</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cp 1-pod-demo.yaml 2-pod-demo.yaml </span><br><span class="line">kubectl apply -f 2-pod-demo.yaml </span><br></pre></td></tr></table></figure>
+
+<p>可以看到 pod-demo-1 创建失败</p>
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/47c3bab0ed07714a372dfe555090d481e76c0f3548ef096f0f50a8a48896660c.png" alt="图 34">  </p>
+<p>排查错误：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl describe pod pod-demo-1</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/272bb4b50908c9a19008ea3d21624b85e5b2d120ec71b022a77caea31e9791fe.png" alt="图 35">  </p>
+<p>进入容器查看日志：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl logs pod-demo-1 -c myapp-2</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/lianyutian/tuchuang1@main/img/7de0f98059e9851816ab9fc78c486e87a5e76b130ad2e84f3250a040fd7f9e57.png" alt="图 36">  </p>
+</article>
+<div class="article-footer">
+
+</div>
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">回顾上一篇</div><a href="/wiki/Kubernetes/Kubernetes%E5%AE%89%E8%A3%85/">Kubernetes安装</a></div><div class="item" id="next"><div class="note">接下来阅读</div><a href="/wiki/Kubernetes/Pod%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">Kubernetes Pod</a></div></section></div>
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><div>
+<span id="runtime_span"></span>
+<script type="text/javascript">
+function show_runtime() {
+    window.setTimeout("show_runtime()", 1000);
+    X = new Date("2023/11/20 17:00:00"); // 网站开始运行的日期和时间
+    Y = new Date(); // 当前日期和时间
+    T = (Y.getTime() - X.getTime()); // 网站运行的总毫秒数
+    M = 24 * 60 * 60 * 1000; // 一天的毫秒数
+    a = T / M; // 总天数
+    A = Math.floor(a); // 总天数的整数部分
+    b = (a - A) * 24; // 总小时数
+    B = Math.floor(b); // 总小时数的整数部分
+    c = (b - B) * 60; // 总分钟数
+    C = Math.floor((b - B) * 60); // 总分钟数的整数部分
+    D = Math.floor((c - C) * 60); // 总秒数
+    runtime_span.innerHTML = "⏱️小破站至今运行 <span class='runtime'>" + A + "天" + B + "小时" + C + "分" + D + "秒</span>";
+}
+show_runtime();
+</script> 
+<img src="/assets/cat.gif" alt="" style="float: right; width: 30px;">
+</div>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">资源清单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95%EF%BC%9F"><span class="toc-text">什么是资源清单？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%EF%BC%88Resource%EF%BC%89"><span class="toc-text">资源（Resource）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%EF%BC%88Object%EF%BC%89"><span class="toc-text">对象（Object）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95%EF%BC%88Manifest%EF%BC%89"><span class="toc-text">资源清单（Manifest）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E8%80%85%E7%9A%84%E5%85%B3%E7%B3%BB%E6%80%BB%E7%BB%93"><span class="toc-text">三者的关系总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E7%B1%BB%E5%9E%8B"><span class="toc-text">资源类型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4%E7%BA%A7%E5%88%AB"><span class="toc-text">命名空间级别</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E5%9E%8B%E8%B5%84%E6%BA%90-Workload"><span class="toc-text">工作负载型资源 (Workload)</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E5%8F%8A%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%9E%8B%E8%B5%84%E6%BA%90%E2%80%8C"><span class="toc-text">服务发现及负载均衡型资源‌</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E4%B8%8E%E5%AD%98%E5%82%A8%E5%9E%8B%E8%B5%84%E6%BA%90"><span class="toc-text">配置与存储型资源</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E7%BA%A7%E8%B5%84%E6%BA%90%E2%80%8C"><span class="toc-text">集群级资源‌</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE%E5%9E%8B%E8%B5%84%E6%BA%90"><span class="toc-text">元数据型资源</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E7%9A%84%E7%BC%96%E5%86%99"><span class="toc-text">资源的编写</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-text">结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B"><span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%94%99%E8%AF%AF%E6%8E%92%E6%9F%A5"><span class="toc-text">错误排查</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":null,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
